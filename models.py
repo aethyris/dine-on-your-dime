@@ -7,6 +7,7 @@ class Recipe(db.Model):
     recipe_title = db.Column(db.String, nullable=False)
     recipe_author = db.Column(db.String, nullable=False)
     recipe_date = db.Column(db.String, nullable=False)
+    recipe_contents = db.Column(db.String, nullable=False)
     recipe_rating = db.Column(db.String, nullable=False)
     recipe_picture = db.Column(db.String, nullable=False)
 
