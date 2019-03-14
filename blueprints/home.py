@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request
+from models import *
 
 home_page = Blueprint('home_page', __name__, template_folder="templates")
 
@@ -8,6 +9,6 @@ def index():
 
 @home_page.route('/search', methods=["POST"])
 def search():
-    # get search results from mysql
     keyword = request.form.get("keyword")
-    return render_template('search.html', keyword=keyword)
+    recipes = Recipe.query.filter((Recipe.recipe_title.contains(keyword) | Recipe.recipe_description.contains(keyword)))
+    return render_template('search.html', keyword=keyword, recipes=recipes)
