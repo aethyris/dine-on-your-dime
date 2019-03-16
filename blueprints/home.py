@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request
+from tkinter import messagebox
 from models import *
 
 home_page = Blueprint('home_page', __name__, template_folder="templates")
@@ -11,4 +12,22 @@ def index():
 def search():
     keyword = request.form.get("keyword")
     recipes = Recipe.query.filter((Recipe.recipe_title.contains(keyword) | Recipe.recipe_description.contains(keyword)))
+    return render_template('search.html', keyword=keyword, recipes=recipes)
+
+
+@home_page.route('/search', methods=["POST"])
+def filter():
+    type = request.form.get("Type")
+    dietary = request.form.get("Dietary")
+    style = request.form.get("Style")
+
+    if type = 'All':
+        type='*'
+    if dietary = 'All':
+            dietary='*'
+    if dietary = 'All':
+        recipes = Recipe.query.filter((Recipe.recipe_title.contains(keyword) | Recipe.recipe_description.contains(keyword)) & (Recipe.type.equals(type)) & (Recipe.dietary_category.equals(dietary)))
+    else:
+        recipes = Recipe.query.filter((Recipe.recipe_title.contains(keyword) | Recipe.recipe_description.contains(keyword)) & (Recipe.type.equals(type)) & (Recipe.dietary_category.equals(dietary)) & (Recipe.recipe_title.contains(style) | Recipe.recipe_description.contains(style)))
+
     return render_template('search.html', keyword=keyword, recipes=recipes)
