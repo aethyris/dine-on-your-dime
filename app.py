@@ -1,8 +1,8 @@
-import sys
+#import sys
 from flask import Flask
 from blueprints.home import home_page
 from config import Config
-from models import *
+#from models import *
 
 app = Flask(__name__)
 app.config.from_object(Config)
