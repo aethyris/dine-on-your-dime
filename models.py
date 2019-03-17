@@ -1,7 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-
 db = SQLAlchemy()
-
 
 class RecipeIngredientAssociation(db.Model):
     __tablename__ = "recipe-ingredient-association"
@@ -11,7 +9,6 @@ class RecipeIngredientAssociation(db.Model):
 
     ingredient = db.relationship("Ingredient", back_populates="recipes")
     recipe = db.relationship("Recipe", back_populates="ingredients")
-
 
 class Recipe(db.Model):
     __tablename__ = "recipes-table"
@@ -27,7 +24,6 @@ class Recipe(db.Model):
 
     ingredients = db.relationship("RecipeIngredientAssociation", back_populates="recipe")
 
-
 class Ingredient(db.Model):
     __tablename__ = "ingredients-table"
     ingredient_id = db.Column(db.Integer, primary_key=True)
@@ -37,4 +33,3 @@ class Ingredient(db.Model):
     ingredient_calorie_count = db.Column(db.Integer, nullable=False)
 
     recipes = db.relationship("RecipeIngredientAssociation", back_populates="ingredient")
-
