@@ -31,7 +31,21 @@
                     <a class="nav-item nav-link my-1" href='#'>Recipes</a>
                 </nav>
                 <nav class="navbar-nav ml-auto">
-                    <a class="nav-item nav-link" href="#">Profile</a>
+                    {% if current_user.is_authenticated %}
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+                                {{ current_user.username}}
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">Profile</a>
+                                <a class="dropdown-item" href="#">Settings</a>
+                                <div class="dropdown-divider"></div>
+                                <a class='dropdown-item' href="{{ url_for('users.logout') }}">Logout</a>
+                            </div>
+                        </div>
+                    {% else %}
+                    <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
+                    {% endif %}
                 </nav>
             </div>
         </nav>
