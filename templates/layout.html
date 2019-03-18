@@ -8,6 +8,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script> src="/blueprints/home.py"</script>
+
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='theme.css') }}">
 
         <title>Dine on Your Dime</title>
@@ -70,6 +71,32 @@
                         <option>Pescatarian</option>
                         <option>Vegetarian</option>
                       </select>
+
+                       <h5>Input Calorie Range</h5>
+                        <form>
+                        <div class="form-row">
+                        <div class="col">
+                        <input type="text" class="form-control" placeholder="Low">
+                        </div>
+                        <div class="col">
+                        <input type="text" class="form-control" placeholder="High">
+                        </div>
+                        </div>
+                        </form>
+
+                        <h5>Input Cooking Time</h5>
+                        <form>
+                        <div class="form-row">
+                        <div class="col">
+                        <input type="text" class="form-control" placeholder="Low">
+                        </div>
+                        <div class="col">
+                        <input type="text" class="form-control" placeholder="High">
+                        </div>
+                        </div>
+                        </form>
+
+                        <br>
 
                       <form action="{{ url_for('home_page.search') }}" method="post" class="form-inline mr-1 ">
                         <button name = "button" value = "OK" onclick=""type = "button">Okay, Lets Dine!</button>
