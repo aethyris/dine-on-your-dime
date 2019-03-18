@@ -10,7 +10,10 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), nullable=False, unique=True)
     email = db.Column(db.String(120), nullable=False, unique=True)
     password_hash = db.Column(db.String(255), nullable=False)
-
+    description = db.Column(db.String(500), nullable=False, default="I love cooking.")
+    create_date = db.Column(db.DateTime, nullable=False)
+    avatar = db.Column(db.String(255), nullable=False, default="https://via.placeholder.com/200/09f/fff.png")
+    
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
     
