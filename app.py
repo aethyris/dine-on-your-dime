@@ -27,9 +27,8 @@ def main():
         if sys.argv[1] == 'createdb':
             db.create_all()
             print("Created database.")
-        elif sys.argv[1] == 'cleardb':
-            db.reflect()
-            db.drop_all()
+        elif sys.argv[1] == 'delusertable':
+            User.__table__.drop(db.engine)
 
 if __name__ == "__main__":
     with app.app_context():
