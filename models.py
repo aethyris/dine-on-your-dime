@@ -4,6 +4,7 @@ from flask_login import UserMixin
 
 db = SQLAlchemy()
 
+
 class User(UserMixin, db.Model):
     __tablename__ = 'users-table'
     id = db.Column(db.Integer, primary_key=True)
@@ -13,9 +14,10 @@ class User(UserMixin, db.Model):
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
-    
+
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
 
 class RecipeIngredientAssociation(db.Model):
     __tablename__ = "recipe-ingredient-association"
@@ -25,6 +27,7 @@ class RecipeIngredientAssociation(db.Model):
 
     ingredient = db.relationship("Ingredient", back_populates="recipes")
     recipe = db.relationship("Recipe", back_populates="ingredients")
+
 
 class Recipe(db.Model):
     __tablename__ = "recipes-table"
@@ -39,6 +42,7 @@ class Recipe(db.Model):
     recipe_calorie_count = db.Column(db.Integer, nullable=False)
 
     ingredients = db.relationship("RecipeIngredientAssociation", back_populates="recipe")
+
 
 class Ingredient(db.Model):
     __tablename__ = "ingredients-table"
