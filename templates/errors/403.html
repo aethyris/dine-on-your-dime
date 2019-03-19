@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+<div class="container h-100">
+    <div class="row h-100">
+        <div class="col-2"></div>
+        <div class="col-8 text-center">
+            <h1 class="display-5 text-dark">
+                    <b class="text-primary display-2">403</b> Forbidden
+            </h1>
+            <h6 class="text-muted">We can't let you in here.</h6>
+            <a class="btn btn-outline-primary" href="{{ url_for('home_page.index') }}">Back into the kitchen</a>
+        </div>
+        <div class="col-2"></div>
+    </div>
+</div>
+
+{% endblock %}
