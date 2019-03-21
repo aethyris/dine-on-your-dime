@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 
+<style>
+    .modal-backdrop {
+        z-index: -1;
+    }
+</style>
+
 <html>
     <head>
         <meta charset="utf-8">
@@ -23,11 +29,27 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarFull">
                 <nav class="navbar-nav">
-                    <button type="button" class="btn btn-outline-success my-1" data-toggle="modal" data-target="#filterModal">Filter</button>
-                    <form action="{{ url_for('home_page.search') }}" method="post" class="form-inline mr-1" id="mainSearch">
-                        <input class="form-control" type="text" name="keyword" placeholder="Find a recipe" style="border-radius: 0rem;">
-                        <button class="btn btn-primary" type="submit">Search</button>
+                    <button type="button" class="btn btn-outline-success my-1" data-toggle="modal" data-target="#filterModal" data-backdrop="false">Filter</button>
+                    <form action="{{ url_for('home_page.search') }}" method="post" id="mainSearch">
+                        <div id="filterModal" tabindex="-1" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Filters</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {% include 'filter.html' %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mt-1">
+                            <input class="form-control" type="text" name="keyword" placeholder="Find a recipe" style="border-radius: 0rem;">
+                            <button class="btn btn-primary" type="submit">Search</button>
+                        </div>
                     </form>
+
                     <a class="nav-item nav-link my-1" href='#'>Recipes</a>
                 </nav>
                 <nav class="navbar-nav ml-auto">
@@ -49,91 +71,6 @@
                 </nav>
             </div>
         </nav>
-    </div>
-
-    <div id="filterModal" tabindex="-1" class="modal" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Filters</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times</button>
-                </div>
-                <div class="modal-body">
-                    <div id="cuisine-filter">
-
-                      <h5>Select Meal Type</h5>
-                      <select class="form-control" id="Type" name="Type of Meal">
-                        <option>All</option>
-                        <option>Breakfast</option>
-                        <option>Lunch</option>
-                        <option>Dinner</option>
-                      </select>
-
-                      <h5>Select Style of Meal </h5>
-
-                      <select class="form-control" id="Style" name="Style of Meal">
-                        <option>All</option>
-                        <option>Fried</option>
-                        <option>BBQ</option>
-                      </select>
-
-                      <h5>Select Dietary Preference </h5>
-                      <select class="form-control" id="Dietary" name="Dietary Preference">
-                        <option>All</option>
-                        <option>Vegan</option>
-                        <option>Standard</option>
-                        <option>Pescatarian</option>
-                        <option>Vegetarian</option>
-                      </select>
-
-                       <h5>Input Calorie Range</h5>
-                        <form>
-                        <div class="form-row">
-                        <div class="col">
-                        <input type="text" class="form-control" placeholder="Low">
-                        </div>
-                        <div class="col">
-                        <input type="text" class="form-control" placeholder="High">
-                        </div>
-                        </div>
-                        </form>
-
-                        <h5>Input Cooking Time</h5>
-                        <form>
-                        <div class="form-row">
-                        <div class="col">
-                        <input type="text" class="form-control" placeholder="Low">
-                        </div>
-                        <div class="col">
-                        <input type="text" class="form-control" placeholder="High">
-                        </div>
-                        </div>
-                        </form>
-                        
-                        <h5>Input Price Range</h5>
-                        <form>
-                        <div class="form-row">
-                        <div class="col">
-                        <input type="text" class="form-control" placeholder="Low">
-                        </div>
-                        <div class="col">
-                        <input type="text" class="form-control" placeholder="High">
-                        </div>
-                        </div>
-                        </form>
-                        
-                        <br>
-
-                      <form action="{{ url_for('home_page.search') }}" method="post" class="form-inline mr-1 ">
-                        <button name = "button" value = "OK" onclick=""type = "button">Okay, Lets Dine!</button>
-                      </form>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="mx-5 mb-3" style="padding-top: 60px">

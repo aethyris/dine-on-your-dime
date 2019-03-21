@@ -1,0 +1,98 @@
+<div class="form-group">
+    <label for="meal_type">Type of Meal</label>
+    <select class="form-control" id="meal_type" name="meal_type">
+        <option>All</option>
+        <option>Breakfast</option>
+        <option>Lunch</option>
+        <option>Dinner</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="meal_style">Style of Meal</label>
+    <select class="form-control" id="meal_style" name="meal_style">
+        <option>All</option>
+        <option>Fried</option>
+        <option>BBQ</option>
+        <option>Steamed</option>
+        <option>Baked</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="dietary_preferences">Dietary Preference</label>
+    <select class="form-control" id="dietary_preferences" name="dietary_preferences">
+        <option>Standard</option>
+        <option>Vegan</option>
+        <option>Pescatarian</option>
+        <option>Vegetarian</option>
+    </select>
+</div>
+
+{% if current_user.is_authenticated %}
+<div class="row">
+    <div class="col form-group">
+        <label for="calorie_min">Calorie Min</label>
+        <input type="number" class="form-control" name="calorie_min" id="calorie_min" placeholder="Min" value="{{ current_user.filters.calorie_min }}">
+    </div>
+    <div class="col form-group">
+        <label for="calorie_max">Calorie Max</label>
+        <input type="number" class="form-control" name="calorie_max" id="calorie_max" placeholder="Max" value="{{ current_user.filters.calorie_max }}">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col form-group">
+        <label for="cooking_time_min">Cooking Time Min</label>
+        <input type="number" class="form-control" name="cooking_time_min" id="cooking_time_min" placeholder="Min" value="{{ current_user.filters.cooking_time_min }}">
+    </div>
+    <div class="col form-group">
+        <label for="cooking_time_max">Cooking Time Max</label>
+        <input type="number" class="form-control" name="cooking_time_max" id="cooking_time_max" placeholder="Max" value="{{ current_user.filters.cooking_time_max }}">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col form-group">
+        <label for="price_min">Price Min</label>
+        <input type="number" class="form-control" name="price_min" id="price_min" placeholder="Min" value="{{ current_user.filters.price_min }}">
+    </div>
+    <div class="col form-group">
+        <label for="price_max">Price Max</label>
+        <input type="number" class="form-control" name="price_max" id="price_max" placeholder="Max" value="{{ current_user.filters.price_max }}">
+    </div>
+</div>
+{% else %}
+<div class="row">
+        <div class="col form-group">
+            <label for="calorie_min">Calorie Min</label>
+            <input type="number" class="form-control" name="calorie_min" id="calorie_min" placeholder="Min">
+        </div>
+        <div class="col form-group">
+            <label for="calorie_max">Calorie Max</label>
+            <input type="number" class="form-control" name="calorie_max" id="calorie_max" placeholder="Max">
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col form-group">
+            <label for="cooking_time_min">Cooking Time Min</label>
+            <input type="number" class="form-control" name="cooking_time_min" id="cooking_time_min" placeholder="Min">
+        </div>
+        <div class="col form-group">
+            <label for="cooking_time_max">Cooking Time Max</label>
+            <input type="number" class="form-control" name="cooking_time_max" id="cooking_time_max" placeholder="Max">
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col form-group">
+            <label for="price_min">Price Min</label>
+            <input type="number" class="form-control" name="price_min" id="price_min" placeholder="Min">
+        </div>
+        <div class="col form-group">
+            <label for="price_max">Price Max</label>
+            <input type="number" class="form-control" name="price_max" id="price_max" placeholder="Max">
+        </div>
+    </div>
+{% endif %}
