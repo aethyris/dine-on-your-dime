@@ -1,6 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from wtforms import Form
+from flask_wtf import FlaskForm
 
 db = SQLAlchemy()
 
@@ -56,3 +58,4 @@ class Ingredient(db.Model):
     ingredient_calorie_count = db.Column(db.Integer, nullable=False)
 
     recipes = db.relationship("RecipeIngredientAssociation", back_populates="ingredient")
+
