@@ -1,3 +1,4 @@
+import mysql connector
 
 class Config(object):
     SQLALCHEMY_DATABASE_URI = user='wongjonella', password='password',
