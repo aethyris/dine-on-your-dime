@@ -7,6 +7,7 @@ from blueprints.recipe import recipes
 from blueprints.errors import errors
 from config import Config
 from models import db, User
+from populate import pop
 
 app = Flask(__name__)
 login = LoginManager(app)
@@ -31,9 +32,12 @@ def main():
     if (len(sys.argv)==2):
         if sys.argv[1] == 'createdb':
             db.create_all()
+            pop()
             print("Created database.")
-        elif sys.argv[1] == 'delusertable':
-            User.__table__.drop(db.engine)
+        elif sys.argv[1] == 'deltables':
+            db.reflect()
+            db.drop_all()
+            db.session.commit()
 
 if __name__ == "__main__":
     with app.app_context():

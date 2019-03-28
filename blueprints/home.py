@@ -39,5 +39,5 @@ def filter():
                         Recipe.recipe_title.contains(style) | Recipe.recipe_description.contains(style)))
 
 
-
+        
     return render_template('search.html', keyword=keyword, recipes=recipes)

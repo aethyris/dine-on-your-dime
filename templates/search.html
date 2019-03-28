@@ -24,19 +24,21 @@
     <div class="row mb-3">
         <div class="col-md-12">
             {% if recipes is defined and recipes[0] is defined %}
-                <div class="card bg-default">
-                    <h5 class="card-header">Card title</h5>
-                    <div class="card-body">
-                        <p class="card-text">
-                            Card content
-                        </p>
+                {% for recipe in recipes %}
+                    <div class="card bg-default">
+                        <h5 class="card-header">{{ recipe.recipe_title }}</h5>
+                        <div class="card-body">
+                            <p class="card-text">
+                                {{ recipe.recipe_description }}
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <p class="card-text">
+                                {{ recipe.recipe_author }}
+                            </p>
+                        </div>
                     </div>
-                    <div class="card-footer">
-                        <p class="card-text">
-                            Card footer
-                        </p>
-                    </div>
-                </div>
+                {% endfor %}
             {% else %}
                 <p>No recipes found.</p>
             {% endif %}

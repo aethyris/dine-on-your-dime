@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, abort
 from flask_login import current_user, login_user, logout_user, login_required
-from models import User, db
+from models import User, db, Filter
 from datetime import datetime
 
 users = Blueprint('users', __name__, template_folder="templates")
@@ -60,6 +60,28 @@ def settings():
         current_user.avatar = request.form.get('new_avatar_url')
         db.session.commit()
         return redirect(url_for('users.settings'))
-    elif request.method == "GET":
-        user_info = current_user
-    return render_template('settings.html', user_info=user_info)
+    return render_template('settings.html', user_info=current_user)
+
+@users.route('/settings/filter', methods=['GET', 'POST'])
+@login_required
+def user_filter():
+    if request.method == "POST":
+        info = request.form
+        print(request.form.get('price_min'))
+        new_filter = Filter(
+            price_min=info.get('price_min'),
+            price_max=info.get('price_max'),
+            calorie_min=info.get('calorie_min'),
+            calorie_max=info.get('calorie_max'),
+            meal_type=info.get('meal_type'),
+            meal_style=info.get('meal_style'),
+            dietary_preferences=info.get('dietary_preferences'),
+            cooking_time_min=info.get('cooking_time_min'),
+            cooking_time_max=info.get('cooking_time_max')
+        )
+        current_user.filters = new_filter
+        db.session.commit()
+        return redirect(url_for('users.settings'))
+
+    return render_template('settings.html', user_info=current_user)
+

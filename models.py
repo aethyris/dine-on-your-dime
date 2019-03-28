@@ -1,11 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from wtforms import Form
-from flask_wtf import FlaskForm
 
 db = SQLAlchemy()
-
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users-table'
@@ -13,16 +10,16 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), nullable=False, unique=True)
     email = db.Column(db.String(120), nullable=False, unique=True)
     password_hash = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.String(500), nullable=False, default="I love cooking.")
+    description = db.Column(db.String(500), nullable=False, default="No description.")
     create_date = db.Column(db.DateTime, nullable=False)
     avatar = db.Column(db.String(255), nullable=False, default="https://via.placeholder.com/200/09f/fff.png")
-    
+    filters = db.relationship('Filter', uselist=False, backref="users")
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
-
+    
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-
 
 class RecipeIngredientAssociation(db.Model):
     __tablename__ = "recipe-ingredient-association"
@@ -32,7 +29,6 @@ class RecipeIngredientAssociation(db.Model):
 
     ingredient = db.relationship("Ingredient", back_populates="recipes")
     recipe = db.relationship("Recipe", back_populates="ingredients")
-
 
 class Recipe(db.Model):
     __tablename__ = "recipes-table"
@@ -48,7 +44,6 @@ class Recipe(db.Model):
 
     ingredients = db.relationship("RecipeIngredientAssociation", back_populates="recipe")
 
-
 class Ingredient(db.Model):
     __tablename__ = "ingredients-table"
     ingredient_id = db.Column(db.Integer, primary_key=True)
@@ -59,3 +54,16 @@ class Ingredient(db.Model):
 
     recipes = db.relationship("RecipeIngredientAssociation", back_populates="ingredient")
 
+class Filter(db.Model):
+    __tablename__ = 'user-filters'
+    filter_id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users-table.id'))
+    price_min = db.Column(db.Numeric, default=0.00)
+    price_max = db.Column(db.Numeric, default=100.00)
+    calorie_min = db.Column(db.Integer, default=0)
+    calorie_max = db.Column(db.Integer, default=2000)
+    meal_type = db.Column(db.String(32), default='All')
+    meal_style = db.Column(db.String(32), default='All')
+    dietary_preferences = db.Column(db.String(255), default='Standard')
+    cooking_time_min = db.Column(db.Integer, default=0)
+    cooking_time_max = db.Column(db.Integer, default=600)
