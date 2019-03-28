@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
 {% block body %}
 
@@ -16,32 +17,10 @@
         </div>
         <div class="col-md-9 tab-content">
             <div class="tab-pane active" id="profiletab">
-                <form action="{{ url_for('users.settings') }}" method="post">
-                    <div class="form-group"> 
-                        <label for="new_username">Username</label>
-                        <input name="new_username" type="text" class="form-control" id="new_username" placeholder="{{ current_user.username }}" disabled/>
-                    </div>
-                    <div class="form-group"> 
-                        <label for="new_email">Email</label>
-                        <input name="new_email" type="email" class="form-control" id="new_email" value="{{ current_user.email }}"/>
-                    </div>
-                    <div class="form-group">  
-                        <label for="new_password">Password</label>
-                        <input name="new_password" type="password" class="form-control" id="new_password" disabled/>
-                    </div>
-                    <div class="form-group">
-                        <label for="new_description">Description</label>
-                        <textarea name="new_description" class="form-control" id="new_description">{{ current_user.description }}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="new_avatar_url">Avatar URL</label>
-                        <input name="new_avatar_url" type="url" class="form-control" id="new_avatar_url" value="{{current_user.avatar }}"/>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </form>
+                {{ wtf.quick_form(info_form, button_map={'submit': 'primary'}) }}
             </div>
             <div class="tab-pane" id="filtertab">
-                <form action="{{ url_for('users.user_filter') }}" method="post">
+                <form action="" method="post">
                     {% include 'filter.html' %}
                     <button type="submit" class="btn btn-primary">Save preferences</button>
                 </form>

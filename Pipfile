@@ -10,6 +10,8 @@ flask = "*"
 flask-sqlalchemy = "*"
 pymysql = "*"
 flask-login = "*"
+flask-wtf = "*"
+flask-bootstrap = "*"
 
 [requires]
 python_version = "3.7"

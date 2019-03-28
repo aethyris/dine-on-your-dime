@@ -1,6 +1,7 @@
 import sys
 from flask import Flask, render_template
 from flask_login import LoginManager
+from flask_bootstrap import Bootstrap
 from blueprints.home import home_page
 from blueprints.users import users
 from blueprints.recipe import recipes
@@ -14,6 +15,7 @@ login = LoginManager(app)
 app.secret_key = 'much secret' # for some reason flask_login needs a secret key?
 app.config.from_object(Config)
 db.init_app(app)
+Bootstrap(app)
 
 @login.user_loader
 def load_user(id): # setting users to sessions

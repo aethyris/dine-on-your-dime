@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, abort
 from flask_login import current_user, login_user, logout_user, login_required
 from models import User, db, Filter
-from datetime import datetime
+from forms import LoginForm, RegistrationForm, UserInfoForm, FilterForm
 
 users = Blueprint('users', __name__, template_folder="templates")
 
@@ -9,37 +9,30 @@ users = Blueprint('users', __name__, template_folder="templates")
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('home_page.index'))
-    info = request.form
-    if request.method == "POST":
-        user = User.query.filter_by(username=info.get("username")).first()
-        if user is not None and user.check_password(info.get("password")):
-            login_user(user, remember=info.get("rememberme"))
-            return redirect(url_for('home_page.index'))
-        else:
-            return render_template('login.html', error=True)
-    return render_template('login.html', error=False)
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            return render_template('login.html', form=form)
+        login_user(user, remember=form.remember_me.data)
+        return redirect(url_for('home_page.index'))
+    return render_template('login.html', form=form)
 
 @users.route('/signup', methods=['GET','POST'])
 def signup():
     if current_user.is_authenticated:
         return redirect(url_for('home_page.index'))
-    register = request.form
-    if request.method == "POST":
-        username = register.get('username')
-        email = register.get('email')
-        if User.query.filter_by(username=username).first() is not None:
-            return render_template('signup.html', usererror=True, emailerror=False)
-        elif User.query.filter_by(email=email).first() is not None:
-            return render_template('signup.html', usererror=False, emailerror=True)   
-        else:
-            user = User(username=username, email=email, create_date=datetime.utcnow())
-            user.set_password(register.get('password'))
-            db.session.add(user)
-            db.session.commit()
-            return redirect(url_for('home_page.index'))
-    return render_template('signup.html', usererror=False, emailerror=False)
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('users.login'))
+    return render_template('signup.html', form=form)
 
 @users.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('home_page.index'))
@@ -54,34 +47,26 @@ def view_user(username):
 @users.route('/settings', methods=['GET','POST'])
 @login_required
 def settings():
-    if request.method == "POST":
-        current_user.email = request.form.get('new_email') 
-        current_user.description = request.form.get('new_description')
-        current_user.avatar = request.form.get('new_avatar_url')
+    info_form = UserInfoForm(obj=current_user)
+    filter_form = FilterForm(obj=current_user.filters)
+    if info_form.validate_on_submit():
+        current_user.username = info_form.username.data
+        current_user.description = info_form.description.data
+        current_user.avatar = info_form.avatar.data
+        current_user.email = info_form.email.data
         db.session.commit()
         return redirect(url_for('users.settings'))
-    return render_template('settings.html', user_info=current_user)
-
-@users.route('/settings/filter', methods=['GET', 'POST'])
-@login_required
-def user_filter():
-    if request.method == "POST":
-        info = request.form
-        print(request.form.get('price_min'))
-        new_filter = Filter(
-            price_min=info.get('price_min'),
-            price_max=info.get('price_max'),
-            calorie_min=info.get('calorie_min'),
-            calorie_max=info.get('calorie_max'),
-            meal_type=info.get('meal_type'),
-            meal_style=info.get('meal_style'),
-            dietary_preferences=info.get('dietary_preferences'),
-            cooking_time_min=info.get('cooking_time_min'),
-            cooking_time_max=info.get('cooking_time_max')
-        )
-        current_user.filters = new_filter
+    elif filter_form.validate_on_submit():
+        current_user.filters.price_min = filter_form.price_min.data
+        current_user.filters.price_max = filter_form.price_max.data
+        current_user.filters.calorie_min = filter_form.calorie_min.data
+        current_user.filters.calorie_max = filter_form.calorie_max.data
+        current_user.filters.meal_type = filter_form.meal_type.data
+        current_user.filters.meal_style = filter_form.meal_style.data
+        current_user.filters.dietary_preferences = filter_form.dietary_preferences.data
+        current_user.filters.cooking_time_min = filter_form.cooking_time_min.data
+        current_user.filters.cooking_time_max = filter_form.cooking_time_max.data
         db.session.commit()
         return redirect(url_for('users.settings'))
-
-    return render_template('settings.html', user_info=current_user)
+    return render_template('settings.html', user_info=current_user, info_form=info_form)
 
