@@ -1,14 +1,14 @@
 {% extends layout.html %}
 {% block body %}
 
+    {% if recipes is defined and recipes[0] is defined %}
+    {% for recipe in recipes %}
+
     <div>
-<figure class="figure">
-  <img src="..." class="figure-img img-fluid rounded" alt="placeholder">
-  <figcaption class="figure-caption">A caption </figcaption>
-</figure>
-
-
-
+    <figure class="figure">
+      <img src="..." class="figure-img img-fluid rounded" alt="placeholder">
+      <figcaption class="figure-caption">{{ recipe.recipe_title }}</figcaption>
+    </figure>
     </div>
 
     <div>
