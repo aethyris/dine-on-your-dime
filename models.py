@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
+from flask_login import UserMixin, AnonymousUserMixin
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -11,7 +12,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), nullable=False, unique=True)
     password_hash = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(500), nullable=False, default="No description.")
-    create_date = db.Column(db.DateTime, nullable=False)
+    create_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     avatar = db.Column(db.String(255), nullable=False, default="https://via.placeholder.com/200/09f/fff.png")
     filters = db.relationship('Filter', uselist=False, backref="users")
     planned_recipes = db.relationship("PlannedRecipeAssociation", back_populates="user")
@@ -21,6 +22,10 @@ class User(UserMixin, db.Model):
     
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+class Anon(AnonymousUserMixin):
+    __tablename__ = 'anon-users-table'
+    filters = db.relationship('Filter', uselist=False, backref="users")
 
 class RecipeIngredientAssociation(db.Model):
     __tablename__ = "recipe-ingredient-association"
