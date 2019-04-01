@@ -12,6 +12,7 @@
             <nav class="nav flex-column nav-pills">
                 <a class="nav-link active" href="#profiletab" data-toggle="tab">Profile</a>
                 <a class="nav-link" href="#filtertab" data-toggle="tab">Filters</a>
+                <a class="nav-link" href="#createrecipetab" data-toggle="tab">Create Recipe</a>
                 <a class="nav-link disabled" href="#">Other</a>
             </nav>
         </div>
@@ -30,8 +31,129 @@
                     <li>{{ current_user.filters.dietary_preferences }}</li>
                 </ul>
             </div>
+
+            <!-- User Created Recipe -->
+            <div class="tab-pane" id="createrecipetab">
+                <h2>Create your own recipe to share on the site!</h2>
+
+                <br>
+
+                <div class="form-group col-7">
+                    <form method="POST" name="recipe_title">
+                        <label class="font-weight-bold">Enter your Recipe Name</label>
+                        <input type="text" class="form-control" id="recipe_title" placeholder="Recipe Name">
+                        <small id="description" class="form-text text-muted">Make sure to accurately sum up the dish
+                            here!
+                        </small>
+                    </form>
+                </div>
+
+                <div class="form-group">
+                    <form method="POST" name="recipe_description">
+
+                        <label class="font-weight-bold">Enter the recipe description</label>
+                        <textarea class="form-control" id="recipe-description" rows="3"
+                                  placeholder="Description"></textarea>
+                        <small id="description" class="form-text text-muted">Describe everything about your dish
+                            here!
+                        </small>
+                    </form>
+                </div>
+
+                <label class="font-weight-bold">Add your recipe ingredients</label>
+
+                <form>
+                    <div class="form-group col-5">
+                        <form method="POST" name="recipe_ingredients">
+                            <input type="text" class="form-control" id="recipe-ingredient"
+                                    placeholder="Ingredient #1">
+                        </form>
+                    </div>
+                    <div class="form-group col-5">
+                        <form method="POST" name="recipe_ingredients">
+                            <input type="text" class="form-control" id="recipe-ingredient"
+                                    placeholder="Ingredient #2">
+                        </form>
+                    </div>
+                    <div class="form-group col-5">
+                        <form method="POST" name="recipe_ingredients">
+                            <input type="text" class="form-control" id="recipe-ingredient"
+                                   placeholder="Ingredient #3">
+                        </form>
+                    </div>
+                    <div class="form-group col-5">
+                        <form method="POST" name="recipe_ingredients">
+                            <input type="text" class="form-control" id="recipe-ingredient"
+                                    placeholder="Ingredient #4">
+                            </form>
+                        </div>
+                    <div class="form-group col-5">
+                        <form method="POST" name="recipe_ingredients">
+                            <input type="text" class="form-control" id="recipe-ingredient"
+                                    placeholder="Ingredient #5">
+                        </form>
+                    </div>
+                    <div class="form-group col-5">
+                        <form method="POST" name="recipe_ingredients">
+                            <input type="text" class="form-control" id="recipe-ingredient"
+                                   placeholder="Ingredient #6">
+                        </form>
+                    </div>
+
+                    <label>Functionality to add more ingredients coming soon</label>
+
+                </form>
+
+                <br>
+
+                <label class="font-weight-bold">Upload an image of your dish</label>
+                    <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                    </div>
+                    <div class="custom-file">
+                        <form method="POST" name="recipe_picture">
+
+                            <input type="file" class="custom-file-input" id="recipe-upload" accept=".jpg,.png"
+                                    aria-describedby="inputGroupFileAddon01">
+                        </form>
+                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                    </div>
+                </div>
+
+                <br>
+
+
+                <label class="font-weight-bold">Enter the estimated cooking time range</label>
+                <div class="row">
+                    <div class="col form-group col-2">
+                        <form method="POST" name="recipe_cooking_time">
+                            <input type="number" class="form-control" name="recipe_cooking_time"
+                                   id="cooking_time_min"
+                                   placeholder="Min" value="{{ current_user.filters.cooking_time_min }}">
+                        </form>
+                    </div>
+                </div>
+
+                <label class="font-weight-bold">Enter the estimated calorie amount</label>
+                <div class="row">
+                    <div class="col form-group col-2">
+                        <form method="POST" name="recipe_calories">
+                            <input type="number" class="form-control" name="calorie_min" id="calorie_min"
+                                    placeholder="Calories" value="{{ current_user.filters.calorie_min }}">
+                        </form>
+                    </div>
+
+                </div>
+
+                <div>
+                    <form method="POST" action="{{ url_for('users.addRecipe') }}">
+                        <input class="btn btn-primary" type="submit" value="Submit Recipe">
+                        </form>
+                </div>
+
+            </div>
         </div>
     </div>
-</div>
 
 {% endblock %}

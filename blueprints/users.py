@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, request, abort
 from flask_login import current_user, login_user, logout_user, login_required
-from models import User, db, Filter
+from models import User, db, Filter, Recipe, Ingredient
 from forms import LoginForm, RegistrationForm, UserInfoForm, FilterForm
+from datetime import datetime
 
 users = Blueprint('users', __name__, template_folder="templates")
 
@@ -18,7 +19,8 @@ def login():
         return redirect(url_for('home_page.index'))
     return render_template('login.html', form=form)
 
-@users.route('/signup', methods=['GET','POST'])
+
+@users.route('/signup', methods=['GET', 'POST'])
 def signup():
     if current_user.is_authenticated:
         return redirect(url_for('home_page.index'))
@@ -44,7 +46,7 @@ def view_user(username):
         abort(404)
     return render_template('user.html', user=user)
 
-@users.route('/settings', methods=['GET','POST'])
+@users.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
     info_form = UserInfoForm(obj=current_user)
@@ -68,5 +70,17 @@ def settings():
         current_user.filters.cooking_time_max = filter_form.cooking_time_max.data
         db.session.commit()
         return redirect(url_for('users.settings'))
-    return render_template('settings.html', user_info=current_user, info_form=info_form)
+    return render_template('settings.html', user_info=current_user)
 
+@users.route('/create_recipe', methods=["GET", "POST"])
+def addRecipe():
+    if request.form:
+        recipe = Recipe(recipe_title=request.form.get("recipe_title")), \
+                 Recipe(recipe_description=request.form.get("recipe_description")), \
+                 Recipe(recipe_picture=request.form.get("recipe_upload")), \
+                 Recipe(recipe_cooking_time=request.form.get("recipe_cooking_time")),\
+                 Recipe(recipe_calorie_count=request.form.get("recipe_calories"))
+        db.session.add(recipe)
+        db.session.commit()
+
+        return render_template(settings.html, user_info=current_user)

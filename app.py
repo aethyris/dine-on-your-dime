@@ -1,4 +1,4 @@
-import sys
+import sys, traceback
 from flask import Flask, render_template
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
@@ -12,6 +12,7 @@ from models import db, User
 from populate import pop
 
 app = Flask(__name__)
+# app.debug = True
 login = LoginManager(app)
 app.secret_key = 'much secret' # for some reason flask_login needs a secret key?
 app.config.from_object(Config)
