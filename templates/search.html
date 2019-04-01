@@ -36,6 +36,10 @@
                             <p class="card-text">
                                 {{ recipe.recipe_author }}
                             </p>
+                            <form class='form' action='{{ url_for("calendar.add_data") }}' method='post'>
+                                <input type='hidden' id='recipe' name='recipe' value='{{ recipe.recipe_id }}'>
+                                <button type='submit' class='btn btn-outline-primary'>Plan</button>
+                            </form>
                         </div>
                     </div>
                 {% endfor %}

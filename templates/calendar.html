@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<script src="{{ url_for('static', filename='lib/moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='lib/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='fullcalendar.min.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            defaultDate: '2019-04-1',
+            editable: true,
+            eventLimit: true,
+            events: {
+                url: 'calendar/data'
+            },
+        });
+    });
+</script>
+
+<div class="container-fluid mt-3">
+    <h3>{{ username }}'s Calendar</h3>
+    <div id='calendar'></div>
+</div>
+
+{% endblock %}

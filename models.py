@@ -14,6 +14,7 @@ class User(UserMixin, db.Model):
     create_date = db.Column(db.DateTime, nullable=False)
     avatar = db.Column(db.String(255), nullable=False, default="https://via.placeholder.com/200/09f/fff.png")
     filters = db.relationship('Filter', uselist=False, backref="users")
+    planned_recipes = db.relationship("PlannedRecipeAssociation", back_populates="user")
     
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -43,6 +44,7 @@ class Recipe(db.Model):
     recipe_calorie_count = db.Column(db.Integer, nullable=False)
 
     ingredients = db.relationship("RecipeIngredientAssociation", back_populates="recipe")
+    planning_users = db.relationship("PlannedRecipeAssociation", back_populates="recipe")
 
 class Ingredient(db.Model):
     __tablename__ = "ingredients-table"
@@ -67,3 +69,13 @@ class Filter(db.Model):
     dietary_preferences = db.Column(db.String(255), default='Standard')
     cooking_time_min = db.Column(db.Integer, default=0)
     cooking_time_max = db.Column(db.Integer, default=600)
+
+class PlannedRecipeAssociation(db.Model):
+    __tablename__ = 'planned-recipe-assoc'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users-table.id"))
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipes-table.recipe_id"))
+    start = db.Column(db.String(64), nullable=False)
+
+    user = db.relationship("User", back_populates="planned_recipes")
+    recipe = db.relationship("Recipe", back_populates="planning_users")

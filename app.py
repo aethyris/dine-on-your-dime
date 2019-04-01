@@ -5,6 +5,7 @@ from blueprints.home import home_page
 from blueprints.users import users
 from blueprints.recipe import recipes
 from blueprints.errors import errors
+from blueprints.calendar import calendar
 from config import Config
 from models import db, User
 from populate import pop
@@ -23,6 +24,7 @@ app.register_blueprint(home_page)
 app.register_blueprint(users)
 app.register_blueprint(recipes)
 app.register_blueprint(errors)
+app.register_blueprint(calendar)
 
 @app.errorhandler(404)
 def page_not_found(e):
