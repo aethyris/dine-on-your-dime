@@ -2,30 +2,38 @@
 
 {% block body %}
 
-<script src="{{ url_for('static', filename='lib/moment.min.js') }}"></script>
-<script src="{{ url_for('static', filename='lib/jquery.min.js') }}"></script>
-<script src="{{ url_for('static', filename='fullcalendar.min.js') }}"></script>
+<script src="https://unpkg.com/@fullcalendar/core@4.0.1/main.min.js"></script>
+<script src="https://unpkg.com/@fullcalendar/moment@4.0.1/main.min.js"></script>
+<script src="https://unpkg.com/@fullcalendar/daygrid/main.min.js"></script>
+<script src="https://unpkg.com/@fullcalendar/timegrid/main.min.js"></script>
+
 <script>
-    $(document).ready(function() {
-        $('#calendar').fullCalendar({
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+    
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: [ 'dayGrid','timeGrid' ],
             header: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'month,agendaWeek,agendaDay'
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
             defaultDate: '2019-04-1',
-            eventColor: '#9821A5',
-            eventTextColor: '#F9F9F9',
             editable: true,
             eventLimit: true,
+            nowIndicator: true,
+            eventColor: '#9821A5',
+            eventTextColor: '#F9F9F9',
             events: {
                 url: 'calendar/data'
             },
-            eventClick: function(event) {
-                $('#modalTitle').text(event.title);
-                $('#eventModal').modal('show');
+            eventClick: function(info) {
+                $('#modalTitle').html(info.event.title);
+                $('#eventModal').modal();
             }
         });
+    
+        calendar.render();
     });
 </script>
 
