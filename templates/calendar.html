@@ -14,11 +14,17 @@
                 right: 'month,agendaWeek,agendaDay'
             },
             defaultDate: '2019-04-1',
+            eventColor: '#9821A5',
+            eventTextColor: '#F9F9F9',
             editable: true,
             eventLimit: true,
             events: {
                 url: 'calendar/data'
             },
+            eventClick: function(event) {
+                $('#modalTitle').text(event.title);
+                $('#eventModal').modal('show');
+            }
         });
     });
 </script>
@@ -26,6 +32,18 @@
 <div class="container-fluid mt-3">
     <h3>{{ username }}'s Calendar</h3>
     <div id='calendar'></div>
+
+    <div class="modal fade" id="eventModal">
+        <div class="modal-dialog">
+            <div class='modal-content'>
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalTitle"></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 </div>
 
 {% endblock %}
