@@ -39,12 +39,14 @@ def logout():
     logout_user()
     return redirect(url_for('home_page.index'))
 
+
 @users.route('/user/<username>')
 def view_user(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
         abort(404)
     return render_template('user.html', user=user)
+
 
 @users.route('/settings', methods=['GET', 'POST'])
 @login_required
