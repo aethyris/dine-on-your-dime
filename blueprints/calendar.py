@@ -16,7 +16,12 @@ def return_data(username):
     recipes = PlannedRecipeAssociation.query.filter_by(user_id=user_id).all()
     json_data = []
     for planned_recipe in recipes:
-        dict_data = {'title': planned_recipe.recipe.recipe_title, 'start': planned_recipe.start, 'description': planned_recipe.recipe.recipe_description}
+        dict_data = {
+            'assoc': planned_recipe.id,
+            'rid': planned_recipe.recipe.recipe_id, 
+            'title': planned_recipe.recipe.recipe_title, 
+            'start': planned_recipe.start, 
+            'description': planned_recipe.recipe.recipe_description}
         json_data.append(dict_data)
     return Response(json.dumps(json_data), mimetype='application/json')
 
@@ -32,9 +37,9 @@ def add_data():
 
 @calendar.route('/user/calendar/remove/', methods=['POST'])
 @login_required
-def remove_data(recipe_id):
+def remove_data():
     if request.method == 'POST':
-        assoc = PlannedRecipeAssociation.query.filter_by(recipe_id=request.form.get('recipe')).first()
+        assoc = PlannedRecipeAssociation.query.filter_by(id=request.form.get('assoc_id')).first()
         db.session.remove(assoc)
         db.session.commit()
     return redirect(url_for('calendar.view_calendar', username=current_user.username))
