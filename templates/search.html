@@ -26,7 +26,7 @@
             {% if recipes is defined and recipes[0] is defined %}
                 {% for recipe in recipes %}
                     <div class="card bg-default">
-                        <h5 class="card-header">{{ recipe.recipe_title }}</h5>
+                        <h5 class="card-header" href="{{  }}">{{ recipe.recipe_title }}</h5>
                         <div class="card-body">
                             <p class="card-text">
                                 {{ recipe.recipe_description }}

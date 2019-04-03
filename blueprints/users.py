@@ -93,14 +93,16 @@ def user_filter():
 
 
 @users.route('/create_recipe', methods=["GET", "POST"])
+@login_required
 def addRecipe():
     if request.form:
-        recipe = Recipe(recipe_title=request.form.get("recipe_title")), \
+        recipe = Recipe(recipe_id=User.id), Recipe(recipe_title=request.form.get("recipe_title")), \
+                 Recipe(recipe_author=User.username), \
                  Recipe(recipe_description=request.form.get("recipe_description")), \
+                 Recipe(recipe_rating=5), \
                  Recipe(recipe_picture=request.form.get("recipe_upload")), \
-                 Recipe(recipe_cooking_time=request.form.get("recipe_cooking_time")),\
+                 Recipe(recipe_cooking_time=request.form.get("recipe_cooking_time")), \
                  Recipe(recipe_calorie_count=request.form.get("recipe_calories"))
         db.session.add(recipe)
         db.session.commit()
 
-        return render_template(settings.html, user_info=current_user)
