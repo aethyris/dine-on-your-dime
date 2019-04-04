@@ -2,8 +2,8 @@
 {% block body %}
 <script>
     $(function () {
-        $('#addForm').ajaxForm(function () {
-            $('#addMealModal').modal('hide');
+        $('.add-form').ajaxForm(function () {
+            $('.add-meal').modal('hide');
         });
     });
 </script>
@@ -35,7 +35,9 @@
                     <div class="card bg-default mb-2">
                         <div class="card-header">
                             <h4 class="pt-1" style="display: inline-block;">{{ recipe.recipe_title }}</h4>
-                            <button class='btn btn-outline-primary float-right' data-toggle="modal" data-target="#addMealModal">Plan</button>
+                            {% if current_user.is_authenticated %}
+                            <button class='btn btn-outline-primary float-right' data-toggle="modal" data-target="#add{{ recipe.recipe_id }}Modal">Plan</button>
+                            {% endif %}
                         </div>
                         <div class="card-body">
                             <p class="card-text">{{ recipe.recipe_description }}</p>
@@ -44,7 +46,7 @@
                             <p class="card-text">by {{ recipe.recipe_author }}</p>
                         </div>
                     </div>
-                    <div class="modal fade" id="addMealModal">
+                    <div class="modal fade add-meal" id="add{{ recipe.recipe_id }}Modal">
                         <div class="modal-dialog">
                             <div class='modal-content'>
                                 <div class="modal-header">
@@ -52,7 +54,7 @@
                                     <button type="button" class="close" data-dismiss="modal">&times</button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{{ url_for('calendar.add_data') }}" id="addForm" method="post">
+                                    <form action="{{ url_for('calendar.add_data') }}" id="addForm" class="add-form" method="post">
                                         <input type="datetime-local" id="dt" name="dt">
                                         <input type='hidden' id='recipe' name='recipe' value='{{ recipe.recipe_id }}'>
                                         <button type="submit" class="btn btn-outline-primary">Add</button>
