@@ -4,7 +4,6 @@ from flask_login import UserMixin, AnonymousUserMixin
 from datetime import datetime
 # from sqlalchemy_imageattach.entity import Image, image_attachment
 
-
 db = SQLAlchemy()
 
 class User(UserMixin, db.Model):
@@ -44,7 +43,7 @@ class Recipe(db.Model):
     recipe_title = db.Column(db.String(120), nullable=False)
     recipe_author = db.Column(db.String(120), nullable=False)
     recipe_date = db.Column(db.Numeric, nullable=False)
-    recipe_description = db.Column(db.String(120), nullable=False)
+    recipe_description = db.Column(db.String(500), nullable=False)
     recipe_rating = db.Column(db.Numeric, nullable=False)
     recipe_picture = db.Column(db.String(120), nullable=False)
     recipe_cooking_time = db.Column(db.Integer, nullable=False)
@@ -78,12 +77,14 @@ class Filter(db.Model):
     cooking_time_max = db.Column(db.Integer, default=600)
 
 class PlannedRecipeAssociation(db.Model):
+    # Association represents each recipe a user adds to their meal plan.
     __tablename__ = 'planned-recipe-assoc'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users-table.id"))
     recipe_id = db.Column(db.Integer, db.ForeignKey("recipes-table.recipe_id"))
     start = db.Column(db.String(64), nullable=False)
     end = db.Column(db.String(64), nullable=False)
+    notes = db.Column(db.String(500), default="")
 
     user = db.relationship("User", back_populates="planned_recipes")
     recipe = db.relationship("Recipe", back_populates="planning_users")

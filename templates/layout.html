@@ -9,6 +9,8 @@
 <html>
     <head>
         <meta charset="utf-8">
+
+        <!-- Bootstrap and jquery -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -19,25 +21,34 @@
             integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i"
             crossorigin="anonymous"></script>
         
+        <!-- fullcalendar4 -->
         <link href="https://unpkg.com/@fullcalendar/core@4.0.1/main.min.css" rel='stylesheet' />
         <link href="https://unpkg.com/@fullcalendar/daygrid@4.0.1/main.min.css" rel='stylesheet' />
         <link href="https://unpkg.com/@fullcalendar/timegrid/main.min.css" rel='stylesheet' />
+
+        <!-- custom css -->
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='theme.css') }}">
 
         <title>Dine on Your Dime</title>
     </head>
 
 <body class="bg-light">
+
+    <!-- Collapsible top nav bar -->
     <div id="navbar">
         <nav class="navbar navbar-expand-lg navbar-light fixed-top mx-5 bg-light">
             <a class="navbar-brand text-primary" href="/"><b>Dine on Your Dime</b></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarFull">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <!-- Nav bar elements -->
             <div class="collapse navbar-collapse" id="navbarFull">
+                <!-- Left side of nav bar -->
                 <nav class="navbar-nav">
                     <button type="button" class="btn btn-outline-success my-1" data-toggle="modal" data-target="#filterModal" data-backdrop="false">Filter</button>
+                    
                     <form action="{{ url_for('home_page.search') }}" method="post" id="mainSearch">
+                        
                         <div id="filterModal" tabindex="-1" class="modal fade" role="dialog">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -51,19 +62,16 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="input-group mt-1">
                             <input class="form-control" type="text" name="keyword" placeholder="Find a recipe" style="border-radius: 0rem;">
                             <button class="btn btn-primary" type="submit">Search</button>
                         </div>
+
                     </form>
-
                     <a class="nav-item nav-link my-1" href='#'>Recipes</a>
-                </nav>
-
-{#            <nav>#}
-{#                <a class="nav-item nav-link my-1" href='{{ url_for('recipe.show_recipe') }}'>Recipes</a>#}
-{#            </nav>#}
-
+                </nav>  
+                <!-- Right side of nav bar -->
                 <nav class="navbar-nav ml-auto">
                     {% if current_user.is_authenticated %}
                         <div class="nav-item dropdown">
@@ -78,13 +86,14 @@
                             </div>
                         </div>
                     {% else %}
-                    <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
+                        <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
                     {% endif %}
                 </nav>
             </div>
         </nav>
     </div>
 
+    <!-- content -->
     <div class="mx-5 mb-3" style="padding-top: 60px">
         {% block body %}
         {% endblock %}

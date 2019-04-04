@@ -7,6 +7,7 @@
 <script src="https://unpkg.com/@fullcalendar/daygrid/main.min.js"></script>
 <script src="https://unpkg.com/@fullcalendar/timegrid/main.min.js"></script>
 <script>
+    // Render calendar and allows it to be used for other js functions
     let calendar;
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
@@ -25,27 +26,40 @@
             eventColor: '#9821A5',
             eventTextColor: '#F9F9F9',
             events: {
+                // actually goes to /user/<username>/calendar/data
                 url: 'calendar/data'
             },
             eventClick: function (info) {
+                // Planned recipe information
                 $('#eventTitle').html(info.event.title);
                 $('#eventDescription').html(info.event.extendedProps.description);
-                $('#eventStartTime').html(info.event.start);
-                $('#eventEndTime').html(info.event.end);
+                $('#eventStartTime').text(info.event.start);
+                $('#eventEndTime').text(info.event.end);
+                $('#eventURL').html(info.event.extendedProps.recipe_url);
+                $('#eventNotes').text(info.event.extendedProps.notes);
+
+                // Used for forms
+                $('#edit-notes').text(info.event.extendedProps.notes);
                 $('#eventEditAssoc').val(info.event.extendedProps.assoc);
                 $('#eventRemoveAssoc').val(info.event.extendedProps.assoc);
+
+                // Renders modal when event is clicked
                 $('#eventModal').modal();
             }
         });
 
         calendar.render();
     });
+
+    // Ajax Form Plugin to hide modal upon submit and rerender calendar
     $(function() {
         $('.eventForm').ajaxForm(function() {
-            $('.eventModal').modal('hide');
+            $('#eventModal').modal('hide');
             calendar.refetchEvents();
         });
     });
+
+    // Toggles modal to display event information or edit/removal form
     function toggle() {
         var edit = document.getElementById("eventEdit");
         var info = document.getElementById("eventInfo");
@@ -64,6 +78,7 @@
     <h3>{{ username }}'s Calendar</h3>
     <div id='calendar'></div>
 
+    <!-- Modal opens upon clicking an recipe (event). -->
     <div class="modal fade eventModal" id="eventModal">
         <div class="modal-dialog">
             <div class='modal-content'>
@@ -72,21 +87,29 @@
                     <button type="button" class="close" data-dismiss="modal">&times</button>
                 </div>
                 <div class="modal-body">
+                    <!-- Recipe information showed on inital modal opening -->
                     <div id="eventInfo">
                         <p id="eventDescription"></p>
                         <p class="grey-text"><b>Start:</b></p>
                         <p class="grey-text" id="eventStartTime"></p>
                         <p class="grey-text"><b>End:</b></p>
                         <p class="grey-text" id="eventEndTime"></p>
+                        <P class="grey-text"><b>Notes:</b></p>
+                        <p class="grey-text" id="eventNotes"></p>
                         {% if username == current_user.username %}
                         <button class="btn btn-outline-primary float-right" onclick="toggle()">Edit</button>
                         {% endif %}
                     </div>
+
+                    <!-- Edit form only shows if it is your meal plan. -->
+                    {% if username == current_user.username %}
                     <div id="eventEdit" style="display: none;">
-                        <form action="#" class=".eventForm form" id="editForm" method="post">
+                        
+                        <!-- Edit form -->
+                        <form action="{{ url_for('calendar.edit_data') }}" class="eventForm form" id="editForm" method="post">
                             <div class="form-group">
                                 <label for="edit-start">Start time</label>
-                                <input class="form-control" type='datetime-local' id="edit-start" name='edit_start'>
+                                <input class="form-control" type='datetime-local' id="edit-start" name='edit_start' required>
                             </div>
                             <div class="form-group">
                                 <label for="edit-notes">Notes</label>
@@ -95,12 +118,15 @@
                             <input type='hidden' id='eventEditAssoc' name='assoc_id'>
                             <button type="submit" class="btn btn-primary">Save Changes</button>
                         </form>
-                        <form action="{{ url_for('calendar.remove_data') }}" class="form .eventForm" method="post">
+
+                        <!-- Remove recipe form -->
+                        <form action="{{ url_for('calendar.remove_data') }}" id="removeForm" class="form eventForm" method="post">
                             <input type='hidden' id='eventRemoveAssoc' name='assoc_id'>
                             <button type="submit" class="btn btn-outline-success mt-2 float-left">Remove</button>
                         </form>
                         <button class="btn btn-outline-primary float-right mt-2" onclick="toggle()">Info</button>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
