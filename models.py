@@ -81,6 +81,7 @@ class PlannedRecipeAssociation(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users-table.id"))
     recipe_id = db.Column(db.Integer, db.ForeignKey("recipes-table.recipe_id"))
     start = db.Column(db.String(64), nullable=False)
+    end = db.Column(db.String(64), nullable=False)
 
     user = db.relationship("User", back_populates="planned_recipes")
     recipe = db.relationship("Recipe", back_populates="planning_users")

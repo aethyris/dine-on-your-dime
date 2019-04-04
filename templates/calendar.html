@@ -6,13 +6,13 @@
 <script src="https://unpkg.com/@fullcalendar/moment@4.0.1/main.min.js"></script>
 <script src="https://unpkg.com/@fullcalendar/daygrid/main.min.js"></script>
 <script src="https://unpkg.com/@fullcalendar/timegrid/main.min.js"></script>
-
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    let calendar;
+    document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
-    
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            plugins: [ 'dayGrid','timeGrid' ],
+
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: ['dayGrid', 'timeGrid'],
             header: {
                 left: 'prev,next today',
                 center: 'title',
@@ -27,16 +27,23 @@
             events: {
                 url: 'calendar/data'
             },
-            eventClick: function(info) {
+            eventClick: function (info) {
                 $('#eventTitle').html(info.event.title);
                 $('#eventDescription').html(info.event.extendedProps.description);
                 $('#eventStartTime').html(info.event.start);
-                $('#eventAssoc').html(info.event.extendedProps.assoc);
+                $('#eventEndTime').html(info.event.end)
+                $('#eventAssoc').val(info.event.extendedProps.assoc);
                 $('#eventModal').modal();
             }
         });
-    
+
         calendar.render();
+    });
+    $(function() {
+        $('#removeForm').ajaxForm(function() {
+            $('#eventModal').modal('hide');
+            calendar.refetchEvents();
+        });
     });
 </script>
 
@@ -53,7 +60,7 @@
                 </div>
                 <div class="modal-body" id="eventDescription"></div>
                 <div class="modal-footer">
-                    <form action="{{ url_for('calendar.remove_data') }}" method="post">
+                    <form action="{{ url_for('calendar.remove_data') }}" id="removeForm" method="post">
                         <input type='hidden' id='eventAssoc' name='assoc_id'>
                         <button type="submit" class="btn btn-outline-primary">Remove</button>
                     </form>

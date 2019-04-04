@@ -30,7 +30,7 @@ def return_data(username):
 def add_data():
     if request.method == 'POST':
         recipe = Recipe.query.filter_by(recipe_id=request.form.get('recipe')).first()
-        assoc = PlannedRecipeAssociation(user=current_user, recipe=recipe, start=datetime.now().replace(microsecond=0).isoformat())
+        assoc = PlannedRecipeAssociation(user=current_user, recipe=recipe, start=request.form.get('dt'), end="")
         db.session.add(assoc)
         db.session.commit()
     return redirect(url_for('calendar.view_calendar', username=current_user.username)) 
@@ -40,6 +40,6 @@ def add_data():
 def remove_data():
     if request.method == 'POST':
         assoc = PlannedRecipeAssociation.query.filter_by(id=request.form.get('assoc_id')).first()
-        db.session.remove(assoc)
+        db.session.delete(assoc)
         db.session.commit()
     return redirect(url_for('calendar.view_calendar', username=current_user.username))
