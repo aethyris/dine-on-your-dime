@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
 {% block body %}
 
 <div class="container-fluid">
@@ -6,24 +7,7 @@
         <div class="col-md-3"></div>
         <div class="col-md-6">
             <h3>Create an account</h3>
-            <form class="form" action="{{ url_for('users.signup') }}" method="post"
-                oninput='passwordconfirm.setCustomValidity(password.value != passwordconfirm.value ? "Passwords do not match." : "")'>
-                <div class="form-group">
-                    {% if usererror == true %}
-                        <p class="text-danger">Username has already been taken.</p>
-                    {% endif %}
-                    <input class="form-control mb-2" type="text" name="username" placeholder="Username" required>
-                    {% if emailerror == true %}
-                        <p class="text-danger">Email has already been used.</p>
-                    {% endif %}
-                    <input class="form-control" type="email" name="email" placeholder="name@example.com" required>
-                </div>
-                <div class="form-group">
-                    <input class="form-control mb-2" type="password" name="password" placeholder="Password" required>
-                    <input class="form-control" type="password" name="passwordconfirm" placeholder="Confirm password" required>
-                </div>
-                <button type="submit" class="btn btn-primary mb-1">Sign Up</button>
-            </form>
+            {{ wtf.quick_form(form, button_map={'submit': 'primary'}) }}
             <p>Already have an account? <a href="{{ url_for('users.login') }}">Login in.</a></p>
             <h4>What do you get from a Dine on Your Dime account?</h4>
             <ul>

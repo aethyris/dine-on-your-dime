@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
 {% block body %}
 
@@ -15,173 +16,108 @@
                     <a class="nav-link disabled" href="#">Other</a>
                 </nav>
             </div>
-
             <div class="col-md-9 tab-content">
                 <div class="tab-pane active" id="profiletab">
-                    <form action="{{ url_for('users.settings') }}" method="post">
-                        <div class="form-group">
-                            <label for="new_username">Username</label>
-                            <input name="new_username" type="text" class="form-control" id="new_username"
-                                   placeholder="{{ current_user.username }}" disabled/>
-                        </div>
-                        <div class="form-group">
-                            <label for="new_email">Email</label>
-                            <input name="new_email" type="email" class="form-control" id="new_email"
-                                   value="{{ current_user.email }}"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="new_password">Password</label>
-                            <input name="new_password" type="password" class="form-control" id="new_password" disabled/>
-                        </div>
-                        <div class="form-group">
-                            <label for="new_description">Description</label>
-                            <textarea name="new_description" class="form-control"
-                                      id="new_description">{{ current_user.description }}</textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="new_avatar_url">Avatar URL</label>
-                            <input name="new_avatar_url" type="url" class="form-control" id="new_avatar_url"
-                                   value="{{ current_user.avatar }}"/>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </form>
+                    {{ wtf.quick_form(info_form, button_map={'submit': 'primary'}) }}
                 </div>
                 <div class="tab-pane" id="filtertab">
-                    <form action="{{ url_for('users.user_filter') }}" method="post">
+                    <form action="" method="post">
                         {% include 'filter.html' %}
                         <button type="submit" class="btn btn-primary">Save preferences</button>
                     </form>
-                    <ul>
-                        <li>{{ current_user.filters.meal_type }}</li>
-                        <li>{{ current_user.filters.meal_style }}</li>
-                        <li>{{ current_user.filters.dietary_preferences }}</li>
-                    </ul>
                 </div>
 
                 <!-- User Created Recipe -->
-
                 <div class="tab-pane" id="createrecipetab">
                     <h2>Create your own recipe to share on the site!</h2>
 
                     <br>
 
-                    <div class="form-group col-8">
-                        <form method="POST" name="recipe_title">
-                            <label class="font-weight-bold">Enter your Recipe Name</label>
-                            <input type="text" class="form-control" id="recipe_title" placeholder="Recipe Name">
-                            <small id="description" class="form-text text-muted">Make sure to accurately sum up the dish
-                                here!
-                            </small>
-                        </form>
-                    </div>
+                    <form action="{{ url_for('users.add_recipe') }}" method="POST">
+                        <div class="form-group col-7">
+                            <label for="recipe_title" class="font-weight-bold">Enter your Recipe Name</label>
+                            <input type="text" class="form-control" id="recipe_title" name="recipe_title"
+                                   placeholder="Recipe Name">
+                        </div>
 
-                    <div class="form-group col-8">
-                        <form method="POST" name="recipe_description">
+                        <div class="form-group">
+                            <label for="recipe_description" class="font-weight-bold"> Enter the recipe
+                                description </label>
+                            <textarea class="form-control" id="recipe_description" name="recipe_description"
+                                      placeholder="Recipe Description"> </textarea>
+                        </div>
 
-                            <label class="font-weight-bold">Enter the recipe description</label>
-                            <textarea class="form-control" id="recipe-description" rows="3"
-                                      placeholder="Description"></textarea>
-                            <small id="description" class="form-text text-muted">Describe everything about your dish
-                                here!
-                            </small>
-                        </form>
-                    </div>
-
-                    <label class="font-weight-bold">Add your recipe ingredients</label>
-
-                    <form>
                         <div class="form-group col-5">
-                            <form method="POST" name="recipe_ingredients">
-                                <input type="text" class="form-control" id="recipe-ingredient"
-                                       placeholder="Ingredient #1">
-
-                            </form>
+                            <label class="font-weight-bold">Add your recipe ingredients</label>
+                            <input type="text" class="form-control" id="recipe_ingredient" name="recipe_ingredient"
+                                   placeholder="Ingredient #1">
                         </div>
+
                         <div class="form-group col-5">
-                            <form method="POST" name="recipe_ingredients">
-                                <input type="text" class="form-control" id="recipe-ingredient"
-                                       placeholder="Ingredient #2">
-                            </form>
+                            <input type="text" class="form-control" id="recipe_ingredient" name="recipe_ingredient"
+                                   placeholder="Ingredient #2">
                         </div>
+
                         <div class="form-group col-5">
-                            <form method="POST" name="recipe_ingredients">
-                                <input type="text" class="form-control" id="recipe-ingredient"
-                                       placeholder="Ingredient #3">
-                            </form>
+                            <input type="text" class="form-control" id="recipe_ingredient" name="recipe_ingredient"
+                                   placeholder="Ingredient #3">
                         </div>
+
                         <div class="form-group col-5">
-                            <form method="POST" name="recipe_ingredients">
-                                <input type="text" class="form-control" id="recipe-ingredient"
-                                       placeholder="Ingredient #4">
-                            </form>
+                            <input type="text" class="form-control" id="recipe_ingredient" name="recipe_ingredient"
+                                   placeholder="Ingredient #4">
                         </div>
+
                         <div class="form-group col-5">
-                            <form method="POST" name="recipe_ingredients">
-                                <input type="text" class="form-control" id="recipe-ingredient"
-                                       placeholder="Ingredient #5">
-                            </form>
+                            <input type="text" class="form-control" id="recipe_ingredient" name="recipe_ingredient"
+                                   placeholder="Ingredient #5">
                         </div>
+
                         <div class="form-group col-5">
-                            <form method="POST" name="recipe_ingredients">
-                                <input type="text" class="form-control" id="recipe-ingredient"
-                                       placeholder="Ingredient #6">
-                            </form>
+                            <input type="text" class="form-control" id="recipe_ingredient" name="recipe_ingredient"
+                                   placeholder="Ingredient #6">
+
+                            <label class="small">Functionality to add more ingredients coming soon</label>
                         </div>
 
-                        <label>Functionality to add more ingredients coming soon</label>
+                        <br>
 
-                    </form>
+                        <label class="font-weight-bold">Upload an image of your dish</label>
 
-                    <br>
-
-                    <label class="font-weight-bold">Upload an image of your dish</label>
-                    <div class="input-group col-7">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                        <div class="form-group col-5">
+                            <input type="text" class="form-control" id="recipe_picture" name="recipe_picture"
+                                   placeholder="Recipe image link">
                         </div>
-                        <div class="custom-file">
-                            <form method="POST" name="recipe_picture">
-
-                                <input type="file" class="custom-file-input" id="recipe-upload" accept=".jpg,.png"
-                                       aria-describedby="inputGroupFileAddon01">
-                            </form>
-                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                        </div>
-                    </div>
-
-                    <br>
 
 
-                    <label class="font-weight-bold">Enter the estimated cooking time range</label>
-                    <div class="row">
-                        <div class="col form-group col-2">
-                            <form method="POST" name="recipe_cooking_time">
+                        <br>
+
+                        <label class="font-weight-bold">Enter the estimated cooking time</label>
+
+                        <div class="row">
+                            <div class="col form-group col-2">
                                 <input type="number" class="form-control" name="recipe_cooking_time"
-                                       id="cooking_time_min"
+                                       id="recipe_cooking_time"
                                        placeholder="Min" value="{{ current_user.filters.cooking_time_min }}">
-                            </form>
+                            </div>
                         </div>
-                    </div>
 
-                    <label class="font-weight-bold">Enter the estimated calorie amount</label>
-                    <div class="row">
-                        <div class="col form-group col-2">
-                            <form method="POST" name="recipe_calories">
-                                <input type="number" class="form-control" name="calorie_min" id="calorie_min"
+                        <label class="font-weight-bold">Enter the estimated calorie amount</label>
+
+                        <div class="row">
+                            <div class="col form-group col-2">
+                                <input type="number" class="form-control" name="recipe_calorie_count"
+                                       id="recipe_calorie_count"
                                        placeholder="Calories" value="{{ current_user.filters.calorie_min }}">
-                            </form>
+                            </div>
                         </div>
 
-                    </div>
-
-                    <div>
-                        <form method="POST" action="{{ url_for('users.addRecipe') }}">
+                        <div>
                             <input class="btn btn-primary" type="submit" value="Submit Recipe">
-                        </form>
-                    </div>
-
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-
+    </div>
 {% endblock %}

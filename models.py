@@ -1,6 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
+from flask_login import UserMixin, AnonymousUserMixin
+from datetime import datetime
+# from sqlalchemy_imageattach.entity import Image, image_attachment
+
 
 db = SQLAlchemy()
 
@@ -11,15 +14,20 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), nullable=False, unique=True)
     password_hash = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(500), nullable=False, default="No description.")
-    create_date = db.Column(db.DateTime, nullable=False)
+    create_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     avatar = db.Column(db.String(255), nullable=False, default="https://via.placeholder.com/200/09f/fff.png")
     filters = db.relationship('Filter', uselist=False, backref="users")
-
+    planned_recipes = db.relationship("PlannedRecipeAssociation", back_populates="user")
+    
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
     
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+class Anon(AnonymousUserMixin):
+    __tablename__ = 'anon-users-table'
+    filters = db.relationship('Filter', uselist=False, backref="users")
 
 class RecipeIngredientAssociation(db.Model):
     __tablename__ = "recipe-ingredient-association"
@@ -43,6 +51,7 @@ class Recipe(db.Model):
     recipe_calorie_count = db.Column(db.Integer, nullable=False)
 
     ingredients = db.relationship("RecipeIngredientAssociation", back_populates="recipe")
+    planning_users = db.relationship("PlannedRecipeAssociation", back_populates="recipe")
 
 class Ingredient(db.Model):
     __tablename__ = "ingredients-table"
@@ -67,3 +76,13 @@ class Filter(db.Model):
     dietary_preferences = db.Column(db.String(255), default='Standard')
     cooking_time_min = db.Column(db.Integer, default=0)
     cooking_time_max = db.Column(db.Integer, default=600)
+
+class PlannedRecipeAssociation(db.Model):
+    __tablename__ = 'planned-recipe-assoc'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users-table.id"))
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipes-table.recipe_id"))
+    start = db.Column(db.String(64), nullable=False)
+
+    user = db.relationship("User", back_populates="planned_recipes")
+    recipe = db.relationship("Recipe", back_populates="planning_users")
