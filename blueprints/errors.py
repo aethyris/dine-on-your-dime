@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-# import traceback
+import traceback
 
 
 errors = Blueprint('errors', __name__, template_folder="templates")

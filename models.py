@@ -2,6 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
 from datetime import datetime
+# from sqlalchemy_imageattach.entity import Image, image_attachment
+
 
 db = SQLAlchemy()
 
@@ -81,6 +83,7 @@ class PlannedRecipeAssociation(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users-table.id"))
     recipe_id = db.Column(db.Integer, db.ForeignKey("recipes-table.recipe_id"))
     start = db.Column(db.String(64), nullable=False)
+    end = db.Column(db.String(64), nullable=False)
 
     user = db.relationship("User", back_populates="planned_recipes")
     recipe = db.relationship("Recipe", back_populates="planning_users")

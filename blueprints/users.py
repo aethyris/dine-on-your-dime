@@ -6,6 +6,7 @@ from datetime import datetime
 
 users = Blueprint('users', __name__, template_folder="templates")
 
+
 @users.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -32,6 +33,7 @@ def signup():
         db.session.commit()
         return redirect(url_for('users.login'))
     return render_template('signup.html', form=form)
+
 
 @users.route('/logout')
 @login_required
@@ -72,17 +74,23 @@ def settings():
         current_user.filters.cooking_time_max = filter_form.cooking_time_max.data
         db.session.commit()
         return redirect(url_for('users.settings'))
-    return render_template('settings.html', user_info=current_user)
+    return render_template('settings.html', user_info=current_user, info_form=info_form)
 
 @users.route('/create_recipe', methods=["GET", "POST"])
-def addRecipe():
-    if request.form:
-        recipe = Recipe(recipe_title=request.form.get("recipe_title")), \
-                 Recipe(recipe_description=request.form.get("recipe_description")), \
-                 Recipe(recipe_picture=request.form.get("recipe_upload")), \
-                 Recipe(recipe_cooking_time=request.form.get("recipe_cooking_time")),\
-                 Recipe(recipe_calorie_count=request.form.get("recipe_calories"))
-        db.session.add(recipe)
+@login_required
+def add_recipe():
+    if request.method == "POST":
+        user_recipe = Recipe(
+            recipe_title=request.form.get("recipe_title"),
+            recipe_author=current_user.username,
+            recipe_date=20190403,
+            recipe_description=request.form.get("recipe_description"),
+            recipe_rating=5,
+            recipe_picture=request.form.get("recipe_picture"),
+            recipe_cooking_time=request.form.get("recipe_cooking_time"),
+            recipe_calorie_count=request.form.get("recipe_calorie_count"))
+        print(request.form.get("recipe_title"))
+        db.session.add(user_recipe)
         db.session.commit()
 
-        return render_template(settings.html, user_info=current_user)
+    return render_template('index.html')

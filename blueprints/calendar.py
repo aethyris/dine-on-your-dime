@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for, Response
 from models import User, db, Recipe, PlannedRecipeAssociation
 from flask_login import current_user, login_required
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 
 calendar = Blueprint('calendar', __name__, template_folder="templates")
@@ -20,7 +20,8 @@ def return_data(username):
             'assoc': planned_recipe.id,
             'rid': planned_recipe.recipe.recipe_id, 
             'title': planned_recipe.recipe.recipe_title, 
-            'start': planned_recipe.start, 
+            'start': planned_recipe.start,
+            'end': planned_recipe.end,
             'description': planned_recipe.recipe.recipe_description}
         json_data.append(dict_data)
     return Response(json.dumps(json_data), mimetype='application/json')
@@ -30,7 +31,10 @@ def return_data(username):
 def add_data():
     if request.method == 'POST':
         recipe = Recipe.query.filter_by(recipe_id=request.form.get('recipe')).first()
-        assoc = PlannedRecipeAssociation(user=current_user, recipe=recipe, start=datetime.now().replace(microsecond=0).isoformat())
+        start_time = str(request.form.get('dt'))
+        duration = int(recipe.recipe_cooking_time)
+        end_time = (datetime.fromisoformat(start_time) + timedelta(minutes=duration)).isoformat()
+        assoc = PlannedRecipeAssociation(user=current_user, recipe=recipe, start=start_time, end=end_time)
         db.session.add(assoc)
         db.session.commit()
     return redirect(url_for('calendar.view_calendar', username=current_user.username)) 
@@ -40,6 +44,6 @@ def add_data():
 def remove_data():
     if request.method == 'POST':
         assoc = PlannedRecipeAssociation.query.filter_by(id=request.form.get('assoc_id')).first()
-        db.session.remove(assoc)
+        db.session.delete(assoc)
         db.session.commit()
     return redirect(url_for('calendar.view_calendar', username=current_user.username))
