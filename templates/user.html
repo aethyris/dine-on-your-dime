@@ -10,12 +10,12 @@
             <h2 class='text-primary'>{{ user.username }}</h2>
             <p class='text-dark'>{{ user.description }}</p>
             {% if user == current_user %}
-                <a href="{{ url_for('users.settings') }}" class="btn btn-outline-primary float-right">Edit Profile</a>
+                <a href="{{ url_for('users.settings') }}" class="btn btn-primary float-right">Edit Profile</a>
             {% endif %}
+            <a href="{{ url_for('calendar.view_calendar', username=current_user.username) }}"
+                class="btn btn-outline-primary float-left">View Meal Plans</a>
         </div>
     </div>
-
-    <a href="{{ url_for('calendar.view_calendar', username=current_user.username) }}" class="btn btn-outline-primary">View Calendar</a>
 
     <div class="row mt-3">
         <div class="col-md-4">

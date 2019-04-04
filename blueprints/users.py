@@ -76,7 +76,6 @@ def settings():
         return redirect(url_for('users.settings'))
     return render_template('settings.html', user_info=current_user, info_form=info_form)
 
-
 @users.route('/create_recipe', methods=["GET", "POST"])
 @login_required
 def add_recipe():
