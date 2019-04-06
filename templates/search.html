@@ -34,7 +34,7 @@
                 {% for recipe in recipes %}
                     <div class="card bg-default mb-2">
                         <div class="card-header">
-                            <h4 class="pt-1" style="display: inline-block;">{{ recipe.recipe_title }}</h4>
+                            <a class="pt-1" href="{{ url_for('recipes.show_recipe', recipe_id=recipe.recipe_id) }}">{{ recipe.recipe_title }}</a>
                             {% if current_user.is_authenticated %}
                             <button class='btn btn-outline-primary float-right' data-toggle="modal" data-target="#add{{ recipe.recipe_id }}Modal">Plan</button>
                             {% endif %}

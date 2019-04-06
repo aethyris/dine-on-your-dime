@@ -1,26 +1,41 @@
-{% extends layout.html %}
+{% extends 'layout.html' %}
 {% block body %}
 
-    {% if recipes is defined and recipes[0] is defined %}
-    {% for recipe in recipes %}
+
 
     <div>
-    <figure class="figure">
-      <img src="..." class="figure-img img-fluid rounded" alt="placeholder">
-      <figcaption class="figure-caption">{{ recipe.recipe_title }}</figcaption>
-    </figure>
+        <p>{{ recipe.recipe_title }}</p>
     </div>
-
-    <div>
-<ul class="list-group list-group-flush">
-    <u>List of Ingredients</u>
-  <li class="list-group-item">Ingredient 1</li>
-  <li class="list-group-item">Ingredient 2</li>
-  <li class="list-group-item">Ingredient 3</li>
-  <li class="list-group-item">Ingredient 4</li>
-  <li class="list-group-item">Ingredient 5</li>
-</ul>
-    </div>
+{#    {% for recipe in recipes %}#}
+{#        {% if recipes is defined and recipes[0] is defined %}#}
 
 
+        <div class="card-body">
+            <p class="card-text">{{ recipe.recipe_title }}</p>
+
+
+        </div>
+
+    <div><img src="{{ recipe.recipe_picture }}"  alt="st">
+</div>
+{#        {% else %}#}
+{#                <p>No recipes found.</p>#}
+{#            {% endif %}#}
+{#    {% endfor %}#}
+
+
+    {#    {% endfor %}#}
+
+    {#    <div>#}
+    {#<ul class="list-group list-group-flush">#}
+    {#    <u>List of Ingredients</u>#}
+    {#  <li class="list-group-item">Ingredient 1</li>#}
+    {#  <li class="list-group-item">Ingredient 2</li>#}
+    {#  <li class="list-group-item">Ingredient 3</li>#}
+    {#  <li class="list-group-item">Ingredient 4</li>#}
+    {#  <li class="list-group-item">Ingredient 5</li>#}
+    {#</ul>#}
+    {#    </div>#}
+    {#{% endif %}#}
+    {#{% endfor %}#}
 {% endblock %}
