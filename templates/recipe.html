@@ -2,40 +2,171 @@
 {% block body %}
 
 
+    <br>
+    <h2 class="display-4">{{ recipe.recipe_title }}</h2>
 
-    <div>
-        <p>{{ recipe.recipe_title }}</p>
-    </div>
-{#    {% for recipe in recipes %}#}
-{#        {% if recipes is defined and recipes[0] is defined %}#}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 card border-0 bg-transparent" style="height: 450px">
+                <img style='max-height: 100%; max-width: 100%; object-fit: contain' src="{{ recipe.recipe_picture }}"
+                     alt="Recipe Image">
+                <div class="card-footer" style="height: auto;">(Like/follow/rating buttons and stuff can go here. If you
+                    have another location
+                    in mind feel free to place it there)
+                </div>
+            </div>
+            <div class="col-sm-4 card border-0 bg-transparent">
+                <br>
+                <div class="card border-primary mb-3" style="height: 113px;max-width: 18rem">
+                    <div class="card-header" style="text-align: center">Submitted By</div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title font-weight-bold" style="text-align: center"><img
+                                class="rounded-circle img-fluid"
+                                style='max-height: 11%; max-width: 11%; object-fit: contain'
+                                src="{{ user.avatar }}"
+                                alt="Recipe Image"> {{ recipe.recipe_author }}</h5>
+                    </div>
+
+                    <div class="card border-primary mb-3" style="height: 113px;max-width: 18rem">
+                        <div class="card-header" style="text-align: center">Cooking Time</div>
+                        <div class="card-body text-primary">
+                            <h5 class="card-title font-weight-bold"
+                                style="text-align: center">{{ recipe.recipe_cooking_time }} Minutes</h5>
+                        </div>
+
+                        <div class="card border-primary mb-3" style="height: 113px;max-width: 18rem ">
+                            <div class="card-header" style="text-align: center">Calories</div>
+                            <div class="card-body text-primary">
+                                <h5 class="card-title font-weight-bold"
+                                    style="text-align: center">{{ recipe.recipe_calorie_count }} Calories</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
-        <div class="card-body">
-            <p class="card-text">{{ recipe.recipe_title }}</p>
+            <!-- having some trouble with the spacing between containers here, too close on some pages
+            but good on others, not sure how to make it consistent -->
+            <h2 class="display-5 card border-0 bg-transparent" style="padding-top:150px">Description</h2>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 card" style="height: auto">
+                        <br>
+                        <p style="font-size: larger">{{ recipe.recipe_description }}
+
+                        </p>
+
+                        <br>
+
+                        <h4><u>Steps</u></h4> (Presumably user would enter the steps as part of the description. Just
+                        putting this here for visual reference. Feel free to delete)
+                        <br>
+
+                    </div>
+
+                    <div class="col-sm-4 card border-0 bg-transparent">
+                        <br>
+                        <div class="card border-primary mb-3" style="height: auto;max-width: 18rem">
+                            <div class="card-header" style="text-align: center">Ingredients</div>
+                            <div class="card-body text-primary">
+                                <ul class="list-group list-group-flush">
+                                    <b style="text-align: center">
+                                        <li class="list-group-item">Ingredient #1</li>
+                                        <li class="list-group-item">Ingredient #2</li>
+                                        <li class="list-group-item">Ingredient #3</li>
+                                        <li class="list-group-item">Ingredient #4</li>
+                                        <li class="list-group-item">Ingredient #5</li>
+                                        <li class="list-group-item">Ingredient #6</li>
+                                    </b>
+                                </ul>
+                            </div>
 
 
+                        </div>
+                        <div class="card border-primary mb-3" style="height: auto;max-width: 18rem">
+                            <div class="card-header" style="text-align: center">Shopping List</div>
+                            <div class="card-body text-primary">
+                                <h5 class="card-title ">Generate a shopping list with all your required ingredients</h5>
+                                <button type="button" class="btn btn-primary btn-lg btn-block" disabled>Create Shopping
+                                    List
+                                </button>
+                                <small>Temp location feel free to change/edit if you're implementing this feature
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <h2 class="display-5 card border-0 bg-transparent" style="padding-top:150px">Comments</h2>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-9 card" style="height: auto">
+                                <br>
+                                <div class="form-group">
+                                    <label for="comment">(Not functioning/Temp location feel free to change/edit if
+                                        you're implementing this feature)</label>
+                                    <textarea class="form-control" disabled rows="5" id="comment"></textarea>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-12 card border-0 bg-transparent">
+                                <br>
+
+                                <h2>Other Recipes you might like</h2>
+                                <div class="row mt-3">
+                                    <div class="col-md-4">
+                                        <div class="card">
+                                            <h5 class="card-header">
+                                                Card title
+                                            </h5>
+                                            <div class="card-body">
+                                                <p class="card-text">
+                                                    Card content
+                                                </p>
+                                            </div>
+                                            <div class="card-footer">
+                                                Card footer
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card">
+                                            <h5 class="card-header">
+                                                Card title
+                                            </h5>
+                                            <div class="card-body">
+                                                <p class="card-text">
+                                                    Card content
+                                                </p>
+                                            </div>
+                                            <div class="card-footer">
+                                                Card footer
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card">
+                                            <h5 class="card-header">
+                                                Card title
+                                            </h5>
+                                            <div class="card-body">
+                                                <p class="card-text">
+                                                    Card content
+                                                </p>
+                                            </div>
+                                            <div class="card-footer">
+                                                Card footer
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-    <div><img src="{{ recipe.recipe_picture }}"  alt="st">
-</div>
-{#        {% else %}#}
-{#                <p>No recipes found.</p>#}
-{#            {% endif %}#}
-{#    {% endfor %}#}
-
-
-    {#    {% endfor %}#}
-
-    {#    <div>#}
-    {#<ul class="list-group list-group-flush">#}
-    {#    <u>List of Ingredients</u>#}
-    {#  <li class="list-group-item">Ingredient 1</li>#}
-    {#  <li class="list-group-item">Ingredient 2</li>#}
-    {#  <li class="list-group-item">Ingredient 3</li>#}
-    {#  <li class="list-group-item">Ingredient 4</li>#}
-    {#  <li class="list-group-item">Ingredient 5</li>#}
-    {#</ul>#}
-    {#    </div>#}
-    {#{% endif %}#}
-    {#{% endfor %}#}
+    </div>
 {% endblock %}

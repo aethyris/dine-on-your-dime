@@ -8,6 +8,8 @@
             <div class="col-md-12">
                 <h2 class="text-primary">User Preferences</h2>
             </div>
+
+            <!-- side nav -->
             <div class="col-md-3">
                 <nav class="nav flex-column nav-pills">
                     <a class="nav-link active" href="#profiletab" data-toggle="tab">Profile</a>
@@ -16,10 +18,16 @@
                     <a class="nav-link disabled" href="#">Other</a>
                 </nav>
             </div>
+
+            <!-- contents of each side nav -->
             <div class="col-md-9 tab-content">
+
+                <!-- user information -->
                 <div class="tab-pane active" id="profiletab">
                     {{ wtf.quick_form(info_form, button_map={'submit': 'primary'}) }}
                 </div>
+
+                <!-- user filters -->
                 <div class="tab-pane" id="filtertab">
                     <form action="" method="post">
                         {% include 'filter.html' %}
@@ -98,7 +106,7 @@
                             <div class="col form-group col-2">
                                 <input type="number" class="form-control" name="recipe_cooking_time"
                                        id="recipe_cooking_time"
-                                       placeholder="Min" value="{{ current_user.filters.cooking_time_min }}">
+                                       placeholder="Min" >
                             </div>
                         </div>
 
