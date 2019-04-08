@@ -76,6 +76,16 @@ def settings():
         return redirect(url_for('users.settings'))
     return render_template('settings.html', user_info=current_user, info_form=info_form)
 
+
+# @users.route('/settings/admin', methods=["GET", "POST"])
+# @login_required
+# def admin(username=User.username):
+#     recipe = Recipe.query.all()
+#     user = User.query.filter_by(username=username).first()
+#
+#     return render_template('admin.html', recipe=recipe, user=user)
+
+
 @users.route('/create_recipe', methods=["GET", "POST"])
 @login_required
 def add_recipe():
