@@ -5,8 +5,8 @@ from datetime import datetime
 
 db = SQLAlchemy()
 followers = db.Table('followers',
-    db.Column('follower_id', db.Integer, db.ForeignKey('user-table.id')),
-    db.Column('followed_id', db.Integer, db.ForeignKey('user-table.id'))
+    db.Column('follower_id', db.Integer, db.ForeignKey('users-table.id')),
+    db.Column('followed_id', db.Integer, db.ForeignKey('users-table.id'))
 )
 
 class User(UserMixin, db.Model):
@@ -20,7 +20,7 @@ class User(UserMixin, db.Model):
     avatar = db.Column(db.String(255), nullable=False, default="https://via.placeholder.com/200/09f/fff.png")
     filters = db.relationship('Filter', uselist=False, backref="users")
     planned_recipes = db.relationship("PlannedRecipeAssociation", back_populates="user")
-    recipes = db.relationship('Recipe', uselist=False, back_populates='recipe_author')
+    recipes = db.relationship("Recipe", uselist=False, back_populates="recipe_author")
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
@@ -61,9 +61,9 @@ class Recipe(db.Model):
     __tablename__ = "recipes-table"
     recipe_id = db.Column(db.Integer, primary_key=True)
     recipe_title = db.Column(db.String(120), nullable=False)
-    recipe_author_id = db.relationship(db.Integer, db.ForeignKey('user-table.id'))
-    recipe_author = db.relationship('User', back_populates='recipes')
     recipe_date = db.Column(db.Numeric, nullable=False)
+    recipe_author_id = db.Column(db.Integer, db.ForeignKey('users-table.id'))
+    recipe_author = db.relationship("User", back_populates="recipes")
     recipe_description = db.Column(db.String(2000), nullable=False)
     recipe_rating = db.Column(db.Numeric, nullable=False)
     recipe_picture = db.Column(db.String(120), nullable=False)

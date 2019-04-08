@@ -11,7 +11,6 @@ from blueprints.errors import errors
 from blueprints.calendar import calendar
 from config import Config
 from models import db, User, RecipeIngredientAssociation, Recipe, Ingredient, Filter, PlannedRecipeAssociation
-from populate import pop
 
 app = Flask(__name__)
 app.debug = True
@@ -55,7 +54,6 @@ def main():
     if (len(sys.argv) == 2):
         if sys.argv[1] == 'createdb':
             db.create_all()
-            pop()
             print("Created database.")
         elif sys.argv[1] == 'deltables':
             db.reflect()
