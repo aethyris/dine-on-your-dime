@@ -93,7 +93,7 @@ def add_recipe():
         user_recipe = Recipe(
             recipe_title=request.form.get("recipe_title"),
             recipe_author=current_user.username,
-            recipe_date=20190403,
+            recipe_date=20190409,
             recipe_description=request.form.get("recipe_description"),
             recipe_rating=5,
             recipe_picture=request.form.get("recipe_picture"),

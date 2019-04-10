@@ -1,9 +1,16 @@
 {% extends 'layout.html' %}
 {% block body %}
 
-
     <br>
-    <h2 class="display-4">{{ recipe.recipe_title }}</h2>
+    <h2 class="display-4">{{ recipe.recipe_title }}
+
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('recipes.promote_recipe', recipe_id=recipe.recipe_id) }}">
+                <button type="button" class="btn btn-success">Promote</button>
+            </a>
+        {% else %}
+        {% endif %}
+    </h2>
 
     <div class="container">
         <div class="row">
@@ -44,6 +51,7 @@
                     </div>
                 </div>
             </div>
+
 
 
             <!-- having some trouble with the spacing between containers here, too close on some pages

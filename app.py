@@ -29,8 +29,6 @@ admin.add_view(ModelView(Recipe, db.session))
 admin.add_view(ModelView(Ingredient, db.session))
 admin.add_view(ModelView(Filter, db.session))
 admin.add_view(ModelView(PlannedRecipeAssociation, db.session))
-
-
 # Admin Settings
 
 @login.user_loader
