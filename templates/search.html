@@ -1,76 +1,118 @@
 {% extends 'layout.html' %}
 {% block body %}
-<script>
-    $(function () {
-        $('.add-form').ajaxForm(function () {
-            $('.add-meal').modal('hide');
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/javascript.util/0.12.12/javascript.util.min.js"></script>
+    <script>
+        $(function () {
+            $('.add-form').ajaxForm(function () {
+                $('.add-meal').modal('hide');
+                $('.toast').toast('show');
+            });
         });
-    });
-</script>
+    </script>
 
-<div class="container-fluid">
-	<div class="row mb-3">
-		<div class="col-md-12">
-			<h3>Search results for "{{keyword}}":</h3>
-			<p class="text-muted"></p>
-			<div id="filter-card">
-                <div class="card">
-                    <div class="card-header">
-                         <a class="collapsed card-link" data-toggle="collapse" data-parent="#filter-card" href="#filter-contents">Filters</a>
-                    </div>
-                    <div id="filter-contents" class="collapse">
-                        <div class="card-body">
-                            Show Filters
+    <!-- toast doesn't stay in one spot -->
+    <div aria-live="polite" aria-atomic="true" class="position-absolute d-flex flex-column p-4 h-100"
+         style="width: 95%;">
+        <div class="toast ml-auto" role="alert" data-delay="10000" data-autohide="true" style="z-index: 999999;">
+            <div class="toast-header border-primary bg-light">
+                <strong class="ml-auto text-primary">Recipe added.</strong>
+                <a class="ml-3 mr-auto text-muted"
+                   href="{{ url_for('calendar.view_calendar', username=current_user.username) }}">View meal plan.</a>
+                <button type="button" class="ml-1 close" data-dismiss="toast">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <!-- Would show list of filters. Doesn't do anything right now. -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <h3>Search results for "{{ keyword }}":</h3>
+                <p class="text-muted"></p>
+                <div id="filter-card">
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="collapsed card-link" data-toggle="collapse" data-parent="#filter-card"
+                               href="#filter-contents">Filters</a>
+                        </div>
+                        <div id="filter-contents" class="collapse">
+                            <div class="card-body">
+                                Show Filters
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-		</div>
-    </div>
+        </div>
 
-    <div class="row mb-3">
-        <div class="col-md-4">
-            {% if recipes is defined and recipes[0] is defined %}
-                {% for recipe in recipes %}
-                    <div class="card bg-default mb-2">
-                        <div class="card-header">
-                            <h4 class="pt-1" style="display: inline-block;">{{ recipe.recipe_title }}</h4>
-                            {% if current_user.is_authenticated %}
-                            <button class='btn btn-outline-primary float-right' data-toggle="modal" data-target="#add{{ recipe.recipe_id }}Modal">Plan</button>
-                            {% endif %}
+        <!-- Displays list of recipes in card format. Not paginated. -->
+        <div class="row mb-3" >
+            <div class="col-lg-6">
+                {% if recipes is defined and recipes[0] is defined %}
+                    {% for recipe in recipes %}
+                        <div class="card bg-default mb-2">
+                            <div class="card-header">
+                                <h3><a class="pt-1"
+                                       href="{{ url_for('recipes.show_recipe', recipe_id=recipe.recipe_id) }}">{{ recipe.recipe_title }}</a>
+
+                                    <!-- Opens the modal to add to meal plan. Each recipe has a different modal based on it's id. -->
+                                    {% if current_user.is_authenticated %}
+                                    <button class='btn btn-outline-primary float-right' data-toggle="modal"
+                                            data-target="#add{{ recipe.recipe_id }}Modal"> Plan
+                                    </button>
+                                {% endif %}
+                                </h3>
+                            </div>
+                            <div class="card" style="height: 350px" >
+                                <a class="pt-1"
+                                       href="{{ url_for('recipes.show_recipe', recipe_id=recipe.recipe_id) }}">
+                                    <img style='height: 100%; width: 100%; object-fit: contain' src="{{ recipe.recipe_picture }}" alt="Recipe Image"></a>
+                            </div>
+
+                            <div class="card-body">
+                                <p class="card-text">{{ recipe.recipe_description }}</p>
+                            </div>
+                            <div class="card-footer">
+                                <p class="card-text">by {{ recipe.recipe_author.username }}</p>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <p class="card-text">{{ recipe.recipe_description }}</p>
-                        </div>
-                        <div class="card-footer">
-                            <p class="card-text">by {{ recipe.recipe_author }}</p>
-                        </div>
-                    </div>
-                    <div class="modal fade add-meal" id="add{{ recipe.recipe_id }}Modal">
-                        <div class="modal-dialog">
-                            <div class='modal-content'>
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Add to Calendar</h4>
-                                    <button type="button" class="close" data-dismiss="modal">&times</button>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="{{ url_for('calendar.add_data') }}" id="addForm" class="add-form" method="post">
-                                        <input type="datetime-local" id="dt" name="dt">
-                                        <input type='hidden' id='recipe' name='recipe' value='{{ recipe.recipe_id }}'>
-                                        <button type="submit" class="btn btn-outline-primary">Add</button>
-                                    </form>
+
+                        <!-- Modal to add recipe to meal plan. -->
+                        <div class="modal fade add-meal" id="add{{ recipe.recipe_id }}Modal">
+                            <div class="modal-dialog">
+                                <div class='modal-content'>
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Add to Calendar</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{ url_for('calendar.add_data') }}" id="addForm" class="add-form"
+                                              method="post">
+                                            <div class="form-group">
+                                                <label for="dt">Start time</label>
+                                                <input class="form-control" type="datetime-local" id="dt" name="dt">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="notes">Notes</label>
+                                                <textarea class="form-control" id="notes" name="notes"></textarea>
+                                            </div>
+                                            <input type='hidden' id='recipe' name='recipe'
+                                                   value='{{ recipe.recipe_id }}'>
+                                            <button type="submit" class="btn btn-outline-primary">Add</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p>No recipes found.</p>
-            {% endif %}
+                    {% endfor %}
+
+                {% else %}
+                    <p>No recipes found.</p>
+                {% endif %}
+            </div>
         </div>
     </div>
-
-    
-</div>
 
 {% endblock %}

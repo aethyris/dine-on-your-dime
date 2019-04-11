@@ -12,6 +12,8 @@ pymysql = "*"
 flask-login = "*"
 flask-wtf = "*"
 flask-bootstrap = "*"
+shell = "*"
+flask-admin = "*"
 
 [requires]
 python_version = "3.7"
