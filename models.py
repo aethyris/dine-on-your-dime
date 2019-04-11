@@ -34,21 +34,15 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def follow(self, user):
-        print('User - follow method')
         if self.followed.filter(followers.c.followed_id == user.id).first() is None:
-            print('in if statement')
             self.followed.append(user)
 
     def unfollow(self, user):
-        print('User - unfollow method')
         if self.followed.filter(followers.c.followed_id == user.id).first() is not None:
-            print('in if statement')
             self.followed.remove(user)
         
-    def follwed_posts(self):
-        print('User - followed_posts method')
+    def followed_recipes(self):
         return Recipe.query.join(followers, (followers.c.followed_id == Recipe.recipe_author_id)).filter(followers.c.follower_id == self.id).order_by(Recipe.recipe_date.desc())
-
 
 class Anon(AnonymousUserMixin):
     __tablename__ = 'anon-users-table'
@@ -69,7 +63,7 @@ class Recipe(db.Model):
     __tablename__ = "recipes-table"
     recipe_id = db.Column(db.Integer, primary_key=True)
     recipe_title = db.Column(db.String(120), nullable=False)
-    recipe_date = db.Column(db.DateTime, nullable=False)
+    recipe_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     recipe_author_id = db.Column(db.Integer, db.ForeignKey('users-table.id'))
     recipe_author = db.relationship("User", back_populates="recipes")
     recipe_description = db.Column(db.String(2000), nullable=False)
