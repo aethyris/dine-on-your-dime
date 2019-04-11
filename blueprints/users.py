@@ -93,7 +93,7 @@ def add_recipe():
         user_recipe = Recipe(
             recipe_title=request.form.get("recipe_title"),
             recipe_author=current_user.username,
-            recipe_date=20190403,
+            recipe_date=datetime.utcnow(),
             recipe_description=request.form.get("recipe_description"),
             recipe_rating=5,
             recipe_picture=request.form.get("recipe_picture"),
@@ -104,3 +104,35 @@ def add_recipe():
         db.session.commit()
 
     return render_template('index.html')
+
+@users.route('/follow/<username>')
+@login_required
+def follow(username):
+    print('Enter follow method')
+    user = User.query.filter_by(username=username).first_or_404()
+    print('Queried user table')
+    if user == current_user:
+        print('Enter if statement')
+        return redirect(url_for('users.view_user', username=username))
+    print('Try to follow user')
+    current_user.follow(user)
+    print('Followed user')
+    db.session.commit()
+    print('Committed data')
+    return redirect(url_for('users.view_user', username=username))
+
+@users.route('/unfollow/<username>')
+@login_required
+def unfollow(username):
+    print('Enter unfollow method')
+    user = User.query.filter_by(username=username).first_or_404()
+    print('Queried user table')
+    if user == current_user:
+        print('Enter if statement')
+        return redirect(url_for('users.view_user', username=username))
+    print('Trying to unfollow')
+    current_user.unfollow(user)
+    print('Unfollowed user')
+    db.session.commit()
+    print('Committed')
+    return redirect(url_for('users.view_user', username=username))

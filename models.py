@@ -34,12 +34,20 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def follow(self, user):
-        if not user in self.followed:
+        print('User - follow method')
+        if self.followed.filter(followers.c.followed_id == user.id).first() is None:
+            print('in if statement')
             self.followed.append(user)
 
     def unfollow(self, user):
-        if user in self.followed:
+        print('User - unfollow method')
+        if self.followed.filter(followers.c.followed_id == user.id).first() is not None:
+            print('in if statement')
             self.followed.remove(user)
+        
+    def follwed_posts(self):
+        print('User - followed_posts method')
+        return Recipe.query.join(followers, (followers.c.followed_id == Recipe.recipe_author_id)).filter(followers.c.follower_id == self.id).order_by(Recipe.recipe_date.desc())
 
 
 class Anon(AnonymousUserMixin):
@@ -61,7 +69,7 @@ class Recipe(db.Model):
     __tablename__ = "recipes-table"
     recipe_id = db.Column(db.Integer, primary_key=True)
     recipe_title = db.Column(db.String(120), nullable=False)
-    recipe_date = db.Column(db.Numeric, nullable=False)
+    recipe_date = db.Column(db.DateTime, nullable=False)
     recipe_author_id = db.Column(db.Integer, db.ForeignKey('users-table.id'))
     recipe_author = db.relationship("User", back_populates="recipes")
     recipe_description = db.Column(db.String(2000), nullable=False)
@@ -78,7 +86,7 @@ class Ingredient(db.Model):
     __tablename__ = "ingredients-table"
     ingredient_id = db.Column(db.Integer, primary_key=True)
     ingredient_name = db.Column(db.String(120), nullable=False)
-    ingredient_description = db.Column(db.String(120), nullable=False)
+    ingredient_description = db.Column(db.String(120), nullable=False, default="No description.")
     ingredient_picture = db.Column(db.String(120), nullable=False)
     ingredient_calorie_count = db.Column(db.Integer, nullable=False)
 

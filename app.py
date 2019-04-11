@@ -13,9 +13,7 @@ from config import Config
 from models import db, User, RecipeIngredientAssociation, Recipe, Ingredient, Filter, PlannedRecipeAssociation
 
 app = Flask(__name__)
-app.debug = True
 login = LoginManager(app)
-app.secret_key = 'much secret'  # for some reason flask_login needs a secret key?
 app.config.from_object(Config)
 db.init_app(app)
 Bootstrap(app)
