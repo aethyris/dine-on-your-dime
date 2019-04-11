@@ -99,7 +99,6 @@ def add_recipe():
             recipe_picture=request.form.get("recipe_picture"),
             recipe_cooking_time=request.form.get("recipe_cooking_time"),
             recipe_calorie_count=request.form.get("recipe_calorie_count"))
-        print(request.form.get("recipe_title"))
         db.session.add(user_recipe)
         db.session.commit()
 
