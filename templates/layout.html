@@ -114,11 +114,11 @@
   <p><font face = "tahoma" color = darkgray" size = "+2" Popular Recipes </font></p><br/>
    <a ref =  target = "_self">
          <img src = {{recipe.recipe_picture}} alt = "Recipe Image" border = "0"/>
-         <a ref = {{recipe.popularList[0]}} target = "_self">
+         <a ref = {{ url_for(popularList[0]) }} target = "_self">
            <img src = {{recipe.recipe_picture}} alt = "Recipe Image" border = "0"/>
-           <a ref = {{recipe.popularList[1]}} target = "_self">
+           <a ref = {{ url_for(recipe.popularList[1]) }} target = "_self">
             <button class="btn btn-primary" type="more">Click here for more popular recipes</button>
-            <a href = {{recipe.html}} target = "_self">Tutorials Point</a>
+            <a href = {{ url_for(recipe) }} target = "_self"></a>
    </a>
     </body>
 </html>
