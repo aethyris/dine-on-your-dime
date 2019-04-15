@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, FloatField, TextAreaField, SelectField, IntegerField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length, URL
 from models import User
-from flask_uploads import uploadPhoto, images
+from flask_uploads import uploadPhoto, Images
 from flask_wtf.file import fileField, FileRequired
 
 class LoginForm(FlaskForm):
@@ -51,10 +51,12 @@ images = uploadPhoto('images', IMAGES)
 class photoForm(FlaskForm):
     photo = FileField(validators = [FileRequired()])
     submit = submitField('Upload photo')
+    image.show(photo)
 
     def uploadPhoto():
-        photo = FileField('image', validators = [FileRequired(), FileAllowed(['jpg', 'png'], 'Images only')]))
+        photo = FileField('image', validators = [FileRequired(), FileAllowed(['jpg', 'png'], 'Images only')])
 
 class commentForm(FlaskForm):
     comment = TextAreaField('Comment', validators=[DataRequired(), Length(max=800)])
     submit = SubmitField('Submit comment')
+    print(comment)

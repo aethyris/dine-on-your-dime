@@ -2,12 +2,10 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
 from datetime import datetime
+# from sqlalchemy_imageattach.entity import Image, image_attachment
+
 
 db = SQLAlchemy()
-followers = db.Table('followers',
-    db.Column('follower_id', db.Integer, db.ForeignKey('users-table.id')),
-    db.Column('followed_id', db.Integer, db.ForeignKey('users-table.id'))
-)
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users-table'
@@ -20,12 +18,6 @@ class User(UserMixin, db.Model):
     avatar = db.Column(db.String(255), nullable=False, default="https://via.placeholder.com/200/09f/fff.png")
     filters = db.relationship('Filter', uselist=False, backref="users")
     planned_recipes = db.relationship("PlannedRecipeAssociation", back_populates="user")
-    recipes = db.relationship("Recipe", uselist=False, back_populates="recipe_author")
-    followed = db.relationship(
-        'User', secondary=followers,
-        primaryjoin=(followers.c.follower_id == id),
-        secondaryjoin=(followers.c.followed_id == id),
-        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -33,19 +25,9 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def follow(self, user):
-        if not user in self.followed:
-            self.followed.append(user)
-
-    def unfollow(self, user):
-        if user in self.followed:
-            self.followed.remove(user)
-
-
 class Anon(AnonymousUserMixin):
     __tablename__ = 'anon-users-table'
     filters = db.relationship('Filter', uselist=False, backref="users")
-
 
 class RecipeIngredientAssociation(db.Model):
     __tablename__ = "recipe-ingredient-association"
@@ -56,15 +38,13 @@ class RecipeIngredientAssociation(db.Model):
     ingredient = db.relationship("Ingredient", back_populates="recipes")
     recipe = db.relationship("Recipe", back_populates="ingredients")
 
-
 class Recipe(db.Model):
     __tablename__ = "recipes-table"
     recipe_id = db.Column(db.Integer, primary_key=True)
     recipe_title = db.Column(db.String(120), nullable=False)
+    recipe_author = db.Column(db.String(120), nullable=False)
     recipe_date = db.Column(db.Numeric, nullable=False)
-    recipe_author_id = db.Column(db.Integer, db.ForeignKey('users-table.id'))
-    recipe_author = db.relationship("User", back_populates="recipes")
-    recipe_description = db.Column(db.String(2000), nullable=False)
+    recipe_description = db.Column(db.String(120), nullable=False)
     recipe_rating = db.Column(db.Numeric, nullable=False)
     recipe_picture = db.Column(db.String(120), nullable=False)
     recipe_cooking_time = db.Column(db.Integer, nullable=False)
@@ -72,7 +52,6 @@ class Recipe(db.Model):
 
     ingredients = db.relationship("RecipeIngredientAssociation", back_populates="recipe")
     planning_users = db.relationship("PlannedRecipeAssociation", back_populates="recipe")
-
 
 class Ingredient(db.Model):
     __tablename__ = "ingredients-table"
@@ -84,10 +63,9 @@ class Ingredient(db.Model):
 
     recipes = db.relationship("RecipeIngredientAssociation", back_populates="ingredient")
 
-
 class Filter(db.Model):
     __tablename__ = 'user-filters'
-    filter_id = db.Column(db.Integer, primary_key=True)
+    filter_id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('users-table.id'))
     price_min = db.Column(db.Numeric, default=0.00)
     price_max = db.Column(db.Numeric, default=100.00)
@@ -99,16 +77,13 @@ class Filter(db.Model):
     cooking_time_min = db.Column(db.Integer, default=0)
     cooking_time_max = db.Column(db.Integer, default=600)
 
-
 class PlannedRecipeAssociation(db.Model):
-    # Association represents each recipe a user adds to their meal plan.
     __tablename__ = 'planned-recipe-assoc'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users-table.id"))
     recipe_id = db.Column(db.Integer, db.ForeignKey("recipes-table.recipe_id"))
     start = db.Column(db.String(64), nullable=False)
     end = db.Column(db.String(64), nullable=False)
-    notes = db.Column(db.String(500), default="")
 
     user = db.relationship("User", back_populates="planned_recipes")
     recipe = db.relationship("Recipe", back_populates="planning_users")
