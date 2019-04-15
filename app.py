@@ -9,6 +9,7 @@ from blueprints.users import users
 from blueprints.recipe import recipes
 from blueprints.errors import errors
 from blueprints.calendar import calendar
+from datetime import datetime
 from config import Config
 from models import db, User, RecipeIngredientAssociation, Recipe, Ingredient, Filter, PlannedRecipeAssociation
 
@@ -23,12 +24,15 @@ Bootstrap(app)
 # Admin Settings
 app.config['FLASK_ADMIN_SWATCH'] = 'sandstone'
 admin = Admin(app, name='Dine on Your Dime (ADMIN)', template_mode='bootstrap3')
+
+
+admin.add_view(ModelView(Recipe, db.session))
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(RecipeIngredientAssociation, db.session))
-admin.add_view(ModelView(Recipe, db.session))
 admin.add_view(ModelView(Ingredient, db.session))
 admin.add_view(ModelView(Filter, db.session))
 admin.add_view(ModelView(PlannedRecipeAssociation, db.session))
+
 # Admin Settings
 
 @login.user_loader
@@ -43,9 +47,9 @@ app.register_blueprint(errors)
 app.register_blueprint(calendar)
 
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('errors/404.html'), 404
+# @app.errorhandler(404)
+# def page_not_found(e):
+#     return render_template('errors/404.html'), 404
 
 
 def main():

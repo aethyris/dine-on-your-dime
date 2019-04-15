@@ -99,7 +99,9 @@ def add_recipe():
             recipe_picture=request.form.get("recipe_picture"),
             recipe_cooking_time=request.form.get("recipe_cooking_time"),
             recipe_calorie_count=request.form.get("recipe_calorie_count"))
-        db.session.add(user_recipe)
+        recipe_ingredient = Ingredient(
+            ingredient_name=request.form.get("recipe_ingredient"))
+        db.session.add(user_recipe, recipe_ingredient)
         db.session.commit()
 
     return render_template('index.html')

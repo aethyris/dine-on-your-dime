@@ -15,46 +15,57 @@
     <h2 class="display-4">{{ recipe.recipe_title }}
 
         {% if current_user.is_authenticated %}
-        <!--Hidden form for the purpose of sending POST data to index page -->
-{#            <div >#}
-{#                <form action="{{ url_for('home_page.editors_choice', recipe_id=recipe.recipe_id) }}" method="POST">#}
+            <!--Hidden form for the purpose of sending data to index page -->
+            <div>
+{#                <form action="editorschoice.html" target="/" method="GET">#}
+{#                    <div class="form-group">#}
+{#                        <input type="text" class="form-control" id="recipe_id" name="recipe_id"#}
+{#                               value="{{ recipe.recipe_id }}">#}
+{#                    </div>#}
+
 {#                    <div class="form-group">#}
 {#                        <input type="text" class="form-control" id="recipe_title" name="recipe_title"#}
 {#                               value="{{ recipe.recipe_title }}">#}
 {#                    </div>#}
-{##}
-{#                    <div class="form-group">#}
-{#                        <input class="form-control" id="recipe_description" name="recipe_description"#}
-{#                                  value="{{ recipe.recipe_description }}">#}
-{#                    </div>#}
-{##}
-{#                    <div class="form-group">#}
-{#                        <input type="text" class="form-control" id="recipe_picture" name="recipe_picture"#}
-{#                               value="{{ recipe.recipe_picture }}">#}
-{#                    </div>#}
-{##}
-{#                        <div class="form-group">#}
-{#                            <input type="number" class="form-control" name="recipe_cooking_time"#}
-{#                                   id="recipe_cooking_time"#}
-{#                                   value="{{ recipe.recipe_cooking_time}}">#}
-{#                        </div>#}
-{##}
-{#                        <div class="form-group">#}
-{#                            <input type="number" class="form-control" name="recipe_calorie_count"#}
-{#                                   id="recipe_calorie_count"#}
-{#                                   value="{{ recipe.recipe_calorie_count}}">#}
-{#                        </div>#}
-{##}
+
+
+                    {#                    <div class="form-group">#}
+                    {#                        <input class="form-control" id="recipe_description" name="recipe_description"#}
+                    {#                               value="{{ recipe.recipe_description }}">#}
+                    {#                    </div>#}
+                    {##}
+                    {#                    <div class="form-group">#}
+                    {#                        <input type="text" class="form-control" id="recipe_picture" name="recipe_picture"#}
+                    {#                               value="{{ recipe.recipe_picture }}">#}
+                    {#                    </div>#}
+                    {##}
+                    {#                    <div class="form-group">#}
+                    {#                        <input class="form-control" id="recipe_author" name="recipe_author"#}
+                    {#                               value="{{ recipe.recipe_author }}">#}
+                    {#                    </div>#}
+
+                    {#                    <div class="form-group">#}
+                    {#                        <input type="number" class="form-control" name="recipe_cooking_time"#}
+                    {#                               id="recipe_cooking_time"#}
+                    {#                               value="{{ recipe.recipe_cooking_time }}">#}
+                    {#                    </div>#}
+                    {##}
+                    {#                    <div class="form-group">#}
+                    {#                        <input type="number" class="form-control" name="recipe_calorie_count"#}
+                    {#                               id="recipe_calorie_count"#}
+                    {#                               value="{{ recipe.recipe_calorie_count }}">#}
+                    {#                    </div>#}
+
 {#                    <div>#}
 {#                        <input class="btn btn-success" type="submit" value="Promote">#}
 {#                    </div>#}
 {#                </form>#}
-{#            </div>#}
+            </div>
 
-
-            <a href="{{ url_for('home_page.editors_choice', recipe_id=recipe.recipe_id) }}">
-                <button type="button" class="btn btn-success">Promote</button>
-            </a>
+            {##}
+            {#            <a href="{{ url_for('home_page.editors_choice', recipe_id=recipe.recipe_id) }}">#}
+            {#                <button type="button" class="btn btn-success">Promote</button>#}
+            {#            </a>#}
         {% else %}
         {% endif %}
     </h2>
@@ -75,13 +86,13 @@
                 <br>
                 <div class="card border-primary mb-3" style="height: 113px;max-width: 18rem">
                     <div class="card-header" style="text-align: center">Submitted By</div>
-                    <div class="card-body text-primary">
-                        <h5 class="card-title font-weight-bold" style="text-align: center"><img
-                                class="rounded-circle img-fluid"
-                                style='max-height: 11%; max-width: 11%; object-fit: contain'
-                                src="{{ user.avatar }}"
-                                alt="Recipe Image"> {{ recipe.recipe_author.username }}</h5>
-                    </div>
+                                        <div class="card-body text-primary">
+                                            <h5 class="card-title font-weight-bold" style="text-align: center"><img
+                                                    class="rounded-circle img-fluid"
+                                                    style='max-height: 11%; max-width: 11%; object-fit: contain'
+                                                    src="{{ user.avatar }}"
+                                                    alt="Recipe Image"> {{ recipe.recipe_author.username }}</h5>
+                                        </div>
 
                     <div class="card border-primary mb-3" style="height: 113px;max-width: 18rem">
                         <div class="card-header" style="text-align: center">Cooking Time</div>
@@ -224,4 +235,37 @@
             </div>
         </div>
     </div>
+
+
+{#    <div>#}
+{#        <form action="iframeTEST.html" method="post" target="my_iframe">#}
+{#            <input type="submit" value="Do Stuff!"/>#}
+{#        </form>#}
+{##}
+{#        <div class="form-group">#}
+{#            <input type="submit" class="form-control" id="recipe_title" name="recipe_title"#}
+{#                   value="{{ recipe.recipe_title }}">#}
+{#        </div>#}
+{##}
+        <!-- when the form is submitted, the server response will appear in this iframe -->
+        {#<iframe name="my_iframe" src="iframeTEST.html"></iframe>#}
+{#    </div>#}
+{##}
+{#    <div class="form-group">#}
+{#            <form action="editorschoice.html" method="GET" target="editors_choice" >#}
+{#            <label for="editors_choice_list">Pick a Recipe</label>#}
+{#            <select class="form-control" id="editors_choice_list" name="editors_choice_list">#}
+{#                <option>{{ recipe.recipe_id }}</option>#}
+{#                <option>2</option>#}
+{#                <option>3</option>#}
+{#                <input type="submit" value="Post Recipe" />#}
+{#            </select>#}
+{#            </form>#}
+{#        </div>#}
+{##}
+{#        <div>#}
+{#            <iframe src="editorschoice.html/" height="850px" width=100% name="editors_choice"#}
+{#                    style="border: none"></iframe>#}
+{#        </div>#}
+
 {% endblock %}

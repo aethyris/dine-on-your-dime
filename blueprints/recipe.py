@@ -12,11 +12,11 @@ def show_recipe(recipe_id, username=User.username):
     return render_template('recipe.html', recipe=recipe, user=user)
 
 
-@recipes.route('/recipe/<recipe_id>/admin')
-def promote_recipe(recipe_id, username=User.username):
-    recipe = Recipe.query.filter_by(recipe_id=recipe_id).first()
-    user = User.query.filter_by(username=username).first()
-    return render_template('frontpage.html', recipe=recipe, user=user)
+# @recipes.route('/recipe/<recipe_id>/admin')
+# def promote_recipe(recipe_id, username=User.username):
+#     recipe = Recipe.query.filter_by(recipe_id=recipe_id).first()
+#     user = User.query.filter_by(username=username).first()
+#     return render_template('frontpage.html', recipe=recipe, user=user)
 
 
 # @recipes.route('/recipe/<recipe_id>/admin')
