@@ -110,26 +110,15 @@
         {% endblock %}
     </div>
 
-  <div class = "comment">
-    <form action = "" method ="post">
-      <textarea id ="title" type = "text" placeholder = "Comment here"></textarea><br>
-      <input type = "submit" value = "comment">
-        <div class = "upload">
-          <input type = "photo" value = "upload"
-          <button class = "btn" type = "submit"> Upload photo </button>
-        </div>
-      <button class="btn btn-primary" type="submit">Submit comment</button>
-    </form>
-  </div>
 
   <p><font face = "tahoma" color = darkgray" size = "+2" Popular Recipes </font></p><br/>
    <a ref =  target = "_self">
          <img src = {{recipe.recipe_picture}} alt = "Recipe Image" border = "0"/>
-         <a ref = {{}} target = "_self">
+         <a ref = {{recipe.popularList[0]}} target = "_self">
            <img src = {{recipe.recipe_picture}} alt = "Recipe Image" border = "0"/>
-           <a ref =  target = "_self">
+           <a ref = {{recipe.popularList[1]}} target = "_self">
             <button class="btn btn-primary" type="more">Click here for more popular recipes</button>
-            <a href =  target = "_self">Tutorials Point</a>
+            <a href = {{recipe.html}} target = "_self">Tutorials Point</a>
    </a>
     </body>
 </html>
