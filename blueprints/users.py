@@ -116,7 +116,7 @@ def add_recipe():
             recipe_rating=5,
             recipe_picture=request.form.get("recipe_picture"),
             recipe_cooking_time=request.form.get("recipe_cooking_time"),
-            recipe_calorie_count=100
+            recipe_calorie_count=request.form.get("recipe_calorie_count")
             )
         current_user.recipes.append(user_recipe)
         db.session.add(user_recipe)
