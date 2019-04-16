@@ -56,6 +56,7 @@ def view_user(username):
 def settings():
     info_form = UserInfoForm(obj=current_user)
     filter_form = FilterForm(obj=current_user.filters)
+    # Modifying User Info
     if info_form.validate_on_submit():
         current_user.username = info_form.username.data
         current_user.description = info_form.description.data
@@ -63,6 +64,7 @@ def settings():
         current_user.email = info_form.email.data
         db.session.commit()
         return redirect(url_for('users.settings'))
+    # Modifying User Filter
     elif filter_form.validate_on_submit():
         current_user.filters.price_min = filter_form.price_min.data
         current_user.filters.price_max = filter_form.price_max.data
@@ -86,7 +88,11 @@ def settings():
 #
 #     return render_template('admin.html', recipe=recipe, user=user)
 
+
 def handle_new_recipe(recipe, follower_ids):
+    '''
+    Helper method used to send SocketIO event to the rooms of the followers.
+    '''
     data = {
         'id': recipe.recipe_id,
         'title': recipe.recipe_title,
@@ -115,11 +121,12 @@ def add_recipe():
         current_user.recipes.append(user_recipe)
         db.session.add(user_recipe)
 
+        # threading for sending socketIO event
         follower_ids = [follower.id for follower in user_recipe.recipe_author.followers]
         thr = threading.Thread(target=handle_new_recipe, args=(user_recipe, follower_ids))
         thr.daemon = True
         thr.start()
-        
+
         db.session.commit()
 
     return render_template('index.html')

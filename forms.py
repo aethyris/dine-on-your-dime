@@ -2,6 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, FloatField, TextAreaField, SelectField, IntegerField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length, URL
 from models import User
+# from flask_uploads import uploadPhoto, Images
+from flask_wtf.file import FileField, FileRequired
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -43,3 +45,18 @@ class FilterForm(FlaskForm):
     dietary_preferences = SelectField('Dietary Preferences', choices=[('Standard', 'Standard'), ('Vegan', 'Vegan'), ('Pescatarian', 'Pescatarian'), ('Vegetarian', 'Vegetarian')], default="Standard")
     cooking_time_min = IntegerField('Cooking Time Min', validators=[DataRequired()], default=0)
     cooking_time_max = IntegerField('Cooking Time Max', validators=[DataRequired()], default=0)
+
+# images = uploadPhoto('images', IMAGES)
+
+# class photoForm(FlaskForm):
+#     photo = FileField(validators = [FileRequired()])
+#     submit = submitField('Upload photo')
+#     image.show(photo)
+
+#     def uploadPhoto():
+#         photo = FileField('image', validators = [FileRequired(), FileAllowed(['jpg', 'png'], 'Images only')])
+
+class commentForm(FlaskForm):
+    comment = TextAreaField('Comment', validators=[DataRequired(), Length(max=800)])
+    submit = SubmitField('Submit comment')
+    print(comment)

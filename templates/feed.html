@@ -5,12 +5,14 @@
 <script type="text/javascript" charset="utf-8">
     
     var pg = 1; 
-    var total = 10;
-    var recipes = [];
+    var total = 10; // number of recipes to be displayed on page
+    var recipes = []; // keeps track of the total + recipes
 
+    // renders the 10 cards and sets total, recipes
     function render_cards(response) {
         recipes = response;
         total = response.shift();
+        // hides cards before rerendering and displaying
         $('.card').css('display', 'none');
         $.each(response, function(index, recipe) {
             $('#card-header-' + index).text(recipe.title);
@@ -21,10 +23,10 @@
         response.unshift(total);
     }
 
+    // SocketIO
     var socket = io.connect('http://' + document.domain + ':' + location.port + '/userfeed'); 
     socket.on('new recipe', function(recipe) {
         recipes.pop();
-        console.log(recipe);
         recipes.splice(1, 0, recipe);
         render_cards(recipes);
     })
@@ -34,6 +36,7 @@
     socket.emit('load', {{current_user.id}}, 1);
 
     $(document).ready(function () {
+        // simple pagination to adjust when newer and older buttons show
         $('#newer').click(function() {
             pg = pg - 1;
             socket.emit('load', {{current_user.id}}, pg);

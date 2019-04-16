@@ -16,7 +16,6 @@ def on_disconnect():
 def emit_new_recipe(recipe, id):
     room = user_sid_dict.get(id)
     if room is not None:
-        print('emit new recipe')
         socketio.emit('new recipe', recipe, namespace='/userfeed', room=room)
 
 @socketio.on('load', namespace='/userfeed')
