@@ -1,0 +1,185 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    
+    var pg = 1; 
+    var total = 10;
+    var recipes = [];
+
+    function render_cards(response) {
+        recipes = response;
+        total = response.shift();
+        $('.card').css('display', 'none');
+        $.each(response, function(index, recipe) {
+            $('#card-header-' + index).text(recipe.title);
+            $('#card-body-' + index).text(recipe.date);
+            $('#card-footer-' + index).text('by ' + recipe.author);
+            $('#card-' + index).css('display', 'block');
+        });
+        response.unshift(total);
+    }
+
+    var socket = io.connect('http://' + document.domain + ':' + location.port + '/userfeed'); 
+    socket.on('new recipe', function(recipe) {
+        recipes.pop();
+        console.log(recipe);
+        recipes.splice(1, 0, recipe);
+        render_cards(recipes);
+    })
+    socket.on('render', function(response) {
+        render_cards(response);
+    })
+    socket.emit('load', {{current_user.id}}, 1);
+
+    $(document).ready(function () {
+        $('#newer').click(function() {
+            pg = pg - 1;
+            socket.emit('load', {{current_user.id}}, pg);
+            $('html, body').animate({scrollTop:0}, '300');
+            if (pg == 1) {
+                $('#newer').css('display', 'none');
+                $('#older').css('display', 'block');
+            } else {
+                $('#newer').css('display', 'block');
+            }
+        });
+
+        $('#older').click(function() {
+            pg = pg + 1;
+            socket.emit('load', {{current_user.id}}, pg);
+            $('html, body').animate({scrollTop:0}, '300');
+            if (pg * 10 > total['total']) {
+                $('#older').css('display', 'none');
+            } else {
+                $('#older').css('display', 'block');
+            }
+            $('#newer').css('display', 'block');
+        });
+    })
+</script>
+
+<div class="container-fluid mt-3" id='activities'>
+    <section>
+        <h3>Recipes from users you follow</h3>
+        <div class="row mb-1">
+            <div class="col-12">
+                <div class='card' id="card-0" style='display: none;'>
+                    <h4 class='card-header' id="card-header-0"></h4>
+                    <div class="card-body">
+                        <p class="card-text" id="card-body-0"></p>
+                    </div>
+                    <div class="card-footer" id="card-footer-0"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-12">
+                <div class='card' id="card-1" style="display: none;">
+                    <h4 class='card-header' id="card-header-1"></h4>
+                    <div class="card-body">
+                        <p class="card-text" id="card-body-1"></p>
+                    </div>
+                    <div class="card-footer" id="card-footer-1"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-12">
+                <div class='card' id="card-2" style="display: none;">
+                    <h4 class='card-header' id="card-header-2"></h4>
+                    <div class="card-body">
+                        <p class="card-text" id="card-body-2"></p>
+                    </div>
+                    <div class="card-footer" id="card-footer-2"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-12">
+                <div class='card' id="card-3" style="display: none;">
+                    <h4 class='card-header' id="card-header-3"></h4>
+                    <div class="card-body">
+                        <p class="card-text" id="card-body-3"></p>
+                    </div>
+                    <div class="card-footer" id="card-footer-3"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-12">
+                <div class='card' id="card-4" style="display: none;">
+                    <h4 class='card-header' id="card-header-4"></h4>
+                    <div class="card-body">
+                        <p class="card-text" id="card-body-4"></p>
+                    </div>
+                    <div class="card-footer" id="card-footer-4"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-12">
+                <div class='card' id="card-5" style="display: none;">
+                    <h4 class='card-header' id="card-header-5"></h4>
+                    <div class="card-body">
+                        <p class="card-text" id="card-body-5"></p>
+                    </div>
+                    <div class="card-footer" id="card-footer-5"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-12">
+                <div class='card' id="card-6" style="display: none;">
+                    <h4 class='card-header' id="card-header-6"></h4>
+                    <div class="card-body">
+                        <p class="card-text" id="card-body-6"></p>
+                    </div>
+                    <div class="card-footer" id="card-footer-6"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-12">
+                <div class='card' id="card-7" style="display: none;">
+                    <h4 class='card-header' id="card-header-7"></h4>
+                    <div class="card-body">
+                        <p class="card-text" id="card-body-7"></p>
+                    </div>
+                    <div class="card-footer" id="card-footer-7"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-12">
+                <div class='card' id="card-8" style="display: none;">
+                    <h4 class='card-header' id="card-header-8"></h4>
+                    <div class="card-body">
+                        <p class="card-text" id="card-body-8"></p>
+                    </div>
+                    <div class="card-footer" id="card-footer-8"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-12">
+                <div class='card' id="card-9" style="display: none;">
+                    <h4 class='card-header' id="card-header-9"></h4>
+                    <div class="card-body">
+                        <p class="card-text" id="card-body-9"></p>
+                    </div>
+                    <div class="card-footer" id="card-footer-9"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class='col-12'>
+                <button class='btn btn-outline-primary float-left' id='newer' style='display: none;'>Newer</button>
+                <button class='btn btn-outline-primary float-right' id='older'>Older</button>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock %}

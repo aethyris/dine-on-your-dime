@@ -1,11 +1,12 @@
-from flask import Blueprint, render_template, redirect, url_for, request, abort
+from flask import Blueprint, render_template, redirect, url_for, request, abort, Response
 from flask_login import current_user, login_user, logout_user, login_required
 from models import User, db, Filter, Recipe, Ingredient
 from forms import LoginForm, RegistrationForm, UserInfoForm, FilterForm
 from datetime import datetime
+from sockets import emit_new_recipe
+import threading
 
 users = Blueprint('users', __name__, template_folder="templates")
-
 
 @users.route('/login', methods=['GET', 'POST'])
 def login():
@@ -85,6 +86,19 @@ def settings():
 #
 #     return render_template('admin.html', recipe=recipe, user=user)
 
+def handle_new_recipe(recipe, follower_ids):
+    data = {
+        'id': recipe.recipe_id,
+        'title': recipe.recipe_title,
+        'date': str(recipe.recipe_date),
+        'author': recipe.recipe_author.username,
+        'picture': recipe.recipe_picture,
+        'rating': str(recipe.recipe_rating),
+        'cooking_time': recipe.recipe_cooking_time,
+        'calorie_count': recipe.recipe_calorie_count
+    }
+    for i in follower_ids:
+        emit_new_recipe(data, i)
 
 @users.route('/create_recipe', methods=["GET", "POST"])
 @login_required
@@ -92,47 +106,46 @@ def add_recipe():
     if request.method == "POST":
         user_recipe = Recipe(
             recipe_title=request.form.get("recipe_title"),
-            recipe_author=current_user.username,
-            recipe_date=datetime.utcnow(),
             recipe_description=request.form.get("recipe_description"),
             recipe_rating=5,
             recipe_picture=request.form.get("recipe_picture"),
             recipe_cooking_time=request.form.get("recipe_cooking_time"),
-            recipe_calorie_count=request.form.get("recipe_calorie_count"))
-        print(request.form.get("recipe_title"))
+            recipe_calorie_count=100
+            )
+        current_user.recipes.append(user_recipe)
         db.session.add(user_recipe)
+
+        follower_ids = [follower.id for follower in user_recipe.recipe_author.followers]
+        thr = threading.Thread(target=handle_new_recipe, args=(user_recipe, follower_ids))
+        thr.daemon = True
+        thr.start()
+        
         db.session.commit()
 
     return render_template('index.html')
 
-@users.route('/follow/<username>')
+@users.route('/feed/follow/<username>')
 @login_required
 def follow(username):
-    print('Enter follow method')
     user = User.query.filter_by(username=username).first_or_404()
-    print('Queried user table')
     if user == current_user:
-        print('Enter if statement')
         return redirect(url_for('users.view_user', username=username))
-    print('Try to follow user')
     current_user.follow(user)
-    print('Followed user')
     db.session.commit()
-    print('Committed data')
     return redirect(url_for('users.view_user', username=username))
 
-@users.route('/unfollow/<username>')
+@users.route('/feed/unfollow/<username>')
 @login_required
 def unfollow(username):
-    print('Enter unfollow method')
     user = User.query.filter_by(username=username).first_or_404()
-    print('Queried user table')
     if user == current_user:
-        print('Enter if statement')
         return redirect(url_for('users.view_user', username=username))
-    print('Trying to unfollow')
     current_user.unfollow(user)
-    print('Unfollowed user')
     db.session.commit()
-    print('Committed')
     return redirect(url_for('users.view_user', username=username))
+
+@users.route('/feed')
+@login_required
+def feed():
+    return render_template('feed.html')
+
