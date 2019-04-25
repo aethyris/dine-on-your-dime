@@ -4,8 +4,12 @@ from flask_login import UserMixin, AnonymousUserMixin
 from datetime import datetime
 # from sqlalchemy_imageattach.entity import Image, image_attachment
 
+db = SQLAlchemy(session_options={"autoflush": False})
 
-db = SQLAlchemy()
+followers = db.Table('followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('users-table.id')),
+    db.Column('followed_id', db.Integer, db.ForeignKey('users-table.id'))
+)
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users-table'
@@ -18,12 +22,29 @@ class User(UserMixin, db.Model):
     avatar = db.Column(db.String(255), nullable=False, default="https://via.placeholder.com/200/09f/fff.png")
     filters = db.relationship('Filter', uselist=False, backref="users")
     planned_recipes = db.relationship("PlannedRecipeAssociation", back_populates="user")
+    recipes = db.relationship("Recipe", back_populates="recipe_author")
+    followed = db.relationship(
+        'User', secondary=followers,
+        primaryjoin=(followers.c.follower_id == id),
+        secondaryjoin=(followers.c.followed_id == id),
+        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def follow(self, user):
+        if self.followed.filter(followers.c.followed_id == user.id).first() is None:
+            self.followed.append(user)
+
+    def unfollow(self, user):
+        if self.followed.filter(followers.c.followed_id == user.id).first() is not None:
+            self.followed.remove(user)
+        
+    def followed_recipes(self):
+        return Recipe.query.join(followers, (followers.c.followed_id == Recipe.recipe_author_id)).filter(followers.c.follower_id == self.id).order_by(Recipe.recipe_date.desc())
 
 class Anon(AnonymousUserMixin):
     __tablename__ = 'anon-users-table'
@@ -42,9 +63,10 @@ class Recipe(db.Model):
     __tablename__ = "recipes-table"
     recipe_id = db.Column(db.Integer, primary_key=True)
     recipe_title = db.Column(db.String(120), nullable=False)
-    recipe_author = db.Column(db.String(120), nullable=False)
-    recipe_date = db.Column(db.Numeric, nullable=False)
-    recipe_description = db.Column(db.String(120), nullable=False)
+    recipe_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
+    recipe_author_id = db.Column(db.Integer, db.ForeignKey('users-table.id'))
+    recipe_author = db.relationship("User", back_populates="recipes")
+    recipe_description = db.Column(db.String(2000), nullable=False)
     recipe_rating = db.Column(db.Numeric, nullable=False)
     recipe_picture = db.Column(db.String(120), nullable=False)
     recipe_cooking_time = db.Column(db.Integer, nullable=False)
@@ -57,7 +79,7 @@ class Ingredient(db.Model):
     __tablename__ = "ingredients-table"
     ingredient_id = db.Column(db.Integer, primary_key=True)
     ingredient_name = db.Column(db.String(120), nullable=False)
-    ingredient_description = db.Column(db.String(120), nullable=False)
+    ingredient_description = db.Column(db.String(120), nullable=False, default="No description.")
     ingredient_picture = db.Column(db.String(120), nullable=False)
     ingredient_calorie_count = db.Column(db.Integer, nullable=False)
 

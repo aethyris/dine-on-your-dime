@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request
+from flask_login import login_required
 from models import *
 
 home_page = Blueprint('home_page', __name__, template_folder="templates")
@@ -7,7 +8,6 @@ home_page = Blueprint('home_page', __name__, template_folder="templates")
 @home_page.route('/')
 def index():
     return render_template('index.html')
-
 
 @home_page.route('/search', methods=["POST"])
 def search():

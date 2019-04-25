@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+
 <div class="container-fluid mt-3">
     <div class="row">
         <div class="col-md-3">
@@ -9,9 +10,17 @@
         <div class="col-md-9">
             <h2 class='text-primary'>{{ user.username }}</h2>
             <p class='text-dark'>{{ user.description }}</p>
+
             {% if user == current_user %}
                 <a href="{{ url_for('users.settings') }}" class="btn btn-primary float-right">Edit Profile</a>
+            {% elif user in current_user.followed.all() %}
+                <a href="{{ url_for('users.unfollow', username=user.username) }}"
+                    class="btn btn-outline-primary float-left mr-1">Unfollow</a>
+            {% else %}
+                <a href="{{ url_for('users.follow', username=user.username) }}"
+                    class="btn btn-outline-primary float-left mr-1">Follow</a>
             {% endif %}
+            
             <a href="{{ url_for('calendar.view_calendar', username=current_user.username) }}"
                 class="btn btn-outline-primary float-left">View Meal Plans</a>
         </div>

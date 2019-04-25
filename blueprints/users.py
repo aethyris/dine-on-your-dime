@@ -1,11 +1,12 @@
-from flask import Blueprint, render_template, redirect, url_for, request, abort
+from flask import Blueprint, render_template, redirect, url_for, request, abort, Response
 from flask_login import current_user, login_user, logout_user, login_required
 from models import User, db, Filter, Recipe, Ingredient
 from forms import LoginForm, RegistrationForm, UserInfoForm, FilterForm
 from datetime import datetime
+from sockets import emit_new_recipe
+import threading
 
 users = Blueprint('users', __name__, template_folder="templates")
-
 
 @users.route('/login', methods=['GET', 'POST'])
 def login():
@@ -55,6 +56,7 @@ def view_user(username):
 def settings():
     info_form = UserInfoForm(obj=current_user)
     filter_form = FilterForm(obj=current_user.filters)
+    # Modifying User Info
     if info_form.validate_on_submit():
         current_user.username = info_form.username.data
         current_user.description = info_form.description.data
@@ -62,6 +64,7 @@ def settings():
         current_user.email = info_form.email.data
         db.session.commit()
         return redirect(url_for('users.settings'))
+    # Modifying User Filter
     elif filter_form.validate_on_submit():
         current_user.filters.price_min = filter_form.price_min.data
         current_user.filters.price_max = filter_form.price_max.data
@@ -86,21 +89,70 @@ def settings():
 #     return render_template('admin.html', recipe=recipe, user=user)
 
 
+def handle_new_recipe(recipe, follower_ids):
+    '''
+    Helper method used to send SocketIO event to the rooms of the followers.
+    '''
+    data = {
+        'id': recipe.recipe_id,
+        'title': recipe.recipe_title,
+        'date': str(recipe.recipe_date),
+        'author': recipe.recipe_author.username,
+        'picture': recipe.recipe_picture,
+        'rating': str(recipe.recipe_rating),
+        'cooking_time': recipe.recipe_cooking_time,
+        'calorie_count': recipe.recipe_calorie_count
+    }
+    for i in follower_ids:
+        emit_new_recipe(data, i)
+
 @users.route('/create_recipe', methods=["GET", "POST"])
 @login_required
 def add_recipe():
     if request.method == "POST":
         user_recipe = Recipe(
             recipe_title=request.form.get("recipe_title"),
-            recipe_author=current_user.username,
-            recipe_date=20190403,
             recipe_description=request.form.get("recipe_description"),
             recipe_rating=5,
             recipe_picture=request.form.get("recipe_picture"),
             recipe_cooking_time=request.form.get("recipe_cooking_time"),
-            recipe_calorie_count=request.form.get("recipe_calorie_count"))
-        print(request.form.get("recipe_title"))
+            recipe_calorie_count=request.form.get("recipe_calorie_count")
+            )
+        current_user.recipes.append(user_recipe)
         db.session.add(user_recipe)
+
+        # threading for sending socketIO event
+        follower_ids = [follower.id for follower in user_recipe.recipe_author.followers]
+        thr = threading.Thread(target=handle_new_recipe, args=(user_recipe, follower_ids))
+        thr.daemon = True
+        thr.start()
+
         db.session.commit()
 
     return render_template('index.html')
+
+@users.route('/feed/follow/<username>')
+@login_required
+def follow(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    if user == current_user:
+        return redirect(url_for('users.view_user', username=username))
+    current_user.follow(user)
+    db.session.commit()
+    return redirect(url_for('users.view_user', username=username))
+
+@users.route('/feed/unfollow/<username>')
+@login_required
+def unfollow(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    if user == current_user:
+        return redirect(url_for('users.view_user', username=username))
+    current_user.unfollow(user)
+    db.session.commit()
+    return redirect(url_for('users.view_user', username=username))
+
+@users.route('/feed')
+@login_required
+def feed():
+    return render_template('feed.html')
+
