@@ -27,15 +27,14 @@
 
                 <!-- user information -->
                 <div class="tab-pane active" id="profiletab">
+                    {{ info_form.hidden_tag() }}
                     {{ wtf.quick_form(info_form, button_map={'submit': 'primary'}) }}
                 </div>
 
                 <!-- user filters -->
                 <div class="tab-pane" id="filtertab">
-                    <form action="" method="post">
-                        {% include 'filter.html' %}
-                        <button type="submit" class="btn btn-primary">Save preferences</button>
-                    </form>
+                    {{ filter_form.hidden_tag() }}
+                    {{ wtf.quick_form(filter_form, button_map={'submit': 'primary'}) }}
                 </div>
 
                 <!-- User Created Recipe -->

@@ -1,6 +1,6 @@
 import sys, traceback
 from flask import Flask, render_template, session
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_bootstrap import Bootstrap
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
@@ -12,6 +12,7 @@ from blueprints.calendar import calendar
 from config import Config
 from models import db, User, RecipeIngredientAssociation, Recipe, Ingredient, Filter, PlannedRecipeAssociation
 from sockets import socketio
+from forms import FilterForm
 
 app = Flask(__name__)
 login = LoginManager(app)
@@ -50,6 +51,13 @@ app.register_blueprint(calendar)
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('errors/404.html'), 404
+
+@app.context_processor
+def inject_filter():
+    if current_user.is_authenticated:
+        return dict(search_filter=FilterForm(obj=current_user.filters))
+    else:
+        return dict(search_filter=FilterForm())
 
 def main():
     if (len(sys.argv)==2):
