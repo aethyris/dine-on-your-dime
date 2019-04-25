@@ -48,9 +48,9 @@ if __name__ == "__main__":
     with app.app_context():
         main()
 
-def most_popular(db):
-    if (recipe_rating > 0):
-        recipe_rating.sort(reverse=True)
-        popularList = sorted(recipe_rating, reverse=True)
+def most_popular():
+    if (Recipe.recipe_rating > 0):
+        Recipe.recipe_rating.sort(reverse=True)
+        popularList = sorted(Recipe.recipe_rating, reverse=True)
         print(popularList[0])
         print(popularList[1])
