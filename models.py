@@ -21,7 +21,7 @@ class User(UserMixin, db.Model):
     avatar = db.Column(db.String(255), nullable=False, default="https://via.placeholder.com/200/09f/fff.png")
     filters = db.relationship('Filter', uselist=False, backref="users")
     planned_recipes = db.relationship("PlannedRecipeAssociation", back_populates="user")
-    recipes = db.relationship("Recipe", uselist=False, back_populates="recipe_author")
+    recipes = db.relationship("Recipe", back_populates="recipe_author")
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),

@@ -75,10 +75,10 @@ def filter():
         type = '*'
     if dietary == 'All':
         dietary = '*'
-    # if dietary == 'All':
-    #     recipes = Recipe.query.filter(
-    #         (Recipe.recipe_title.contains(keyword) | Recipe.recipe_description.contains(keyword)) & (
-    #             Recipe.type.equals(type)) & (Recipe.dietary_category.equals(dietary)))
+    if dietary == 'All':
+        recipes = Recipe.query.filter(
+            (Recipe.recipe_title.contains(keyword) | Recipe.recipe_description.contains(keyword)) & (
+                Recipe.type.equals(type)) & (Recipe.dietary_category.equals(dietary)))
     else:
         recipes = Recipe.query.filter(
             (Recipe.recipe_title.contains(keyword) | Recipe.recipe_description.contains(keyword)) & (
