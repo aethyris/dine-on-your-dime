@@ -3,7 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
 from datetime import datetime
 
-db = SQLAlchemy()
+db = SQLAlchemy(session_options={"autoflush": False})
+
 followers = db.Table('followers',
                      db.Column('follower_id', db.Integer, db.ForeignKey('users-table.id')),
                      db.Column('followed_id', db.Integer, db.ForeignKey('users-table.id'))
@@ -35,12 +36,16 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def follow(self, user):
-        if not user in self.followed:
+        if self.followed.filter(followers.c.followed_id == user.id).first() is None:
             self.followed.append(user)
 
     def unfollow(self, user):
-        if user in self.followed:
+        if self.followed.filter(followers.c.followed_id == user.id).first() is not None:
             self.followed.remove(user)
+
+    def followed_recipes(self):
+        return Recipe.query.join(followers, (followers.c.followed_id == Recipe.recipe_author_id)).filter(
+            followers.c.follower_id == self.id).order_by(Recipe.recipe_date.desc())
 
 
 class Anon(AnonymousUserMixin):
@@ -62,12 +67,12 @@ class Recipe(db.Model):
     __tablename__ = "recipes-table"
     recipe_id = db.Column(db.Integer, primary_key=True)
     recipe_title = db.Column(db.String(120), nullable=False)
-    recipe_date = db.Column(db.Numeric, nullable=True, default=datetime.utcnow())
+    recipe_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     recipe_author_id = db.Column(db.Integer, db.ForeignKey('users-table.id'))
     recipe_author = db.relationship("User", back_populates="recipes")
     recipe_description = db.Column(db.String(2000), nullable=False)
     recipe_rating = db.Column(db.Numeric, nullable=False)
-    recipe_picture = db.Column(db.String(120), nullable=False)
+    recipe_picture = db.Column(db.String(256), nullable=False)
     recipe_cooking_time = db.Column(db.Integer, nullable=False)
     recipe_calorie_count = db.Column(db.Integer, nullable=False)
 
@@ -79,7 +84,7 @@ class Ingredient(db.Model):
     __tablename__ = "ingredients-table"
     ingredient_id = db.Column(db.Integer, primary_key=True)
     ingredient_name = db.Column(db.String(120), nullable=False)
-    ingredient_description = db.Column(db.String(120), nullable=False)
+    ingredient_description = db.Column(db.String(120), nullable=False, default="No description.")
     ingredient_picture = db.Column(db.String(120), nullable=False)
     ingredient_calorie_count = db.Column(db.Integer, nullable=False)
 
@@ -102,14 +107,12 @@ class Filter(db.Model):
 
 
 class PlannedRecipeAssociation(db.Model):
-    # Association represents each recipe a user adds to their meal plan.
     __tablename__ = 'planned-recipe-assoc'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users-table.id"))
     recipe_id = db.Column(db.Integer, db.ForeignKey("recipes-table.recipe_id"))
     start = db.Column(db.String(64), nullable=False)
     end = db.Column(db.String(64), nullable=False)
-    notes = db.Column(db.String(500), default="")
 
     user = db.relationship("User", back_populates="planned_recipes")
     recipe = db.relationship("Recipe", back_populates="planning_users")

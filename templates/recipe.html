@@ -1,75 +1,10 @@
 {% extends 'layout.html' %}
 {% block body %}
 
-    {#    <br>#}
-    {#    <h2 class="display-4">{{ recipe.recipe_title }}#}
-    {##}
-    {#        {% if current_user.is_authenticated %}#}
-    {#            <a href="{{ url_for('recipes.promote_recipe', recipe_id=recipe.recipe_id) }}">#}
-    {#                <button type="button" class="btn btn-success">Promote</button>#}
-    {#            </a>#}
-    {#        {% else %}#}
-    {#        {% endif %}#}
-    {#    </h2>#}
-
-    <h2 class="display-4">{{ recipe.recipe_title }}
-
-        {% if current_user.is_authenticated %}
-            <!--Hidden form for the purpose of sending data to index page -->
-            <div>
-{#                <form action="editorschoice.html" target="/" method="GET">#}
-{#                    <div class="form-group">#}
-{#                        <input type="text" class="form-control" id="recipe_id" name="recipe_id"#}
-{#                               value="{{ recipe.recipe_id }}">#}
-{#                    </div>#}
-
-{#                    <div class="form-group">#}
-{#                        <input type="text" class="form-control" id="recipe_title" name="recipe_title"#}
-{#                               value="{{ recipe.recipe_title }}">#}
-{#                    </div>#}
-
-
-                    {#                    <div class="form-group">#}
-                    {#                        <input class="form-control" id="recipe_description" name="recipe_description"#}
-                    {#                               value="{{ recipe.recipe_description }}">#}
-                    {#                    </div>#}
-                    {##}
-                    {#                    <div class="form-group">#}
-                    {#                        <input type="text" class="form-control" id="recipe_picture" name="recipe_picture"#}
-                    {#                               value="{{ recipe.recipe_picture }}">#}
-                    {#                    </div>#}
-                    {##}
-                    {#                    <div class="form-group">#}
-                    {#                        <input class="form-control" id="recipe_author" name="recipe_author"#}
-                    {#                               value="{{ recipe.recipe_author }}">#}
-                    {#                    </div>#}
-
-                    {#                    <div class="form-group">#}
-                    {#                        <input type="number" class="form-control" name="recipe_cooking_time"#}
-                    {#                               id="recipe_cooking_time"#}
-                    {#                               value="{{ recipe.recipe_cooking_time }}">#}
-                    {#                    </div>#}
-                    {##}
-                    {#                    <div class="form-group">#}
-                    {#                        <input type="number" class="form-control" name="recipe_calorie_count"#}
-                    {#                               id="recipe_calorie_count"#}
-                    {#                               value="{{ recipe.recipe_calorie_count }}">#}
-                    {#                    </div>#}
-
-{#                    <div>#}
-{#                        <input class="btn btn-success" type="submit" value="Promote">#}
-{#                    </div>#}
-{#                </form>#}
-            </div>
-
-            {##}
-            {#            <a href="{{ url_for('home_page.editors_choice', recipe_id=recipe.recipe_id) }}">#}
-            {#                <button type="button" class="btn btn-success">Promote</button>#}
-            {#            </a>#}
-        {% else %}
-        {% endif %}
-    </h2>
-
+    <div style="vertical-align: center; line-height: 100px; text-align: center">
+        <h1 class="display-4" style="border-bottom:3px solid black ;font-family: 'Segoe UI">
+            <b><em>{{ recipe.recipe_title }}</em></b></h1>
+    </div>
 
 
     <div class="container">
@@ -86,13 +21,13 @@
                 <br>
                 <div class="card border-primary mb-3" style="height: 113px;max-width: 18rem">
                     <div class="card-header" style="text-align: center">Submitted By</div>
-                                        <div class="card-body text-primary">
-                                            <h5 class="card-title font-weight-bold" style="text-align: center"><img
-                                                    class="rounded-circle img-fluid"
-                                                    style='max-height: 11%; max-width: 11%; object-fit: contain'
-                                                    src="{{ user.avatar }}"
-                                                    alt="Recipe Image"> {{ recipe.recipe_author.username }}</h5>
-                                        </div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title font-weight-bold" style="text-align: center"><img
+                                class="rounded-circle img-fluid"
+                                style='max-height: 11%; max-width: 11%; object-fit: contain'
+                                src="{{ user.avatar }}"
+                                alt="Recipe Image"> {{ recipe.recipe_author.username }}</h5>
+                    </div>
 
                     <div class="card border-primary mb-3" style="height: 113px;max-width: 18rem">
                         <div class="card-header" style="text-align: center">Cooking Time</div>
@@ -115,19 +50,15 @@
 
             <!-- having some trouble with the spacing between containers here, too close on some pages
             but good on others, not sure how to make it consistent -->
-            <h2 class="display-5 card border-0 bg-transparent" style="padding-top:150px">Description</h2>
+            <h2 class="display-5 card border-0 bg-transparent" style="padding-top:150px"><b>Description</b></h2>
             <div class="container">
                 <div class="row">
                     <div class="col-sm-8 card" style="height: auto">
                         <br>
                         <p style="font-size: larger">{{ recipe.recipe_description }}
-
                         </p>
 
                         <br>
-
-                        <h4><u>Steps</u></h4> (Presumably user would enter the steps as part of the description. Just
-                        putting this here for visual reference. Feel free to delete)
                         <br>
 
                     </div>
@@ -139,12 +70,8 @@
                             <div class="card-body text-primary">
                                 <ul class="list-group list-group-flush">
                                     <b style="text-align: center">
-                                        <li class="list-group-item">Ingredient #1</li>
-                                        <li class="list-group-item">Ingredient #2</li>
-                                        <li class="list-group-item">Ingredient #3</li>
-                                        <li class="list-group-item">Ingredient #4</li>
-                                        <li class="list-group-item">Ingredient #5</li>
-                                        <li class="list-group-item">Ingredient #6</li>
+                                        <!-- There should be a loop here, but I'm not sure how to implement that logic -->
+                                        <li class="list-group-item">{{ ingredient.ingredient_name }}</li>
                                     </b>
                                 </ul>
                             </div>
@@ -165,68 +92,15 @@
                     </div>
 
 
-                    <h2 class="display-5 card border-0 bg-transparent" style="padding-top:150px">Comments</h2>
+                    <h2 class="display-5 card border-0 bg-transparent" style="padding-top:150px"><b>Comments</b></h2>
                     <div class="container">
                         <div class="row">
-                            <div class="col-sm-9 card" style="height: auto">
+                            <div class="col-sm-8 card" style="height: auto">
                                 <br>
                                 <div class="form-group">
                                     <label for="comment">(Not functioning/Temp location feel free to change/edit if
                                         you're implementing this feature)</label>
                                     <textarea class="form-control" disabled rows="5" id="comment"></textarea>
-                                </div>
-                            </div>
-
-
-                            <div class="col-sm-12 card border-0 bg-transparent">
-                                <br>
-                                <h2>Other Recipes you might like</h2>
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <div class="card">
-                                            <h5 class="card-header">
-                                                Card title
-                                            </h5>
-                                            <div class="card-body">
-                                                <p class="card-text">
-                                                    Card content
-                                                </p>
-                                            </div>
-                                            <div class="card-footer">
-                                                Card footer
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card">
-                                            <h5 class="card-header">
-                                                Card title
-                                            </h5>
-                                            <div class="card-body">
-                                                <p class="card-text">
-                                                    Card content
-                                                </p>
-                                            </div>
-                                            <div class="card-footer">
-                                                Card footer
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card">
-                                            <h5 class="card-header">
-                                                Card title
-                                            </h5>
-                                            <div class="card-body">
-                                                <p class="card-text">
-                                                    Card content
-                                                </p>
-                                            </div>
-                                            <div class="card-footer">
-                                                Card footer
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -236,36 +110,16 @@
         </div>
     </div>
 
-
-{#    <div>#}
-{#        <form action="iframeTEST.html" method="post" target="my_iframe">#}
-{#            <input type="submit" value="Do Stuff!"/>#}
-{#        </form>#}
-{##}
-{#        <div class="form-group">#}
-{#            <input type="submit" class="form-control" id="recipe_title" name="recipe_title"#}
-{#                   value="{{ recipe.recipe_title }}">#}
-{#        </div>#}
-{##}
-        <!-- when the form is submitted, the server response will appear in this iframe -->
-        {#<iframe name="my_iframe" src="iframeTEST.html"></iframe>#}
-{#    </div>#}
-{##}
-{#    <div class="form-group">#}
-{#            <form action="editorschoice.html" method="GET" target="editors_choice" >#}
-{#            <label for="editors_choice_list">Pick a Recipe</label>#}
-{#            <select class="form-control" id="editors_choice_list" name="editors_choice_list">#}
-{#                <option>{{ recipe.recipe_id }}</option>#}
-{#                <option>2</option>#}
-{#                <option>3</option>#}
-{#                <input type="submit" value="Post Recipe" />#}
-{#            </select>#}
-{#            </form>#}
-{#        </div>#}
-{##}
-{#        <div>#}
-{#            <iframe src="editorschoice.html/" height="850px" width=100% name="editors_choice"#}
-{#                    style="border: none"></iframe>#}
-{#        </div>#}
+    <div class="comment">
+        <form action="" method="post">
+            <textarea id="title" type="text" placeholder="Comment here"></textarea><br>
+            <input type="submit" value="comment">
+            <div class="upload">
+                <input type="photo" value="upload">
+                <button class="btn" type="submit"> Upload photo</button>
+            </div>
+            <button class="btn btn-primary" type="submit">Submit comment</button>
+        </form>
+    </div>
 
 {% endblock %}

@@ -48,7 +48,7 @@
         </div>
 
         <!-- Displays list of recipes in card format. Not paginated. -->
-        <div class="row mb-3" >
+        <div class="row mb-3">
             <div class="col-lg-6">
                 {% if recipes is defined and recipes[0] is defined %}
                     {% for recipe in recipes %}
@@ -59,22 +59,20 @@
 
                                     <!-- Opens the modal to add to meal plan. Each recipe has a different modal based on it's id. -->
                                     {% if current_user.is_authenticated %}
-                                    <button class='btn btn-outline-primary float-right' data-toggle="modal"
-                                            data-target="#add{{ recipe.recipe_id }}Modal"> Plan
-                                    </button>
-                                {% endif %}
+                                        <button class='btn btn-outline-primary float-right' data-toggle="modal"
+                                                data-target="#add{{ recipe.recipe_id }}Modal"> Plan
+                                        </button>
+                                    {% endif %}
                                 </h3>
                             </div>
-                            <div class="card" style="height: 350px" >
+                            <div class="card" style="height: 350px">
                                 <a class="pt-1"
-                                       href="{{ url_for('recipes.show_recipe', recipe_id=recipe.recipe_id) }}">
-                                    <img style='height: 100%; width: 100%; object-fit: contain' src="{{ recipe.recipe_picture }}" alt="Recipe Image"></a>
+                                   href="{{ url_for('recipes.show_recipe', recipe_id=recipe.recipe_id) }}">
+                                    <img style='max-height: 100%; max-width: 100%; object-fit: contain'
+                                         src="{{ recipe.recipe_picture }}" alt="Recipe Image"></a>
                             </div>
 
-                            <div class="card-body">
-{#                                <p class="card-text">{{ recipe.recipe_description }}</p>#}
-                            </div>
-                            <div class="card-footer">
+                            <div class="card-footer" style='max-height: 100%; max-width: 100%; object-fit: contain'>
                                 <p class="card-text">by {{ recipe.recipe_author.username }}</p>
                             </div>
                         </div>
@@ -109,7 +107,7 @@
                     {% endfor %}
 
                 {% else %}
-                    <p>No recipes found.</p>
+                    <p>No recipes found. Try another search term.</p>
                 {% endif %}
             </div>
         </div>

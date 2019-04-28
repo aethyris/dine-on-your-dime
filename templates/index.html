@@ -82,47 +82,12 @@
                     <div class="card-body text-center">
                         <h2 class="card-title font-weight-bold" style="font-family: 'Agency FB'">Create an Account!</h2>
                         <h6 class="card-text">Creating an account let's you add recipes to the site, create custom
-                            filters, save your preferences and more. Sign up today!</h6>
+                            filters, follow other users and more. Sign up today!</h6>
                         <a href="{{ url_for('users.signup') }}" class="btn btn-dark">Sign Up</a>
 
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- cards showing other info -->
-
-        <div class="col-sm-12 card border-0 bg-transparent text-center">
-            <div class="card-body bg-transparent border-0">
-                <h1 class="card-title bg-transparent border-0 font-weight-bold" style="font-family: 'Agency FB'"><img
-                        src="http://clipart-library.com/img/128925.png" alt="Star"
-                        style="max-width: 30px; max-height: 30px; "> Editors' Choice! <img
-                        src="http://clipart-library.com/img/128925.png" alt="Star"
-                        style="max-width: 30px; max-height: 30px; "></h1>
-                <h4 class="card-text bg-transparent border-0">Check out this weeks' recipe hand picked by our
-                    editors!</h4>
-            </div>
-        </div>
-
-        <!-- Editors Choice Options -->
-        {% if current_user.is_authenticated %}
-            <div class="form-group">
-                <form action="editorschoice.html" method="GET" target="editors_choice">
-                    <label for="editors_choice_list">Pick a Recipe</label>
-                    <select class="form-control" id="editors_choice_list" name="editors_choice_list">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <input type="submit" value="Post Recipe"/>
-                    </select>
-
-                </form>
-            </div>
-
-        {% else %}
-        {% endif %}
-        <div>
-            <iframe src="editorschoice.html/" height="850px" width=100% name="editors_choice"
-                    style="border: none"></iframe>
         </div>
     </div>
 
