@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
-from datetime import datetime
+from datetime import datetime, timezone
 # from sqlalchemy_imageattach.entity import Image, image_attachment
 
 db = SQLAlchemy(session_options={"autoflush": False})
@@ -42,7 +42,7 @@ class User(UserMixin, db.Model):
     def unfollow(self, user):
         if self.followed.filter(followers.c.followed_id == user.id).first() is not None:
             self.followed.remove(user)
-        
+
     def followed_recipes(self):
         return Recipe.query.join(followers, (followers.c.followed_id == Recipe.recipe_author_id)).filter(followers.c.follower_id == self.id).order_by(Recipe.recipe_date.desc())
 
@@ -109,3 +109,22 @@ class PlannedRecipeAssociation(db.Model):
 
     user = db.relationship("User", back_populates="planned_recipes")
     recipe = db.relationship("Recipe", back_populates="planning_users")
+
+class Comment(db.Model):
+     __tablename__ = 'comments'
+    id = db.Column(db.Integer, primary_key = True)
+    comment_content = db.Column(db.String)
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id") )
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id") )
+
+    def save_comment(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def get_comments(post_id):
+        comments = Comment.query.filter_by(post_id=post_id).all()
+        return comments
+
+    def delete_single_comment(comment_id):
+        comment = Comment.query.filter_by(id=comment_id).delete()
+        db.session.commit()

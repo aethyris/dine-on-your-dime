@@ -51,17 +51,12 @@ class FilterForm(FlaskForm):
     cooking_time_min = IntegerField('Cooking Time Min', validators=[DataRequired()], default=0)
     cooking_time_max = IntegerField('Cooking Time Max', validators=[DataRequired()], default=0)
 
-# images = uploadPhoto('images', IMAGES)
+ images = uploadPhoto('images', IMAGES)
 
-# class photoForm(FlaskForm):
-#     photo = FileField(validators = [FileRequired()])
-#     submit = submitField('Upload photo')
-#     image.show(photo)
-
-#     def uploadPhoto():
-#         photo = FileField('image', validators = [FileRequired(), FileAllowed(['jpg', 'png'], 'Images only')])
+ class photoForm(FlaskForm):
+     photo = FileField(validators = [FileRequired()])
+    submit = submitField('Upload photo')
 
 class commentForm(FlaskForm):
     comment = TextAreaField('Comment', validators=[DataRequired(), Length(max=800)])
     submit = SubmitField('Submit comment')
-    print(comment)
