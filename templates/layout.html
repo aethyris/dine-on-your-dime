@@ -7,90 +7,109 @@
 </style>
 
 <html>
-    <head>
-        <meta charset="utf-8">
+<head>
+    <meta charset="utf-8">
 
-        <!-- Bootstrap and jquery -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    <!-- Bootstrap and jquery -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <script> src="/blueprints/home.py"</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script> src = "/blueprints/home.py"</script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"
             integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i"
             crossorigin="anonymous"></script>
 
-        <!-- fullcalendar4 -->
-        <link href="https://unpkg.com/@fullcalendar/core@4.0.1/main.min.css" rel='stylesheet' />
-        <link href="https://unpkg.com/@fullcalendar/daygrid@4.0.1/main.min.css" rel='stylesheet' />
-        <link href="https://unpkg.com/@fullcalendar/timegrid/main.min.css" rel='stylesheet' />
 
-        <!-- custom css -->
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='theme.css') }}">
+    <!-- fullcalendar4 -->
+    <link href="https://unpkg.com/@fullcalendar/core@4.0.1/main.min.css" rel='stylesheet'/>
+    <link href="https://unpkg.com/@fullcalendar/daygrid@4.0.1/main.min.css" rel='stylesheet'/>
+    <link href="https://unpkg.com/@fullcalendar/timegrid/main.min.css" rel='stylesheet'/>
 
-        <title>Dine on Your Dime</title>
-    </head>
+    <!-- custom css -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='theme.css') }}">
+
+    <title>Dine on Your Dime</title>
+</head>
 
 <body class="bg-light">
 
-    <!-- Collapsible top nav bar -->
-    <div id="navbar">
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top mx-5 bg-light">
-            <a class="navbar-brand text-primary" href="/"><b>Dine on Your Dime</b></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarFull">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <!-- Nav bar elements -->
-            <div class="collapse navbar-collapse" id="navbarFull">
-                <!-- Left side of nav bar -->
-                <nav class="navbar-nav">
-                    <button type="button" class="btn btn-outline-success my-1" data-toggle="modal" data-target="#filterModal" data-backdrop="false">Filter</button>
+<!-- Collapsible top nav bar -->
+<div id="navbar">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top mx-5 bg-light">
+        <a class="navbar-brand text-primary" href="/"><b>Dine on Your Dime</b></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarFull">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Nav bar elements -->
+        <div class="collapse navbar-collapse" id="navbarFull">
+            <!-- Left side of nav bar -->
+            <nav class="navbar-nav">
+                <button type="button" class="btn btn-outline-success my-1" data-toggle="modal"
+                        data-target="#filterModal" data-backdrop="false">Filter
+                </button>
 
-                    <form action="{{ url_for('home_page.search') }}" method="post" id="mainSearch">
+                <form action="{{ url_for('home_page.search') }}" method="post" id="mainSearch">
 
-                        <div id="filterModal" tabindex="-1" class="modal fade" role="dialog">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Filters</h4>
-                                        <button type="button" class="close" data-dismiss="modal">&times</button>
-                                    </div>
-                                    <div class="modal-body">
-                                        {% include 'filter.html' %}
-                                    </div>
+                    <div id="filterModal" tabindex="-1" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Filters</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times</button>
+                                </div>
+                                <div class="modal-body">
+                                    {% include 'filter.html' %}
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="input-group mt-1">
-                            <input class="form-control" type="text" name="keyword" placeholder="Find a recipe" style="border-radius: 0rem;">
-                            <button class="btn btn-primary" type="submit">Search</button>
-                        </div>
+                    <div class="input-group mt-1">
+                        <input class="form-control" type="text" name="keyword" placeholder="Find a recipe"
+                               style="border-radius: 0" required title="">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
 
-                    </form>
-                    <a class="nav-item nav-link my-1" href='#'>Recipes</a>
-                    <a class="nav-item nav-link my-1" href='{{ url_for("users.feed") }}'>My Feed</a>
-                </nav>
-                <!-- Right side of nav bar -->
-                <nav class="navbar-nav ml-auto">
-                    {% if current_user.is_authenticated %}
-                        <div>
-                        <a href="/admin"> <button class="btn btn-danger" type="button">ADMIN CONSOLE</button> </a>
+                </form>
+                {#                    <a class="nav-item nav-link my-1" href='#'>Recipes</a>#}
+                {% if current_user.is_authenticated %}
+                    <a class="nav-item nav-link my-1" href='{{ url_for("users.feed") }}'
+                       style="font-size: large">Feed</a>
+                {% endif %}
+            </nav>
+            <!-- Right side of nav bar -->
+            <nav class="navbar-nav ml-auto">
+                {#                {% if current_user.is_authenticated %}#}
+                {#                    <div>#}
+                {#                        <a href="/admin">#}
+                {#                            <button class="btn btn-danger" type="button">ADMIN CONSOLE</button>#}
+                {#                        </a>#}
+                {#                    </div>#}
+                {#                {% endif %}#}
+
+                {% if current_user.is_authenticated %}
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown">
+                            {{ current_user.username }}
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item"
+                               href="{{ url_for('users.view_user', username=current_user.username) }}">Profile</a>
+                            <a class="dropdown-item" href="{{ url_for('users.settings') }}">Settings</a>
+                            <div class="dropdown-divider"></div>
+                            <a class='dropdown-item' href="{{ url_for('users.logout') }}">Logout</a>
                         </div>
-                        <div class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
-                                {{ current_user.username}}
-                            </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ url_for('users.view_user', username=current_user.username) }}">Profile</a>
-                                <a class="dropdown-item" href="{{ url_for('users.settings') }}">Settings</a>
-                                <div class="dropdown-divider"></div>
-                                <a class='dropdown-item' href="{{ url_for('users.logout') }}">Logout</a>
-                            </div>
-                        </div>
+<<<<<<< HEAD
                     {% else %}
                         <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
                     {% endif %}
@@ -119,5 +138,33 @@
             <a href = {{ url_for("Recipes") }} target = "_self"></a>
    </a>
  </div>
+=======
+                    </div>
+                {% else %}
+                    <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
+                {% endif %}
+            </nav>
+        </div>
+    </nav>
+</div>
+
+<!-- content -->
+<div class="mx-5 mb-3" style="padding-top: 60px">
+    {% block body %}
+    {% endblock %}
+</div>
+
+{##}
+{#  <p><font face = "tahoma" color = darkgray" size = "+2" Popular Recipes </font></p><br/>#}
+{#   <a ref =  target = "_self">#}
+{#         <img src = {{recipe.recipe_picture}} alt = "Recipe Image" border = "0"/>#}
+{#         <a ref = {{ url_for(popularList[0]) }} target = "_self">#}
+{#           <img src = {{recipe.recipe_picture}} alt = "Recipe Image" border = "0"/>#}
+{#           <a ref = {{ url_for(recipe.popularList[1]) }} target = "_self">#}
+{#            <button class="btn btn-primary" type="more">Click here for more popular recipes</button>#}
+{#            <a href = {{ url_for(recipe) }} target = "_self"></a>#}
+{#   </a>#}
+{##}
+>>>>>>> 8e2a04569e59ede36cf3e53e9f8b1ffa5df21a7e
 </body>
 </html>

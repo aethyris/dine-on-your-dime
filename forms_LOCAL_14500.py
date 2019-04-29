@@ -1,27 +1,20 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, FloatField, TextAreaField, SelectField, \
-    IntegerField
-from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length, URL, InputRequired
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FloatField, TextAreaField, SelectField, IntegerField
+from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length, URL
 from models import User
-<<<<<<< HEAD
 <<<<<<< HEAD
 from flask_uploads import uploadPhoto, images
 from flask_wtf.file import fileField, FileRequired
 =======
 # from flask_uploads import uploadPhoto, Images
-=======
-# from flask_uploads import uploadPhoto, images
->>>>>>> 8e2a04569e59ede36cf3e53e9f8b1ffa5df21a7e
 from flask_wtf.file import FileField, FileRequired
 >>>>>>> 823528de26dd1519a844a6d148e0f4ad39a08162
-
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Login')
-
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(max=64)])
@@ -40,7 +33,6 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('Please use a different email address.')
 
-
 class UserInfoForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(max=64)])
     email = StringField('Email', validators=[DataRequired(), Email(), Length(max=120)])
@@ -48,24 +40,16 @@ class UserInfoForm(FlaskForm):
     avatar = StringField('Avatar URL', validators=[DataRequired(), URL(), Length(max=255)])
     submit = SubmitField('Save changes')
 
-
 class FilterForm(FlaskForm):
-    price_min = FloatField('Price Min', validators=[InputRequired()], default=0)
-    price_max = FloatField('Price Max', validators=[InputRequired()], default=100)
-    meal_type = SelectField('Meal Type', choices=[('All', 'All'), ('Breakfast', 'Breakfast'), ('Lunch', 'Lunch'),
-                                                  ('Dinner', 'Dinner')], default="All")
-    meal_style = SelectField('Meal Style',
-                             choices=[('All', 'All'), ('Fried', 'Fried'), ('BBQ', 'BBQ'), ('Steamed', 'Steamed'),
-                                      ('Baked', 'Baked')], default="All")
-    dietary_preferences = SelectField('Dietary Preferences', choices=[('Standard', 'Standard'), ('Vegan', 'Vegan'),
-                                                                      ('Pescatarian', 'Pescatarian'),
-                                                                      ('Vegetarian', 'Vegetarian')], default="Standard")
-    cooking_time_min = IntegerField('Cooking Time Min', validators=[InputRequired()], default=0)
-    cooking_time_max = IntegerField('Cooking Time Max', validators=[InputRequired()], default=0)
-    calorie_min = IntegerField('Calorie Min', validators=[InputRequired()], default=0)
-    calorie_max = IntegerField('Calorie Max', validators=[InputRequired()], default=0)
-    submit = SubmitField('Save preferences')
-
+    price_min = FloatField('Price Min', validators=[DataRequired()], default=0)
+    price_max = FloatField('Price Max', validators=[DataRequired()], default=100)
+    calorie_min = IntegerField('Calorie Min', validators=[DataRequired()], default=0)
+    calorie_max = IntegerField('Calorie Max', validators=[DataRequired()], default=0)
+    meal_type = SelectField('Meal Type', choices=[('All', 'All'), ('Breakfast', 'Breakfast'), ('Lunch', 'Lunch'), ('Dinner', 'Dinner')], default="All")
+    meal_style = SelectField('Meal Style', choices=[('All', 'All'), ('Fried', 'Fried'), ('BBQ', 'BBQ'), ('Steamed', 'Steamed'), ('Baked', 'Baked')], default="All")
+    dietary_preferences = SelectField('Dietary Preferences', choices=[('Standard', 'Standard'), ('Vegan', 'Vegan'), ('Pescatarian', 'Pescatarian'), ('Vegetarian', 'Vegetarian')], default="Standard")
+    cooking_time_min = IntegerField('Cooking Time Min', validators=[DataRequired()], default=0)
+    cooking_time_max = IntegerField('Cooking Time Max', validators=[DataRequired()], default=0)
 
  images = uploadPhoto('images', IMAGES)
 
@@ -73,6 +57,6 @@ class FilterForm(FlaskForm):
      photo = FileField(validators = [FileRequired()])
     submit = submitField('Upload photo')
 
-class CommentForm(FlaskForm):
+class commentForm(FlaskForm):
     comment = TextAreaField('Comment', validators=[DataRequired(), Length(max=800)])
     submit = SubmitField('Submit comment')

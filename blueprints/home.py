@@ -1,13 +1,14 @@
 from flask import Blueprint, render_template, request
-from flask_login import login_required
 from models import *
 
 home_page = Blueprint('home_page', __name__, template_folder="templates")
 
 
-@home_page.route('/')
-def index():
-    return render_template('index.html')
+@home_page.route('/', methods=["GET", "POST"])
+def index(recipe_title=Recipe.recipe_title):
+    recipe = Recipe.query.filter_by(recipe_title=recipe_title).first()
+    return render_template('index.html', recipe=recipe)
+
 
 @home_page.route('/search', methods=["POST"])
 def search():
@@ -28,10 +29,10 @@ def filter():
         type = '*'
     if dietary == 'All':
         dietary = '*'
-    # if dietary == 'All':
-    #     recipes = Recipe.query.filter(
-    #         (Recipe.recipe_title.contains(keyword) | Recipe.recipe_description.contains(keyword)) & (
-    #             Recipe.type.equals(type)) & (Recipe.dietary_category.equals(dietary)))
+    if dietary == 'All':
+        recipes = Recipe.query.filter(
+            (Recipe.recipe_title.contains(keyword) | Recipe.recipe_description.contains(keyword)) & (
+                Recipe.type.equals(type)) & (Recipe.dietary_category.equals(dietary)))
     else:
         recipes = Recipe.query.filter(
             (Recipe.recipe_title.contains(keyword) | Recipe.recipe_description.contains(keyword)) & (

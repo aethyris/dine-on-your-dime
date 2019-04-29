@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-import sys, traceback
-from flask import Flask, render_template, session, request
-from flask_login import LoginManager
-=======
 import sys
 from flask import Flask, render_template
 from flask_login import LoginManager, current_user
->>>>>>> 8e2a04569e59ede36cf3e53e9f8b1ffa5df21a7e
 from flask_bootstrap import Bootstrap
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
@@ -27,7 +21,6 @@ socketio.init_app(app)
 app.config.from_object(Config)
 db.init_app(app)
 Bootstrap(app)
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
 # Admin Settings
@@ -89,43 +82,10 @@ if __name__ == "__main__":
     with app.app_context():
         main()
 
-<<<<<<< HEAD
-@app.route("/")
-def index():
-    return render_template("recipe.html")
-
-@app.route("/upload", methods = ["POST"])
-def upload():
-    photo = os.path.join(APP_ROOT, "images/")
-    print(photo)
-
-    for file in request.files.getlist("file"):
-        print(file)
-        filename = file.filename
-        destination = "/".join([photo, filename])
-        print(destination)
-        file.save(destination)
-    return render_template("recipe.html")
-
-@app.route("/comment", methods = ["POST"])
-def comment():
-    recipe = "recipes-table"
-        for recipe in recipe.comments:
-            print(get_comments)
-
-@app.route("/")
-def most_popular():
-    if (Recipe.recipe_rating > 0):
-        Recipe.recipe_rating.sort(reverse=True)
-        popularList = sorted(Recipe.recipe_rating, reverse=True)
-=======
 
 def most_popular(db):
     if (recipe_rating > 0):
         recipe_rating.sort(reverse=True)
         popularList = sorted(recipe_rating, reverse=True)
->>>>>>> 8e2a04569e59ede36cf3e53e9f8b1ffa5df21a7e
         print(popularList[0])
         print(popularList[1])
-        print(popularList[2])
-    return render_template("layout.html")

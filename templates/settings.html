@@ -15,9 +15,6 @@
                     <a class="nav-link active" href="#profiletab" data-toggle="tab">Profile</a>
                     <a class="nav-link" href="#filtertab" data-toggle="tab">Filters</a>
                     <a class="nav-link" href="#createrecipetab" data-toggle="tab">Create Recipe</a>
-
-{#                    <a class="nav-link" href="#admintab" data-toggle="tab">Admin Console</a>#}
-
                     <a class="nav-link disabled" href="#">Other</a>
                 </nav>
             </div>
@@ -27,15 +24,14 @@
 
                 <!-- user information -->
                 <div class="tab-pane active" id="profiletab">
+                    {{ info_form.hidden_tag() }}
                     {{ wtf.quick_form(info_form, button_map={'submit': 'primary'}) }}
                 </div>
 
                 <!-- user filters -->
                 <div class="tab-pane" id="filtertab">
-                    <form action="" method="post">
-                        {% include 'filter.html' %}
-                        <button type="submit" class="btn btn-primary">Save preferences</button>
-                    </form>
+                    {{ filter_form.hidden_tag() }}
+                    {{ wtf.quick_form(filter_form, button_map={'submit': 'primary'}) }}
                 </div>
 
                 <!-- User Created Recipe -->
@@ -45,17 +41,17 @@
                     <br>
 
                     <form action="{{ url_for('users.add_recipe') }}" method="POST">
-                        <div class="form-group col-7">
-                            <label for="recipe_title" class="font-weight-bold">Enter your Recipe Name</label>
+                        <div class="form-group ">
+                            <label for="recipe_title" class="font-weight-bold">Enter your recipe name</label>
                             <input type="text" class="form-control" id="recipe_title" name="recipe_title"
-                                   placeholder="Recipe Name">
+                                   placeholder="Recipe Name" required>
                         </div>
 
                         <div class="form-group">
                             <label for="recipe_description" class="font-weight-bold"> Enter the recipe
                                 description </label>
                             <textarea class="form-control" id="recipe_description" name="recipe_description"
-                                      placeholder="Recipe Description"> </textarea>
+                                      placeholder="Recipe Description/Recipe Steps" maxlength="2000" rows="6" required></textarea>
                         </div>
 
                         <div class="form-group col-5">
@@ -91,25 +87,23 @@
                             <label class="small">Functionality to add more ingredients coming soon</label>
                         </div>
 
-                        <br>
 
-                        <label class="font-weight-bold">Upload an image of your dish</label>
+                        <label class="font-weight-bold">Enter the image link of your recipe (uploading not supported
+                            yet)</label>
 
-                        <div class="form-group col-5">
+                        <div class="form-group">
                             <input type="text" class="form-control" id="recipe_picture" name="recipe_picture"
-                                   placeholder="Recipe image link">
+                                   placeholder="Recipe image link" required>
                         </div>
 
-
-                        <br>
 
                         <label class="font-weight-bold">Enter the estimated cooking time</label>
 
                         <div class="row">
                             <div class="col form-group col-2">
-                                <input type="number" class="form-control" name="recipe_cooking_time"
+                                <input type="number" min="0" class="form-control" name="recipe_cooking_time"
                                        id="recipe_cooking_time"
-                                       placeholder="Min">
+                                       placeholder="Minutes" required>
                             </div>
                         </div>
 
@@ -117,9 +111,9 @@
 
                         <div class="row">
                             <div class="col form-group col-2">
-                                <input type="number" class="form-control" name="recipe_calorie_count"
+                                <input type="number" min="0" class="form-control" name="recipe_calorie_count"
                                        id="recipe_calorie_count"
-                                       placeholder="Calories">
+                                       placeholder="Calories" required>
                             </div>
                         </div>
 
@@ -128,51 +122,6 @@
                         </div>
                     </form>
                 </div>
-
-                <!-- Admin tab for those who are admins. Temp might remove -->
-{#                <div class="tab-pane" id="admintab">#}
-{##}
-{#                    <div class="card">#}
-{#                        <div class="card-body">#}
-{#                            <h2 class="card-title">Admin Console</h2>#}
-{#                            <p class="card-text">You are an admin. You have the ability to:#}
-{#                            <li>Promote recipes on the front page</li>#}
-{#                            <li>Create new Recipes</li>#}
-{#                            <li>Read all recipes on the site</li>#}
-{#                            <li>Update Existing recipes</li>#}
-{#                            <li>Delete any recipe</li>#}
-{#                            </p>#}
-{#                        </div>#}
-{#                        <div class="container" style="padding-top: 50px">#}
-{#                            <div class="row">#}
-{#                                <div class="card border-primary mb-3 col-xs-6" style="max-width: 18rem">#}
-{#                                    <div class="card-header">Header</div>#}
-{#                                    <div class="card-body text-primary">#}
-{#                                        <h5 class="card-title">Primary card title</h5>#}
-{#                                        <p class="card-text">Some quick example text to build on the card title and make#}
-{#                                            up#}
-{#                                            the bulk of the card's content.</p>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                <div class="card border-primary mb-3 col-xs-6" style="max-width: 18rem">#}
-{#                                    <div class="card-header">Header</div>#}
-{#                                    <div class="card-body text-primary">#}
-{#                                        <h5 class="card-title">Primary card title</h5>#}
-{#                                        <p class="card-text">Some quick example text to build on the card title and make#}
-{#                                            up#}
-{#                                            the bulk of the card's content.</p>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{##}
-{##}
-{#                        </div>#}
-{##}
-{##}
-{#                    </div>#}
-{#                </div>#}
-
-
             </div>
         </div>
     </div>

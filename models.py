@@ -1,15 +1,20 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
+<<<<<<< HEAD
 from datetime import datetime, timezone
 # from sqlalchemy_imageattach.entity import Image, image_attachment
+=======
+from datetime import datetime
+>>>>>>> 8e2a04569e59ede36cf3e53e9f8b1ffa5df21a7e
 
 db = SQLAlchemy(session_options={"autoflush": False})
 
 followers = db.Table('followers',
-    db.Column('follower_id', db.Integer, db.ForeignKey('users-table.id')),
-    db.Column('followed_id', db.Integer, db.ForeignKey('users-table.id'))
-)
+                     db.Column('follower_id', db.Integer, db.ForeignKey('users-table.id')),
+                     db.Column('followed_id', db.Integer, db.ForeignKey('users-table.id'))
+                     )
+
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users-table'
@@ -44,11 +49,14 @@ class User(UserMixin, db.Model):
             self.followed.remove(user)
 
     def followed_recipes(self):
-        return Recipe.query.join(followers, (followers.c.followed_id == Recipe.recipe_author_id)).filter(followers.c.follower_id == self.id).order_by(Recipe.recipe_date.desc())
+        return Recipe.query.join(followers, (followers.c.followed_id == Recipe.recipe_author_id)).filter(
+            followers.c.follower_id == self.id).order_by(Recipe.recipe_date.desc())
+
 
 class Anon(AnonymousUserMixin):
     __tablename__ = 'anon-users-table'
     filters = db.relationship('Filter', uselist=False, backref="users")
+
 
 class RecipeIngredientAssociation(db.Model):
     __tablename__ = "recipe-ingredient-association"
@@ -59,6 +67,7 @@ class RecipeIngredientAssociation(db.Model):
     ingredient = db.relationship("Ingredient", back_populates="recipes")
     recipe = db.relationship("Recipe", back_populates="ingredients")
 
+
 class Recipe(db.Model):
     __tablename__ = "recipes-table"
     recipe_id = db.Column(db.Integer, primary_key=True)
@@ -68,12 +77,13 @@ class Recipe(db.Model):
     recipe_author = db.relationship("User", back_populates="recipes")
     recipe_description = db.Column(db.String(2000), nullable=False)
     recipe_rating = db.Column(db.Numeric, nullable=False)
-    recipe_picture = db.Column(db.String(120), nullable=False)
+    recipe_picture = db.Column(db.String(256), nullable=False)
     recipe_cooking_time = db.Column(db.Integer, nullable=False)
     recipe_calorie_count = db.Column(db.Integer, nullable=False)
 
     ingredients = db.relationship("RecipeIngredientAssociation", back_populates="recipe")
     planning_users = db.relationship("PlannedRecipeAssociation", back_populates="recipe")
+
 
 class Ingredient(db.Model):
     __tablename__ = "ingredients-table"
@@ -85,9 +95,10 @@ class Ingredient(db.Model):
 
     recipes = db.relationship("RecipeIngredientAssociation", back_populates="ingredient")
 
+
 class Filter(db.Model):
     __tablename__ = 'user-filters'
-    filter_id = db.Column(db.Integer, primary_key = True)
+    filter_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users-table.id'))
     price_min = db.Column(db.Numeric, default=0.00)
     price_max = db.Column(db.Numeric, default=100.00)
@@ -98,6 +109,7 @@ class Filter(db.Model):
     dietary_preferences = db.Column(db.String(255), default='Standard')
     cooking_time_min = db.Column(db.Integer, default=0)
     cooking_time_max = db.Column(db.Integer, default=600)
+
 
 class PlannedRecipeAssociation(db.Model):
     __tablename__ = 'planned-recipe-assoc'

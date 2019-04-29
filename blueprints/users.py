@@ -8,6 +8,7 @@ import threading
 
 users = Blueprint('users', __name__, template_folder="templates")
 
+
 @users.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -30,6 +31,7 @@ def signup():
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
+        user.filters = Filter()
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('users.login'))
@@ -57,15 +59,15 @@ def settings():
     info_form = UserInfoForm(obj=current_user)
     filter_form = FilterForm(obj=current_user.filters)
     # Modifying User Info
-    if info_form.validate_on_submit():
-        current_user.username = info_form.username.data
-        current_user.description = info_form.description.data
-        current_user.avatar = info_form.avatar.data
-        current_user.email = info_form.email.data
-        db.session.commit()
-        return redirect(url_for('users.settings'))
+    # if info_form.validate_on_submit():
+    #     current_user.username = info_form.username.data
+    #     current_user.description = info_form.description.data
+    #     current_user.avatar = info_form.avatar.data
+    #     current_user.email = info_form.email.data
+    #     db.session.commit()
+    #     return redirect(url_for('users.settings'))
     # Modifying User Filter
-    elif filter_form.validate_on_submit():
+    if filter_form.validate_on_submit():
         current_user.filters.price_min = filter_form.price_min.data
         current_user.filters.price_max = filter_form.price_max.data
         current_user.filters.calorie_min = filter_form.calorie_min.data
@@ -77,22 +79,13 @@ def settings():
         current_user.filters.cooking_time_max = filter_form.cooking_time_max.data
         db.session.commit()
         return redirect(url_for('users.settings'))
-    return render_template('settings.html', user_info=current_user, info_form=info_form)
-
-
-# @users.route('/settings/admin', methods=["GET", "POST"])
-# @login_required
-# def admin(username=User.username):
-#     recipe = Recipe.query.all()
-#     user = User.query.filter_by(username=username).first()
-#
-#     return render_template('admin.html', recipe=recipe, user=user)
+    return render_template('settings.html', user_info=current_user, info_form=info_form, filter_form=filter_form)
 
 
 def handle_new_recipe(recipe, follower_ids):
-    '''
+    """
     Helper method used to send SocketIO event to the rooms of the followers.
-    '''
+    """
     data = {
         'id': recipe.recipe_id,
         'title': recipe.recipe_title,
@@ -106,18 +99,25 @@ def handle_new_recipe(recipe, follower_ids):
     for i in follower_ids:
         emit_new_recipe(data, i)
 
+
 @users.route('/create_recipe', methods=["GET", "POST"])
 @login_required
 def add_recipe():
+    """
+    After user enters recipe information into forms in settings.html this
+    function adds the recipe to the database
+    :return: index.html
+    """
     if request.method == "POST":
         user_recipe = Recipe(
             recipe_title=request.form.get("recipe_title"),
+            recipe_date=datetime.utcnow(),
             recipe_description=request.form.get("recipe_description"),
             recipe_rating=5,
             recipe_picture=request.form.get("recipe_picture"),
             recipe_cooking_time=request.form.get("recipe_cooking_time"),
             recipe_calorie_count=request.form.get("recipe_calorie_count")
-            )
+        )
         current_user.recipes.append(user_recipe)
         db.session.add(user_recipe)
 
@@ -129,7 +129,15 @@ def add_recipe():
 
         db.session.commit()
 
+    def add_ingredient():
+        if request.method == 'POST':
+            recipe_ingredient = Ingredient(
+                ingredient_name=request.form.get("recipe_ingredient"))
+
+            db.session.add(recipe_ingredient)
+            db.session.commit()
     return render_template('index.html')
+
 
 @users.route('/feed/follow/<username>')
 @login_required
@@ -141,6 +149,7 @@ def follow(username):
     db.session.commit()
     return redirect(url_for('users.view_user', username=username))
 
+
 @users.route('/feed/unfollow/<username>')
 @login_required
 def unfollow(username):
@@ -151,8 +160,8 @@ def unfollow(username):
     db.session.commit()
     return redirect(url_for('users.view_user', username=username))
 
+
 @users.route('/feed')
 @login_required
 def feed():
     return render_template('feed.html')
-

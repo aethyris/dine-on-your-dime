@@ -3,17 +3,8 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Float
     IntegerField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length, URL, InputRequired
 from models import User
-<<<<<<< HEAD
-<<<<<<< HEAD
-from flask_uploads import uploadPhoto, images
-from flask_wtf.file import fileField, FileRequired
-=======
-# from flask_uploads import uploadPhoto, Images
-=======
 # from flask_uploads import uploadPhoto, images
->>>>>>> 8e2a04569e59ede36cf3e53e9f8b1ffa5df21a7e
 from flask_wtf.file import FileField, FileRequired
->>>>>>> 823528de26dd1519a844a6d148e0f4ad39a08162
 
 
 class LoginForm(FlaskForm):
@@ -67,12 +58,17 @@ class FilterForm(FlaskForm):
     submit = SubmitField('Save preferences')
 
 
- images = uploadPhoto('images', IMAGES)
+# images = uploadPhoto('images', IMAGES)
 
- class photoForm(FlaskForm):
-     photo = FileField(validators = [FileRequired()])
-    submit = submitField('Upload photo')
+# class photoForm(FlaskForm):
+#     photo = FileField(validators = [FileRequired()])
+#     submit = submitField('Upload photo')
+#     image.show(photo)
+
+#     def uploadPhoto():
+#         photo = FileField('image', validators = [FileRequired(), FileAllowed(['jpg', 'png'], 'Images only')])
 
 class CommentForm(FlaskForm):
     comment = TextAreaField('Comment', validators=[DataRequired(), Length(max=800)])
     submit = SubmitField('Submit comment')
+    print(comment)

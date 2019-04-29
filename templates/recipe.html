@@ -1,9 +1,11 @@
 {% extends 'layout.html' %}
 {% block body %}
 
+    <div style="vertical-align: center; line-height: 100px; text-align: center">
+        <h1 class="display-4" style="border-bottom:3px solid black ;font-family: 'Segoe UI">
+            <b><em>{{ recipe.recipe_title }}</em></b></h1>
+    </div>
 
-    <br>
-    <h2 class="display-4">{{ recipe.recipe_title }}</h2>
 
     <div class="container">
         <div class="row">
@@ -48,19 +50,15 @@
 
             <!-- having some trouble with the spacing between containers here, too close on some pages
             but good on others, not sure how to make it consistent -->
-            <h2 class="display-5 card border-0 bg-transparent" style="padding-top:150px">Description</h2>
+            <h2 class="display-5 card border-0 bg-transparent" style="padding-top:150px"><b>Description</b></h2>
             <div class="container">
                 <div class="row">
                     <div class="col-sm-8 card" style="height: auto">
                         <br>
                         <p style="font-size: larger">{{ recipe.recipe_description }}
-
                         </p>
 
                         <br>
-
-                        <h4><u>Steps</u></h4> (Presumably user would enter the steps as part of the description. Just
-                        putting this here for visual reference. Feel free to delete)
                         <br>
 
                     </div>
@@ -72,12 +70,8 @@
                             <div class="card-body text-primary">
                                 <ul class="list-group list-group-flush">
                                     <b style="text-align: center">
-                                        <li class="list-group-item">Ingredient #1</li>
-                                        <li class="list-group-item">Ingredient #2</li>
-                                        <li class="list-group-item">Ingredient #3</li>
-                                        <li class="list-group-item">Ingredient #4</li>
-                                        <li class="list-group-item">Ingredient #5</li>
-                                        <li class="list-group-item">Ingredient #6</li>
+                                        <!-- There should be a loop here, but I'm not sure how to implement that logic -->
+                                        <li class="list-group-item">{{ ingredient.ingredient_name }}</li>
                                     </b>
                                 </ul>
                             </div>
@@ -98,68 +92,15 @@
                     </div>
 
 
-                    <h2 class="display-5 card border-0 bg-transparent" style="padding-top:150px">Comments</h2>
+                    <h2 class="display-5 card border-0 bg-transparent" style="padding-top:150px"><b>Comments</b></h2>
                     <div class="container">
                         <div class="row">
-                            <div class="col-sm-9 card" style="height: auto">
+                            <div class="col-sm-8 card" style="height: auto">
                                 <br>
                                 <div class="form-group">
                                     <label for="comment">(Not functioning/Temp location feel free to change/edit if
                                         you're implementing this feature)</label>
                                     <textarea class="form-control" disabled rows="5" id="comment"></textarea>
-                                </div>
-                            </div>
-
-
-                            <div class="col-sm-12 card border-0 bg-transparent">
-                                <br>
-                                <h2>Other Recipes you might like</h2>
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <div class="card">
-                                            <h5 class="card-header">
-                                                Card title
-                                            </h5>
-                                            <div class="card-body">
-                                                <p class="card-text">
-                                                    Card content
-                                                </p>
-                                            </div>
-                                            <div class="card-footer">
-                                                Card footer
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card">
-                                            <h5 class="card-header">
-                                                Card title
-                                            </h5>
-                                            <div class="card-body">
-                                                <p class="card-text">
-                                                    Card content
-                                                </p>
-                                            </div>
-                                            <div class="card-footer">
-                                                Card footer
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card">
-                                            <h5 class="card-header">
-                                                Card title
-                                            </h5>
-                                            <div class="card-body">
-                                                <p class="card-text">
-                                                    Card content
-                                                </p>
-                                            </div>
-                                            <div class="card-footer">
-                                                Card footer
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -169,6 +110,7 @@
         </div>
     </div>
 
+<<<<<<< HEAD
       <div class = "comment">
         <form id = "commentForm" action = "{{ url_for("recipe")}}" method ="POST">
           <textarea id ="title" type = "text" placeholder = "Comment here"></textarea><br>
@@ -178,8 +120,18 @@
               <input type = "file" name = "file" accept = "image/*" multiple>
               <input type = "submit" value = "uploadp"
               <button class = "btn" type = "submit"> Upload photo </button>
+=======
+    <div class="comment">
+        <form action="" method="post">
+            <textarea id="title" type="text" placeholder="Comment here"></textarea><br>
+            <input type="submit" value="comment">
+            <div class="upload">
+                <input type="photo" value="upload">
+                <button class="btn" type="submit"> Upload photo</button>
+>>>>>>> 8e2a04569e59ede36cf3e53e9f8b1ffa5df21a7e
             </div>
-          <button class="btn btn-primary" type="submit">Submit comment</button>
+            <button class="btn btn-primary" type="submit">Submit comment</button>
         </form>
-      </div>
+    </div>
+
 {% endblock %}
