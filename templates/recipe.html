@@ -12,9 +12,18 @@
             <div class="col-sm-8 card border-0 bg-transparent" style="height: 450px">
                 <img style='max-height: 100%; max-width: 100%; object-fit: contain' src="{{ recipe.recipe_picture }}"
                      alt="Recipe Image">
-                <div class="card-footer" style="height: auto;">(Like/follow/rating buttons and stuff can go here. If you
-                    have another location
-                    in mind feel free to place it there)
+                <div class="card-footer" style="height: auto;"> Feel Free to Like This Recipe !
+
+                          <script type="text/javascript">
+                            var clicks = 0;
+                            function updateClickCount() {
+                                document.getElementById("clickCount").innerHTML = clicks;
+                            }
+                        </script>
+                     <button type="button" onClick="clicks++;updateClickCount();" id="push">Like</button>
+                        <i class="mdi-action-favorite red-text text-lighten-1"></i> <a href="#">
+                        <div id="clickCount"></div></a>
+
                 </div>
             </div>
             <div class="col-sm-4 card border-0 bg-transparent">

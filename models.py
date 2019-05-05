@@ -29,6 +29,8 @@ class User(UserMixin, db.Model):
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
+
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -43,9 +45,12 @@ class User(UserMixin, db.Model):
         if self.followed.filter(followers.c.followed_id == user.id).first() is not None:
             self.followed.remove(user)
 
+
     def followed_recipes(self):
         return Recipe.query.join(followers, (followers.c.followed_id == Recipe.recipe_author_id)).filter(
             followers.c.follower_id == self.id).order_by(Recipe.recipe_date.desc())
+
+
 
 
 class Anon(AnonymousUserMixin):
@@ -61,7 +66,6 @@ class RecipeIngredientAssociation(db.Model):
 
     ingredient = db.relationship("Ingredient", back_populates="recipes")
     recipe = db.relationship("Recipe", back_populates="ingredients")
-
 
 class Recipe(db.Model):
     __tablename__ = "recipes-table"
@@ -117,7 +121,6 @@ class PlannedRecipeAssociation(db.Model):
     user = db.relationship("User", back_populates="planned_recipes")
     recipe = db.relationship("Recipe", back_populates="planning_users")
 
-
 like = db.Table(
     'like',
     db.Column('like_id', db.Integer, db.ForeignKey('user.id')),
@@ -153,9 +156,3 @@ class Like(db.Model):
                 likers.c.liker_id == self.id)
         own = Post.query.filter_by(user_id=self.id)
         return liked.union(own).order_by(Post.timestamp.desc())
-
-
-    #JOIN USER, RECIPE, AND LIKES Table
-    result = session.query(user).join(recipe).filter,join(like).filter
-    for row in result:
-      print (row_id, row.name, recipe_id, userid, like)
