@@ -116,3 +116,46 @@ class PlannedRecipeAssociation(db.Model):
 
     user = db.relationship("User", back_populates="planned_recipes")
     recipe = db.relationship("Recipe", back_populates="planning_users")
+
+
+like = db.Table(
+    'like',
+    db.Column('like_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('liked_id', db.Integer, db.ForeignKey('user.id'))
+)
+
+class Like(db.Model):
+    __tablename__ = 'Likes'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users-table.id"))
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipes-table.recipe_id"))
+    like = db.relationship(
+        'User', secondary=like,
+        primaryjoin=(like.c.liked_id == id),
+        secondaryjoin=(like.c.liked_id == id),
+        backref=db.backref('Likes', lazy='dynamic'), lazy='dynamic')
+
+    def like(self, user):
+        if not self.is_liking(user):
+            self.liked.append(user)
+
+    def unlike(self, user):
+        if self.is_unliking(user):
+            self.unliked.remove(user)
+
+    def is_liking(self, user):
+        return self.liked.filter(
+            likers.c.liked_id == user.id).count() > 0
+
+    def liked_posts(self):
+        liked = Post.query.join(
+            likers, (likers.c.liked_id == Post.user_id)).filter(
+                likers.c.liker_id == self.id)
+        own = Post.query.filter_by(user_id=self.id)
+        return liked.union(own).order_by(Post.timestamp.desc())
+
+
+    #JOIN USER, RECIPE, AND LIKES Table
+    result = session.query(user).join(recipe).filter,join(like).filter
+    for row in result:
+      print (row_id, row.name, recipe_id, userid, like)
