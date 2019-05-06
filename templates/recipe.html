@@ -8,27 +8,34 @@
 
 
     <div class="container">
-        <div class="row">
-            <div class="col-sm-8 card border-0 bg-transparent" style="height: 450px">
-                <img style='max-height: 100%; max-width: 100%; object-fit: contain' src="{{ recipe.recipe_picture }}"
+        <div class="row" style="height: 480px;">
+            <div class="col-sm-8">
+                <img class='img-fluid' src="{{ recipe.recipe_picture }}"
                      alt="Recipe Image">
-                <div class="card-footer" style="height: auto;"> Feel Free to Like This Recipe !
-
-                          <script type="text/javascript">
-                            var clicks = 0;
-                            function updateClickCount() {
-                                document.getElementById("clickCount").innerHTML = clicks;
-                            }
-                        </script>
-                     <button type="button" onClick="clicks++;updateClickCount();" id="push">Like</button>
-                        <i class="mdi-action-favorite red-text text-lighten-1"></i> <a href="#">
-                        <div id="clickCount"></div></a>
-
-                </div>
             </div>
-            <div class="col-sm-4 card border-0 bg-transparent">
-                <br>
-                <div class="card border-primary mb-3" style="height: 113px;max-width: 18rem">
+            <div class="col-sm-4">
+                <div class="row mt-2 mb-3">
+                    <div class="col-sm-12">
+                        <span>Likes: {{ recipe.user_liked|length }}</span>
+                        {% if current_user.is_authenticated and current_user != recipe.recipe_author%}
+                        {% if current_user in recipe.user_liked %}
+                        <a href="{{ url_for('recipes.unlike_recipe', recipe_id=recipe.recipe_id) }}" class="btn btn-primary btn-rounded btn-sm">Unlike</a>
+                        {% else %}
+                        <a href="{{ url_for('recipes.like_recipe', recipe_id=recipe.recipe_id) }}" class="btn btn-primary btn-rounded btn-sm">Like</a>
+                        {% endif %}
+                        {% endif %}
+
+                        <span class="ml-3">Favorites: {{ recipe.user_favorites|length }}</span>
+                        {% if current_user.is_authenticated and current_user != recipe.recipe_author %}
+                        {% if current_user in recipe.user_favorites %}
+                        <a href="{{ url_for('recipes.unfavorite_recipe', recipe_id=recipe.recipe_id) }}" class="btn btn-primary btn-rounded btn-sm">Unfavorite</a>
+                        {% else %}
+                        <a href="{{ url_for('recipes.favorite_recipe', recipe_id=recipe.recipe_id) }}" class="btn btn-primary btn-rounded btn-sm">Favorite</a>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card border-primary mb-3">
                     <div class="card-header" style="text-align: center">Submitted By</div>
                     <div class="card-body text-primary">
                         <h5 class="card-title font-weight-bold" style="text-align: center"><img
@@ -37,86 +44,82 @@
                                 src="{{ user.avatar }}"
                                 alt="Recipe Image"> {{ recipe.recipe_author.username }}</h5>
                     </div>
+                </div>
 
-                    <div class="card border-primary mb-3" style="height: 113px;max-width: 18rem">
-                        <div class="card-header" style="text-align: center">Cooking Time</div>
-                        <div class="card-body text-primary">
-                            <h5 class="card-title font-weight-bold"
-                                style="text-align: center">{{ recipe.recipe_cooking_time }} Minutes</h5>
-                        </div>
+                <div class="card border-primary mb-3">
+                    <div class="card-header" style="text-align: center">Cooking Time</div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title font-weight-bold"
+                            style="text-align: center">{{ recipe.recipe_cooking_time }} Minutes</h5>
+                    </div>
+                </div>
 
-                        <div class="card border-primary mb-3" style="height: 113px;max-width: 18rem ">
-                            <div class="card-header" style="text-align: center">Calories</div>
-                            <div class="card-body text-primary">
-                                <h5 class="card-title font-weight-bold"
-                                    style="text-align: center">{{ recipe.recipe_calorie_count }} Calories</h5>
-                            </div>
-                        </div>
+                <div class="card border-primary">
+                    <div class="card-header" style="text-align: center">Calories</div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title font-weight-bold"
+                            style="text-align: center">{{ recipe.recipe_calorie_count }} Calories</h5>
                     </div>
                 </div>
             </div>
-
+        </div>
 
             <!-- having some trouble with the spacing between containers here, too close on some pages
             but good on others, not sure how to make it consistent -->
-            <h2 class="display-5 card border-0 bg-transparent" style="padding-top:150px"><b>Description</b></h2>
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-8 card" style="height: auto">
-                        <br>
-                        <p style="font-size: larger">{{ recipe.recipe_description }}
-                        </p>
+        <h2 class="mt-3"><b>Description</b></h2>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 card" style="height: auto">
+                    <br>
+                    <p style="font-size: larger">{{ recipe.recipe_description }}
+                    </p>
 
-                        <br>
-                        <br>
+                    <br>
+                    <br>
+
+                </div>
+
+                <div class="col-sm-4 card border-0 bg-transparent">
+                    <br>
+                    <div class="card border-primary mb-3" style="height: auto;max-width: 18rem">
+                        <div class="card-header" style="text-align: center">Ingredients</div>
+                        <div class="card-body text-primary">
+                            <ul class="list-group list-group-flush">
+                                <b style="text-align: center">
+                                </b>
+                            </ul>
+                        </div>
 
                     </div>
-
-                    <div class="col-sm-4 card border-0 bg-transparent">
-                        <br>
-                        <div class="card border-primary mb-3" style="height: auto;max-width: 18rem">
-                            <div class="card-header" style="text-align: center">Ingredients</div>
-                            <div class="card-body text-primary">
-                                <ul class="list-group list-group-flush">
-                                    <b style="text-align: center">
-                                        <!-- There should be a loop here, but I'm not sure how to implement that logic -->
-                                        <li class="list-group-item">{{ ingredient.ingredient_name }}</li>
-                                    </b>
-                                </ul>
-                            </div>
-
-
-                        </div>
-                        <div class="card border-primary mb-3" style="height: auto;max-width: 18rem">
-                            <div class="card-header" style="text-align: center">Shopping List</div>
-                            <div class="card-body text-primary">
-                                <h5 class="card-title ">Generate a shopping list with all your required ingredients</h5>
-                                <button type="button" class="btn btn-primary btn-lg btn-block" disabled>Create Shopping
+                    <div class="card border-primary mb-3" style="height: auto;max-width: 18rem">
+                        <div class="card-header" style="text-align: center">Shopping List</div>
+                        <div class="card-body text-primary">
+                            <h5 class="card-title ">Generate a shopping list with all your required ingredients</h5>
+                            <button type="button" class="btn btn-primary btn-lg btn-block" disabled>Create Shopping
                                     List
-                                </button>
-                                <small>Temp location feel free to change/edit if you're implementing this feature
-                                </small>
-                            </div>
+                            </button>
+                            <small>Temp location feel free to change/edit if you're implementing this feature
+                            </small>
                         </div>
                     </div>
+                </div>
 
-
-                    <h2 class="display-5 card border-0 bg-transparent" style="padding-top:150px"><b>Comments</b></h2>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-8 card" style="height: auto">
-                                <br>
-                                <div class="form-group">
-                                    <label for="comment">(Not functioning/Temp location feel free to change/edit if
-                                        you're implementing this feature)</label>
-                                    <textarea class="form-control" disabled rows="5" id="comment"></textarea>
-                                </div>
+                <h2 class="display-5 card border-0 bg-transparent" style="padding-top:150px"><b>Comments</b></h2>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8 card" style="height: auto">
+                            <br>
+                            <div class="form-group">
+                                <label for="comment">(Not functioning/Temp location feel free to change/edit if
+                                    you're implementing this feature)</label>
+                                <textarea class="form-control" disabled rows="5" id="comment"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <div class="comment">
@@ -130,5 +133,6 @@
             <button class="btn btn-primary" type="submit">Submit comment</button>
         </form>
     </div>
+ 
 
 {% endblock %}

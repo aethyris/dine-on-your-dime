@@ -129,14 +129,6 @@ def add_recipe():
 
         db.session.commit()
 
-
-        liker_ids = [liker.id for liker in user_recipe.recipe_author.liker]
-        thr = threading.Thread(target=handle_new_recipe, args=(user_recipe, liker_ids))
-        thr.daemon = True
-        thr.start()
-
-        db.session.commit()
-
     def add_ingredient():
         if request.method == 'POST':
             recipe_ingredient = Ingredient(
@@ -184,31 +176,3 @@ def like_action(post_id, action):
 @login_required
 def feed():
     return render_template('feed.html')
-
-
-@users.route('/leaderboard/like/<username>')
-@login_required
-def like(username):
-            user = User.query.filter_by(username=username).first_or_404()
-            if user == current_user:
-                return redirect(url_for('users.view_user', username=username))
-            current_user.like(user)
-            db.session.commit()
-            return redirect(url_for('users.view_user', username=username))
-
-
-@users.route('/leaderboard/unlike/<username>')
-@login_required
-def unlike(username):
-            user = User.query.filter_by(username=username).first_or_404()
-            if user == current_user:
-                return redirect(url_for('users.view_user', username=username))
-            current_user.unlike(user)
-            db.session.commit()
-            return redirect(url_for('users.view_user', username=username))
-
-
-@users.route('/leaderboard')
-@login_required
-def leaderboard():
-            return render_template('leaderboard.html')

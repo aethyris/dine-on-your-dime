@@ -10,6 +10,15 @@ followers = db.Table('followers',
                      db.Column('followed_id', db.Integer, db.ForeignKey('users-table.id'))
                      )
 
+favorites = db.Table('favorites',
+                    db.Column('recipe_id', db.Integer, db.ForeignKey('recipes-table.recipe_id')),
+                    db.Column('user_id', db.Integer, db.ForeignKey('users-table.id'))
+                    )
+
+likes = db.Table('likes',
+                db.Column('recipe_id', db.Integer, db.ForeignKey('recipes-table.recipe_id')),
+                db.Column('user_id', db.Integer, db.ForeignKey('users-table.id'))
+                )
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users-table'
@@ -28,8 +37,8 @@ class User(UserMixin, db.Model):
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
-
-
+    liked = db.relationship("Recipe", secondary=likes, back_populates="user_liked")
+    favorite = db.relationship("Recipe", secondary=favorites, back_populates="user_favorites")
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -45,13 +54,9 @@ class User(UserMixin, db.Model):
         if self.followed.filter(followers.c.followed_id == user.id).first() is not None:
             self.followed.remove(user)
 
-
     def followed_recipes(self):
         return Recipe.query.join(followers, (followers.c.followed_id == Recipe.recipe_author_id)).filter(
             followers.c.follower_id == self.id).order_by(Recipe.recipe_date.desc())
-
-
-
 
 class Anon(AnonymousUserMixin):
     __tablename__ = 'anon-users-table'
@@ -83,7 +88,8 @@ class Recipe(db.Model):
 
     ingredients = db.relationship("RecipeIngredientAssociation", back_populates="recipe")
     planning_users = db.relationship("PlannedRecipeAssociation", back_populates="recipe")
-
+    user_liked = db.relationship("User", secondary=likes, back_populates="liked")
+    user_favorites = db.relationship("User", secondary=favorites, back_populates="favorite")
 
 class Ingredient(db.Model):
     __tablename__ = "ingredients-table"
@@ -94,7 +100,6 @@ class Ingredient(db.Model):
     ingredient_calorie_count = db.Column(db.Integer, nullable=False)
 
     recipes = db.relationship("RecipeIngredientAssociation", back_populates="ingredient")
-
 
 class Filter(db.Model):
     __tablename__ = 'user-filters'
@@ -121,39 +126,3 @@ class PlannedRecipeAssociation(db.Model):
 
     user = db.relationship("User", back_populates="planned_recipes")
     recipe = db.relationship("Recipe", back_populates="planning_users")
-
-like = db.Table(
-    'like',
-    db.Column('like_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('liked_id', db.Integer, db.ForeignKey('user.id'))
-)
-
-class Like(db.Model):
-    __tablename__ = 'Likes'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users-table.id"))
-    recipe_id = db.Column(db.Integer, db.ForeignKey("recipes-table.recipe_id"))
-    like = db.relationship(
-        'User', secondary=like,
-        primaryjoin=(like.c.liked_id == id),
-        secondaryjoin=(like.c.liked_id == id),
-        backref=db.backref('Likes', lazy='dynamic'), lazy='dynamic')
-
-    def like(self, user):
-        if not self.is_liking(user):
-            self.liked.append(user)
-
-    def unlike(self, user):
-        if self.is_unliking(user):
-            self.unliked.remove(user)
-
-    def is_liking(self, user):
-        return self.liked.filter(
-            likers.c.liked_id == user.id).count() > 0
-
-    def liked_posts(self):
-        liked = Post.query.join(
-            likers, (likers.c.liked_id == Post.user_id)).filter(
-                likers.c.liker_id == self.id)
-        own = Post.query.filter_by(user_id=self.id)
-        return liked.union(own).order_by(Post.timestamp.desc())

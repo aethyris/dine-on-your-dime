@@ -1,16 +1,21 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8"/>
-    <h1>Dine On Your Dime Leaderboard</h1>
-    <table>
-<table border="1">
-<tr>
-<th>Chef Name</th><th>Score</th><th>Rank</th>
-</tr>
-<tr>
-<td>Shanelle</td><td>20,000</td><td>Gold</td>
-</tr>
-<tr>
-</tr>
-</table>
+{% extends 'layout.html' %}
+{% block body %}
+
+    <div class="container">
+        <table>
+            <tr>
+                <th>Recipe</th>
+                <th>Likes</th>
+                <th>Author</th>
+            </tr>
+            {% for recipe in recipes %}
+            <tr>
+                <td>{{ recipe.recipe_title }}</td>
+                <td>{{ recipe.user_liked|length }}</td>
+                <td>{{ recipe.recipe_description }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}

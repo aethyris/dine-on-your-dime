@@ -9,6 +9,7 @@ from blueprints.users import users
 from blueprints.recipe import recipes
 from blueprints.errors import errors
 from blueprints.calendar import calendar
+from blueprints.leaderboard import leaderboard
 from config import Config
 from models import db, User, RecipeIngredientAssociation, Recipe, Ingredient, Filter, PlannedRecipeAssociation
 from sockets import socketio
@@ -50,6 +51,7 @@ app.register_blueprint(users)
 app.register_blueprint(recipes)
 app.register_blueprint(errors)
 app.register_blueprint(calendar)
+app.register_blueprint(leaderboard)
 
 
 # 404 Handler
