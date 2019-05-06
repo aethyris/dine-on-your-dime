@@ -126,7 +126,7 @@ class PlannedRecipeAssociation(db.Model):
     end = db.Column(db.String(64), nullable=False)
 
     user = db.relationship("User", back_populates="planned_recipes")
-<<<<<<< HEAD
+
     recipe = db.relationship("Recipe", back_populates="planning_users")
 
 class Comment(db.Model):
@@ -147,6 +147,5 @@ class Comment(db.Model):
     def delete_single_comment(comment_id):
         comment = Comment.query.filter_by(id=comment_id).delete()
         db.session.commit()
-=======
+
     recipe = db.relationship("Recipe", back_populates="planning_users")
->>>>>>> adc581abc2060db5e75781dd0a9ed9d905daf93d
