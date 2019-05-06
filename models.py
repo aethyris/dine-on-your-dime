@@ -79,6 +79,7 @@ class Recipe(db.Model):
     recipe_picture = db.Column(db.String(256), nullable=False)
     recipe_cooking_time = db.Column(db.Integer, nullable=False)
     recipe_calorie_count = db.Column(db.Integer, nullable=False)
+    recipe_likes = db.Column(db.Integer, default=0)
 
     ingredients = db.relationship("RecipeIngredientAssociation", back_populates="recipe")
     planning_users = db.relationship("PlannedRecipeAssociation", back_populates="recipe")
