@@ -28,6 +28,9 @@ def like_recipe(recipe_id):
 @recipes.route('/recipe/<recipe_id>/unlike')
 @login_required
 def unlike_recipe(recipe_id):
+
+    # TODO: allow a negative amount of likes
+
     recipe = Recipe.query.filter_by(recipe_id=recipe_id).first_or_404()
     recipe.user_liked.remove(current_user)
     db.session.commit()

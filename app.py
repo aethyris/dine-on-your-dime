@@ -63,6 +63,9 @@ def page_not_found(e):
 
 @app.context_processor
 def inject_filter():
+    """
+    Ensures that the there is a filterform on each page.
+    """
     if current_user.is_authenticated:
         return dict(search_filter=FilterForm(obj=current_user.filters))
     else:

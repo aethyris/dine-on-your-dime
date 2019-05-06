@@ -2,17 +2,17 @@
 {% block body %}
 
     <div class="container">
-        <table>
+        <table class="table">
             <tr>
                 <th>Recipe</th>
                 <th>Likes</th>
                 <th>Author</th>
             </tr>
-            {% for recipe in recipes %}
+            {% for x in recipes %}
             <tr>
-                <td>{{ recipe.recipe_title }}</td>
-                <td>{{ recipe.user_liked|length }}</td>
-                <td>{{ recipe.recipe_description }}</td>
+                <td>{{ x[0].recipe_title }}</td>
+                <td>{{ x[0].user_liked|length }}</td>
+                <td>{{ x[0].recipe_author.username }}</td>
             </tr>
             {% endfor %}
         </table>
