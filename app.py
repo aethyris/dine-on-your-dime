@@ -37,7 +37,7 @@ def load_user(id):  # setting users to sessions
 app.register_blueprint(home_page)
 app.register_blueprint(users)
 app.register_blueprint(recipes)
-#app.register_blueprint(errors)
+app.register_blueprint(errors)
 app.register_blueprint(calendar)
 app.register_blueprint(leaderboard)
 
