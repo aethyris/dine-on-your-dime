@@ -58,15 +58,15 @@ class FilterForm(FlaskForm):
     submit = SubmitField('Save preferences')
 
 
-# images = uploadPhoto('images', IMAGES)
+ images = uploadPhoto('images', IMAGES)
 
-# class photoForm(FlaskForm):
-#     photo = FileField(validators = [FileRequired()])
-#     submit = submitField('Upload photo')
-#     image.show(photo)
+ class photoForm(FlaskForm):
+     photo = FileField(validators = [FileRequired()])
+     submit = submitField('Upload photo')
+     image.show(photo)
 
-#     def uploadPhoto():
-#         photo = FileField('image', validators = [FileRequired(), FileAllowed(['jpg', 'png'], 'Images only')])
+     def uploadPhoto():
+         photo = FileField('image', validators = [FileRequired(), FileAllowed(['jpg', 'png'], 'Images only')])
 
 class CommentForm(FlaskForm):
     comment = TextAreaField('Comment', validators=[DataRequired(), Length(max=800)])

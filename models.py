@@ -1,12 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
-<<<<<<< HEAD
 from datetime import datetime, timezone
 # from sqlalchemy_imageattach.entity import Image, image_attachment
-=======
-from datetime import datetime
->>>>>>> 8e2a04569e59ede36cf3e53e9f8b1ffa5df21a7e
 
 db = SQLAlchemy(session_options={"autoflush": False})
 
@@ -123,7 +119,7 @@ class PlannedRecipeAssociation(db.Model):
     recipe = db.relationship("Recipe", back_populates="planning_users")
 
 class Comment(db.Model):
-     __tablename__ = 'comments'
+    __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key = True)
     comment_content = db.Column(db.String)
     post_id = db.Column(db.Integer, db.ForeignKey("posts.id") )
