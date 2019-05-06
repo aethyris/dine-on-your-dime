@@ -16,7 +16,6 @@ from sockets import socketio
 from forms import FilterForm
 
 app = Flask(__name__)
-app.debug = True
 login = LoginManager(app)
 socketio.init_app(app)
 app.config.from_object(Config)
@@ -81,6 +80,7 @@ def main():
             db.reflect()
             db.drop_all()
             db.session.commit()
+    app.run(host='0.0.0.0', port='8080')
 
 
 if __name__ == "__main__":
