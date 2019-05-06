@@ -6,7 +6,7 @@ recipes = Blueprint('recipes', __name__, template_folder="templates")
 
 
 @recipes.route('/recipe/<recipe_id>')
-def show_recipe(recipe_id):
+def show_recipe(recipe_id,):
     """
     This function handles the logic for displaying recipe information in the recipe.html page
     :param recipe_id: Every recipe contains a unique ID

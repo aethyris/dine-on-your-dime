@@ -6,8 +6,6 @@ import sys
 from flask import Flask, render_template
 from flask_login import LoginManager, current_user
 from flask_bootstrap import Bootstrap
-from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
 from blueprints.home import home_page
 from blueprints.users import users
 from blueprints.recipe import recipes
@@ -15,7 +13,7 @@ from blueprints.errors import errors
 from blueprints.calendar import calendar
 from blueprints.leaderboard import leaderboard
 from config import Config
-from models import db, User, RecipeIngredientAssociation, Recipe, Ingredient, Filter, PlannedRecipeAssociation
+from models import db, User
 from sockets import socketio
 from forms import FilterForm
 
@@ -26,20 +24,6 @@ app.config.from_object(Config)
 db.init_app(app)
 Bootstrap(app)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-
-
-# Admin Settings
-
-
-# app.config['FLASK_ADMIN_SWATCH'] = 'sandstone'
-# admin = Admin(app, name='Dine on Your Dime (ADMIN)', template_mode='bootstrap3')
-# admin.add_view(ModelView(User, db.session))
-# admin.add_view(ModelView(RecipeIngredientAssociation, db.session))
-# admin.add_view(ModelView(Recipe, db.session))
-# admin.add_view(ModelView(Ingredient, db.session))
-# admin.add_view(ModelView(Filter, db.session))
-# admin.add_view(ModelView(PlannedRecipeAssociation, db.session))
-
 
 # Login User Loader
 

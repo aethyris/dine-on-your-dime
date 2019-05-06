@@ -87,8 +87,10 @@
                         <div class="card-header" style="text-align: center">Ingredients</div>
                         <div class="card-body text-primary">
                             <ul class="list-group list-group-flush">
-                                <b style="text-align: center">
-                                </b>
+                                <b style="text-align: center"></b>
+                                <span style="white-space: pre-line">
+                                    {{ recipe.recipe_ingredients }}
+                                </span>
                             </ul>
                         </div>
 
@@ -126,11 +128,11 @@
 
 
       <div class = "comment">
-        <form id = "commentForm" action = "{{ url_for("recipe")}}" method ="POST">
+        <form id = "commentForm" action = "" method ="POST">
           <textarea id ="title" type = "text" placeholder = "Comment here"></textarea><br>
           <input type = "submit" value = "uploadc">
             <div class = "upload">
-              <form id = "photoForm" action = "{{url_for("recipe")}}" method = "POST" enctype = "multipart/form-data">
+              <form id = "photoForm" action = "" method = "POST" enctype = "multipart/form-data">
               <input type = "file" name = "file" accept = "image/*" multiple>
               <input type = "submit" value = "uploadp"
               <button class = "btn" type = "submit"> Upload photo </button>

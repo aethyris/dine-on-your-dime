@@ -87,6 +87,7 @@ class Recipe(db.Model):
     recipe_cooking_time = db.Column(db.Integer, nullable=False)
     recipe_calorie_count = db.Column(db.Integer, nullable=False)
     recipe_likes = db.Column(db.Integer, default=0)
+    recipe_ingredients = db.Column(db.String(256))
 
     comments = db.relationship("Comment", back_populates="recipe")
 

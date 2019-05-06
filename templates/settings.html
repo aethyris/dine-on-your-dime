@@ -41,52 +41,26 @@
                     <br>
 
                     <form action="{{ url_for('users.add_recipe') }}" method="POST">
-                        <div class="form-group ">
+                        <div class="form-group">
                             <label for="recipe_title" class="font-weight-bold">Enter your recipe name</label>
                             <input type="text" class="form-control" id="recipe_title" name="recipe_title"
                                    placeholder="Recipe Name" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="recipe_description" class="font-weight-bold"> Enter the recipe
-                                description </label>
-                            <textarea class="form-control" id="recipe_description" name="recipe_description"
-                                      placeholder="Recipe Description/Recipe Steps" maxlength="2000" rows="6" required></textarea>
+                            <label for="recipe_description" class="font-weight-bold">Enter the recipe description</label>
+                            <textarea class="form-control" id="recipe_description" name="recipe_description" placeholder="Recipe Description/Recipe Steps" maxlength="2000" rows="6" required></textarea>
                         </div>
 
-                        <div class="form-group col-5">
-                            <label class="font-weight-bold">Add your recipe ingredients</label>
-                            <input type="text" class="form-control" id="recipe_ingredient" name="recipe_ingredient"
-                                   placeholder="Ingredient #1">
+                        <div class="form-group">
+                            <label for="recipe_ingredients" class="font-weight-bold"> Enter the recipe
+                                ingredients </label>
+                            <span style="white-space: pre-line">
+                            <textarea class="form-control" id="recipe_ingredients" name="recipe_ingredients"
+                                      placeholder="Enter the recipe ingredients in a list" maxlength="2000" rows="10"
+                                      required></textarea>
+                            </span>
                         </div>
-
-                        <div class="form-group col-5">
-                            <input type="text" class="form-control" id="recipe_ingredient" name="recipe_ingredient"
-                                   placeholder="Ingredient #2">
-                        </div>
-
-                        <div class="form-group col-5">
-                            <input type="text" class="form-control" id="recipe_ingredient" name="recipe_ingredient"
-                                   placeholder="Ingredient #3">
-                        </div>
-
-                        <div class="form-group col-5">
-                            <input type="text" class="form-control" id="recipe_ingredient" name="recipe_ingredient"
-                                   placeholder="Ingredient #4">
-                        </div>
-
-                        <div class="form-group col-5">
-                            <input type="text" class="form-control" id="recipe_ingredient" name="recipe_ingredient"
-                                   placeholder="Ingredient #5">
-                        </div>
-
-                        <div class="form-group col-5">
-                            <input type="text" class="form-control" id="recipe_ingredient" name="recipe_ingredient"
-                                   placeholder="Ingredient #6">
-
-                            <label class="small">Functionality to add more ingredients coming soon</label>
-                        </div>
-
 
                         <label class="font-weight-bold">Enter the image link of your recipe (uploading not supported
                             yet)</label>

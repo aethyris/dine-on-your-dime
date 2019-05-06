@@ -89,14 +89,6 @@
             </nav>
             <!-- Right side of nav bar -->
             <nav class="navbar-nav ml-auto">
-                {#                {% if current_user.is_authenticated %}#}
-                {#                    <div>#}
-                {#                        <a href="/admin">#}
-                {#                            <button class="btn btn-danger" type="button">ADMIN CONSOLE</button>#}
-                {#                        </a>#}
-                {#                    </div>#}
-                {#                {% endif %}#}
-
                 {% if current_user.is_authenticated %}
                     <div class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"

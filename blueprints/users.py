@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, abort, Response
 from flask_login import current_user, login_user, logout_user, login_required
-from models import User, db, Filter, Recipe, Ingredient
+from models import User, db, Filter, Recipe
 from forms import LoginForm, RegistrationForm, UserInfoForm, FilterForm
 from datetime import datetime
 from sockets import emit_new_recipe
@@ -116,7 +116,8 @@ def add_recipe():
             recipe_rating=5,
             recipe_picture=request.form.get("recipe_picture"),
             recipe_cooking_time=request.form.get("recipe_cooking_time"),
-            recipe_calorie_count=request.form.get("recipe_calorie_count")
+            recipe_calorie_count=request.form.get("recipe_calorie_count"),
+            recipe_ingredients=None
         )
         current_user.recipes.append(user_recipe)
         db.session.add(user_recipe)
@@ -128,14 +129,6 @@ def add_recipe():
         thr.start()
 
         db.session.commit()
-
-    def add_ingredient():
-        if request.method == 'POST':
-            recipe_ingredient = Ingredient(
-                ingredient_name=request.form.get("recipe_ingredient"))
-
-            db.session.add(recipe_ingredient)
-            db.session.commit()
     return render_template('index.html')
 
 
