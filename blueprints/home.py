@@ -15,6 +15,7 @@ def search():
     # get search results from mysql
     keyword = request.form.get("keyword")
     recipes = Recipe.query.filter((Recipe.recipe_title.contains(keyword) | Recipe.recipe_description.contains(keyword)))
+    # TODO: add filter for FilterForm
     return render_template('search.html', keyword=keyword, recipes=recipes)
 
 

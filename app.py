@@ -13,13 +13,13 @@ from blueprints.users import users
 from blueprints.recipe import recipes
 from blueprints.errors import errors
 from blueprints.calendar import calendar
+from blueprints.leaderboard import leaderboard
 from config import Config
 from models import db, User, RecipeIngredientAssociation, Recipe, Ingredient, Filter, PlannedRecipeAssociation
 from sockets import socketio
 from forms import FilterForm
 
 app = Flask(__name__)
-app.debug = True
 login = LoginManager(app)
 socketio.init_app(app)
 app.config.from_object(Config)
@@ -55,6 +55,7 @@ app.register_blueprint(users)
 app.register_blueprint(recipes)
 app.register_blueprint(errors)
 app.register_blueprint(calendar)
+app.register_blueprint(leaderboard)
 
 
 # 404 Handler
@@ -66,6 +67,9 @@ def page_not_found(e):
 
 @app.context_processor
 def inject_filter():
+    """
+    Ensures that the there is a filterform on each page.
+    """
     if current_user.is_authenticated:
         return dict(search_filter=FilterForm(obj=current_user.filters))
     else:
@@ -81,6 +85,7 @@ def main():
             db.reflect()
             db.drop_all()
             db.session.commit()
+    app.run(host='0.0.0.0', port='8080')
 
 
 if __name__ == "__main__":

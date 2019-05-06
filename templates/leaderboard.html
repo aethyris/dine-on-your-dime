@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+    <div class="container">
+        <table class="table">
+            <tr>
+                <th>Recipe</th>
+                <th>Likes</th>
+                <th>Author</th>
+            </tr>
+            {% for x in recipes %}
+            <tr>
+                <td>{{ x[0].recipe_title }}</td>
+                <td>{{ x[0].user_liked|length }}</td>
+                <td>{{ x[0].recipe_author.username }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}
