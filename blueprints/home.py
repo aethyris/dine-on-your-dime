@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request
 from models import *
+from forms import FilterForm
 
 home_page = Blueprint('home_page', __name__, template_folder="templates")
 
@@ -14,6 +15,8 @@ def index(recipe_title=Recipe.recipe_title):
 def search():
     # get search results from mysql
     keyword = request.form.get("keyword")
+    calorie_min = request.form.get("calorie_min")
+    calorie_max = request.form.get("calorie_max")
     recipes = Recipe.query.filter((Recipe.recipe_title.contains(keyword) | Recipe.recipe_description.contains(keyword)))
     # TODO: add filter for FilterForm
     return render_template('search.html', keyword=keyword, recipes=recipes)

@@ -1,4 +1,4 @@
-
+import os
 import sys, traceback
 from flask import Flask, render_template, session, request
 from flask_login import LoginManager
@@ -53,7 +53,7 @@ def load_user(id):  # setting users to sessions
 app.register_blueprint(home_page)
 app.register_blueprint(users)
 app.register_blueprint(recipes)
-app.register_blueprint(errors)
+#app.register_blueprint(errors)
 app.register_blueprint(calendar)
 app.register_blueprint(leaderboard)
 
@@ -92,9 +92,6 @@ if __name__ == "__main__":
     with app.app_context():
         main()
 
-@app.route("/")
-def index():
-    return render_template("recipe.html")
 
 @app.route("/upload", methods = ["POST"])
 def upload():

@@ -40,6 +40,7 @@ class User(UserMixin, db.Model):
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
     liked = db.relationship("Recipe", secondary=likes, back_populates="user_liked")
     favorite = db.relationship("Recipe", secondary=favorites, back_populates="user_favorites")
+    comments = db.relationship("Comment", back_populates="user")
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -87,6 +88,8 @@ class Recipe(db.Model):
     recipe_calorie_count = db.Column(db.Integer, nullable=False)
     recipe_likes = db.Column(db.Integer, default=0)
 
+    comments = db.relationship("Comment", back_populates="recipe")
+
     ingredients = db.relationship("RecipeIngredientAssociation", back_populates="recipe")
     planning_users = db.relationship("PlannedRecipeAssociation", back_populates="recipe")
     user_liked = db.relationship("User", secondary=likes, back_populates="liked")
@@ -132,20 +135,9 @@ class PlannedRecipeAssociation(db.Model):
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key = True)
-    comment_content = db.Column(db.String)
-    post_id = db.Column(db.Integer, db.ForeignKey("posts.id") )
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id") )
+    comment_content = db.Column(db.String(256), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipes-table.recipe_id"))
+    recipe = db.relationship("Recipe", back_populates="comments")
 
-    def save_comment(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def get_comments(post_id):
-        comments = Comment.query.filter_by(post_id=post_id).all()
-        return comments
-
-    def delete_single_comment(comment_id):
-        comment = Comment.query.filter_by(id=comment_id).delete()
-        db.session.commit()
-
-    recipe = db.relationship("Recipe", back_populates="planning_users")
+    user_id = db.Column(db.Integer, db.ForeignKey("users-table.id"))
+    user = db.relationship("User", back_populates="comments")

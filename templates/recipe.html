@@ -16,6 +16,7 @@
             <div class="col-sm-4">
                 <div class="row mt-2 mb-3">
                     <div class="col-sm-12">
+                        <!-- Likes -->
                         <span>Likes: {{ recipe.user_liked|length }}</span>
                         {% if current_user.is_authenticated and current_user != recipe.recipe_author%}
                         {% if current_user in recipe.user_liked %}
@@ -25,6 +26,7 @@
                         {% endif %}
                         {% endif %}
 
+                        <!-- Favorites -->
                         <span class="ml-3">Favorites: {{ recipe.user_favorites|length }}</span>
                         {% if current_user.is_authenticated and current_user != recipe.recipe_author %}
                         {% if current_user in recipe.user_favorites %}
@@ -41,7 +43,7 @@
                         <h5 class="card-title font-weight-bold" style="text-align: center"><img
                                 class="rounded-circle img-fluid"
                                 style='max-height: 11%; max-width: 11%; object-fit: contain'
-                                src="{{ user.avatar }}"
+                                src="{{ recipe.recipe_author.avatar }}"
                                 alt="Recipe Image"> {{ recipe.recipe_author.username }}</h5>
                     </div>
                 </div>
